@@ -1,3 +1,9 @@
 vendor/
 bin/
 \.terraform/
+terraform-provider-alicloud
+crash.log
+terraform.tfstate
+terraform.tfstate.backup
+*.bak 
+\.gitignore.swp 
