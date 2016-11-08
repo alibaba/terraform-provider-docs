@@ -154,7 +154,7 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 	d.SetPartial("instance_name")
 	d.SetPartial("description")
 	d.SetPartial("password")
-	d.SetPartial("subnet_id")
+	// d.SetPartial("subnet_id")
 	d.SetPartial("system_disk_category")
 	d.SetPartial("instance_charge_type")
 	d.SetPartial("availability_zone")

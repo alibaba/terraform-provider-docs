@@ -1,6 +1,6 @@
-variable "count" { default = "3" }
+variable "count" { default = "1" }
 variable "count_format" {default = "%02d"}
-variable "image_id" { default = "ubuntu1404_64_40G_cloudinit_20160427.raw" }
+variable "image_id" { default = "ubuntu1404_64_40G_cloudinit_20160727.raw" }
 
 variable "role" {}
 variable "datacenter" {}
@@ -8,7 +8,6 @@ variable "short_name" { default = "hi" }
 variable "ec2_type" {}
 variable "ec2_password" {}
 variable "availability_zones" {}
-variable "vpc_subnet_ids" {}
 variable "security_group_id" {}
 variable "ssh_username" { default = "root" }
 
@@ -30,12 +29,11 @@ resource "alicloud_instance" "instance" {
   instance_type = "${var.ec2_type}"
   count = "${var.count}"
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
-  subnet_id = "${element(split(",", var.vpc_subnet_ids), count.index)}"
   security_group_id = "${var.security_group_id}"
 
   password = "${var.ec2_password}"
 
-  instance_charge_type = "PrePaid"
+  instance_charge_type = "PostPaid"
   period = "1"
   system_disk_category = "cloud_efficiency"
 
