@@ -12,7 +12,7 @@ func resourceAliyunAllocateIp() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"instance_id": &schema.Schema{
 				Type:     schema.TypeString,
-				Required: true,
+				Optional: true,
 			},
 		},
 	}

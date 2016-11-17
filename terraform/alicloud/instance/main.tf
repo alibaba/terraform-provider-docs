@@ -63,7 +63,7 @@ resource "alicloud_disk_attachment" "instance-attachment" {
   disk_id = "${element(alicloud_disk.disk.*.id, count.index)}"
   instance_id = "${element(alicloud_instance.instance.*.id, count.index)}"
   device_name = "${var.device_name}"
-  depends_on = ["alicloud_disk.disk"]
+  depends_on = ["alicloud_instance.instance"]
 }
 
 output "hostname_list" {
