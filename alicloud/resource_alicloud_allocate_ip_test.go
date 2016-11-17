@@ -1,7 +1,8 @@
+
 package alicloud
 
 import (
-	"testing"
+"testing"
 )
 
 func TestAccAllocatePublicIp(t *testing.T) {
@@ -19,3 +20,4 @@ func TestAccAllocatePublicIp(t *testing.T) {
 	//	t.Logf("public ip is %s \n", ipAddress)
 	//}
 }
+
