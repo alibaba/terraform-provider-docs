@@ -18,10 +18,12 @@ func resourceAliyunDiskAttachment() *schema.Resource {
 			"instance_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				ForceNew: true,
 			},
 			"disk_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				ForceNew: true,
 			},
 
 			"device_name": &schema.Schema{
