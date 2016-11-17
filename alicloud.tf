@@ -1,6 +1,6 @@
 variable "ec2_password" { default = "" }
 
-variable "worker_count" { default = "2" }
+variable "worker_count" { default = "1" }
 variable "worker_count_format" { default = "%03d" }
 variable "worker_ec2_type" { default = "ecs.n1.small" }
 
