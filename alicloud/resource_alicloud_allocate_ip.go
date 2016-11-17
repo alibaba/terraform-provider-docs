@@ -5,6 +5,9 @@ import "github.com/hashicorp/terraform/helper/schema"
 func resourceAliyunAllocateIp() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceAliyunAllocate,
+		Read:   resourceAliyunAllocateRead,
+		Update: resourceAliyunAllocateUpdate,
+		Delete: resourceAliyunAllocateDelete,
 
 		Schema: map[string]*schema.Schema{
 			"instance_id": &schema.Schema{
@@ -31,5 +34,17 @@ func resourceAliyunAllocate(d *schema.ResourceData, meta interface{}) error {
 	d.SetId(ipAddress)
 	d.Set("ipAddress", ipAddress)
 
+	return nil
+}
+
+func resourceAliyunAllocateRead(d *schema.ResourceData, meta interface{}) error {
+	return nil
+}
+
+func resourceAliyunAllocateUpdate(d *schema.ResourceData, meta interface{}) error {
+	return nil
+}
+
+func resourceAliyunAllocateDelete(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
