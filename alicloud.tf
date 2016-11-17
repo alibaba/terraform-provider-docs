@@ -1,6 +1,6 @@
 variable "ec2_password" { default = "" }
 
-variable "worker_count" { default = "1" }
+variable "worker_count" { default = "2" }
 variable "worker_count_format" { default = "%03d" }
 variable "worker_ec2_type" { default = "ecs.n1.small" }
 
@@ -12,6 +12,8 @@ variable "region" { default = "cn-beijing"}
 
 variable "secrity_group" {default = "sg-25y6ag32b"}
 variable "availability_zones" {default = "cn-beijing-b"}
+
+variable "internet_charge_type" { default = "PayByTraffic" }
 
 variable "datacenter" { default = "beijing" }
 
@@ -31,5 +33,6 @@ module "worker-nodes" {
   short_name = "${var.short_name}"
   availability_zones = "${var.availability_zones}"
   security_group_id = "${var.secrity_group}"
+  internet_charge_type = "${var.internet_charge_type}"
 }
 

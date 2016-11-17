@@ -33,6 +33,7 @@ func Provider() terraform.ResourceProvider {
 
 		ResourcesMap: map[string]*schema.Resource{
 			"alicloud_instance":        resourceAliyunInstance(),
+			"alicloud_allocate_pubic_ip": resourceAliyunAllocatePublicIp(),
 			"alicloud_disk":            resourceAliyunDisk(),
 			"alicloud_disk_attachment": resourceAliyunDiskAttachment(),
 			"alicloud_security_group":  resourceAliyunSecurityGroup(),
