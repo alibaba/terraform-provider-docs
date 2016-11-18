@@ -153,6 +153,19 @@ func validateInternetChargeType(v interface{}, k string) (ws []string, errors []
 	return
 }
 
+func validateInternetMaxBandWidthOut(v interface{}, k string) (ws []string, errors []error) {
+	if value := v.(int); value != 0 {
+		if value < 1 || value > 100 {
+			errors = append(errors, fmt.Errorf(
+				"%q must be a valid internet bandwidth out between 1 and 1000",
+				k))
+			return
+		}
+	}
+	return
+}
+
+
 // SLB
 func validateSlbName(v interface{}, k string) (ws []string, errors []error) {
 	if value := v.(string); value != "" {

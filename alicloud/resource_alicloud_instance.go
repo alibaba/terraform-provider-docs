@@ -62,9 +62,10 @@ func resourceAliyunInstance() *schema.Resource {
 				ForceNew: true,
 			},
 			"internet_max_bandwidth_out": &schema.Schema{
-				Type:     schema.TypeString,
+				Type:     schema.TypeInt,
 				Optional: true,
 				ForceNew: true,
+				ValidateFunc: validateInternetMaxBandWidthOut,
 			},
 			"host_name": &schema.Schema{
 				Type:     schema.TypeString,
@@ -154,7 +155,7 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 	d.SetPartial("instance_name")
 	d.SetPartial("description")
 	d.SetPartial("password")
-	d.SetPartial("subnet_id")
+	// d.SetPartial("subnet_id")
 	d.SetPartial("system_disk_category")
 	d.SetPartial("instance_charge_type")
 	d.SetPartial("availability_zone")
@@ -202,14 +203,14 @@ func resourceAliyunInstanceRead(d *schema.ResourceData, meta interface{}) error 
 
 	d.Set("host_name", instance.HostName)
 
-	d.Set("public_ip", instance.PublicIpAddress)
+	//d.Set("public_ip", instance.PublicIpAddress)
 
-	if instance.InstanceNetworkType == "Classic" {
-		d.Set("private_ip", instance.InnerIpAddress)
-	} else {
-		d.Set("private_ip", instance.VpcAttributes.PrivateIpAddress.IpAddress[0])
-		d.Set("subnet_id", instance.VpcAttributes.VSwitchId)
-	}
+	//if instance.InstanceNetworkType == "Classic" {
+	//	d.Set("private_ip", instance.InnerIpAddress)
+	//} else {
+	//	d.Set("private_ip", instance.VpcAttributes.PrivateIpAddress.IpAddress[0])
+	//	d.Set("subnet_id", instance.VpcAttributes.VSwitchId)
+	//}
 
 	tags, _, err := conn.DescribeTags(&ecs.DescribeTagsArgs{
 		RegionId:     getRegion(d, meta),
@@ -397,6 +398,10 @@ func buildAliyunInstanceArgs(d *schema.ResourceData, meta interface{}) (*ecs.Cre
 
 	if v := d.Get("internet_charge_type").(string); v != "" {
 		args.InternetChargeType = common.InternetChargeType(v)
+	}
+
+	if v := d.Get("internet_max_bandwidth_out").(int); v != 0 {
+		args.InternetMaxBandwidthOut = v
 	}
 
 	if v := d.Get("host_name").(string); v != "" {
