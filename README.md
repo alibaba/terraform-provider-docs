@@ -5,16 +5,18 @@
 ### Install terraform
 * preference: https://www.terraform.io/intro/getting-started/install.html
 		
-		note: the system path setting on the terraform parent folder. example: if the terraform in the PATH "~/work/terraform_0.7.10", then the path is export PATH=$PATH:~/work/terraform_0.7.10
+* note: the system path setting on the terraform parent folder. example: if the terraform in the PATH "~/work/terraform_0.7.10", then the path is export PATH=$PATH:~/work/terraform_0.7.10
 
 ### Install GoLang SDK
 * Create folder for Go running environment, example: ~/work/go
-* Download GoLong SDK: http://www.golangtc.com/download (GoLang SDK install to mac reference: http://www.tuicool.com/articles/Fv6zUfE)
+* Download GoLong SDK: http://www.golangtc.com/download 
+* GoLang SDK install on mac that will be reference: http://www.tuicool.com/articles/Fv6zUfE
 * Setting the PATH and GOPATH, example: 
 		
 		export PATH=$PATH:/usr/local/go/bin
 		export GOPATH="~/work/go"
-* Look for a GoLang project and get it, then create the go base directory, such as go get github.com/gorilla/mux
+
+* Look for a GoLang project and get it, then create the go base directory, such as: go get github.com/denverdino/aliyungo
 
 ### How to used project
 1. Create the folder "alibaba" in your GoPath, such as "work/go/src/github.com/alibaba". and clone the project.
