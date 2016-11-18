@@ -11,8 +11,11 @@ variable "availability_zones" {}
 variable "security_group_id" {}
 variable "ssh_username" { default = "root" }
 
+variable "internet_charge_type" {}
+variable "internet_max_bandwidth_out" { default = 5 }
+
 variable "disk_category" { default = "cloud_ssd" }
-variable "disk_size" { default = "20" }
+variable "disk_size" { default = "40" }
 variable "device_name" { default = "/dev/xvdb" }
 
 resource "alicloud_disk" "disk" {
@@ -31,6 +34,9 @@ resource "alicloud_instance" "instance" {
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
   security_group_id = "${var.security_group_id}"
 
+  internet_charge_type = "${var.internet_charge_type}"
+  internet_max_bandwidth_out = "${var.internet_max_bandwidth_out}"
+
   password = "${var.ec2_password}"
 
   instance_charge_type = "PostPaid"
@@ -45,6 +51,12 @@ resource "alicloud_instance" "instance" {
   }
 }
 
+resource "alicloud_allocate_pubic_ip" "allocate" {
+  count = "${var.count}"
+  instance_id = "${element(alicloud_instance.instance.*.id, count.index)}"
+
+}
+
 resource "alicloud_disk_attachment" "instance-attachment" {
   count = "${var.count}"
   disk_id = "${element(alicloud_disk.disk.*.id, count.index)}"
@@ -55,6 +67,11 @@ resource "alicloud_disk_attachment" "instance-attachment" {
 output "hostname_list" {
   value = "${join(",", alicloud_instance.instance.*.instance_name)}"
 }
+
+output "public_ip" {
+  value = "${alicloud_allocate_pubic_ip.allocate.id}"
+}
+
 
 output "ecs_ids" {
   value = "${join(",", alicloud_instance.instance.*.id)}"

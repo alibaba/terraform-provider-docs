@@ -13,6 +13,8 @@ variable "region" { default = "cn-beijing"}
 variable "secrity_group" {default = "sg-25y6ag32b"}
 variable "availability_zones" {default = "cn-beijing-b"}
 
+variable "internet_charge_type" { default = "PayByTraffic" }
+
 variable "datacenter" { default = "beijing" }
 
 provider "alicloud" {
@@ -31,5 +33,6 @@ module "worker-nodes" {
   short_name = "${var.short_name}"
   availability_zones = "${var.availability_zones}"
   security_group_id = "${var.secrity_group}"
+  internet_charge_type = "${var.internet_charge_type}"
 }
 
