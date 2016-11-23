@@ -38,6 +38,12 @@ func resourceAliyunInstance() *schema.Resource {
 				Required: true,
 			},
 
+			"allocate_public_ip": &schema.Schema{
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default: true,
+			},
+
 			"instance_name": &schema.Schema{
 				Type:         schema.TypeString,
 				Optional:     true,
@@ -48,6 +54,13 @@ func resourceAliyunInstance() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ValidateFunc: validateInstanceDescription,
+			},
+
+			"instance_network_type": &schema.Schema{
+				Type:         schema.TypeString,
+				Optional:     true,
+				ForceNew:     true,
+				ValidateFunc: validateInstanceNetworkType,
 			},
 
 			"internet_charge_type": &schema.Schema{
@@ -113,6 +126,7 @@ func resourceAliyunInstance() *schema.Resource {
 				ForceNew: true,
 			},
 
+
 			"public_ip": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -155,10 +169,13 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 	d.SetPartial("instance_name")
 	d.SetPartial("description")
 	d.SetPartial("password")
-	// d.SetPartial("subnet_id")
+	if(d.Get("subnet_id") != ""){
+		d.SetPartial("subnet_id")
+	}
 	d.SetPartial("system_disk_category")
 	d.SetPartial("instance_charge_type")
 	d.SetPartial("availability_zone")
+	d.SetPartial("allocate_public_ip")
 
 	// after instance created, its status is pending,
 	// so we need to wait it become to stopped and then start it
@@ -203,20 +220,29 @@ func resourceAliyunInstanceRead(d *schema.ResourceData, meta interface{}) error 
 
 	d.Set("host_name", instance.HostName)
 
-	//d.Set("public_ip", instance.PublicIpAddress)
+	if (d.Get("allocate_public_ip").(bool)) {
+		ipAddress, err := conn.AllocatePublicIpAddress(d.Id())
+		if err != nil {
+			log.Printf("[DEBUG] AllocatePublicIpAddress for instance got error: %s", err)
+		} else {
+			d.Set("public_ip", ipAddress)
+		}
 
-	//if instance.InstanceNetworkType == "Classic" {
-	//	d.Set("private_ip", instance.InnerIpAddress)
-	//} else {
-	//	d.Set("private_ip", instance.VpcAttributes.PrivateIpAddress.IpAddress[0])
-	//	d.Set("subnet_id", instance.VpcAttributes.VSwitchId)
-	//}
+	}
+
+	if(d.Get("instance_network_type") == "Classic"){
+		d.Set("private_ip", instance.InnerIpAddress)
+	} else {
+		d.Set("private_ip", instance.VpcAttributes.PrivateIpAddress.IpAddress[0])
+		d.Set("subnet_id", instance.VpcAttributes.VSwitchId)
+	}
 
 	tags, _, err := conn.DescribeTags(&ecs.DescribeTagsArgs{
 		RegionId:     getRegion(d, meta),
 		ResourceType: ecs.TagResourceInstance,
 		ResourceId:   d.Id(),
 	})
+
 	if err != nil {
 		log.Printf("[DEBUG] DescribeTags for instance got error: %s", err)
 	}
