@@ -65,7 +65,7 @@ func resourceAliyunVpcCreate(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	ec2conn := meta.(*AliyunClient).ec2conn
+	ec2conn := meta.(*AliyunClient).ecsconn
 
 	vpc, err := ec2conn.CreateVpc(args)
 	if err != nil {
@@ -106,7 +106,7 @@ func resourceAliyunVpcRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAliyunVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	d.Partial(true)
 
@@ -146,7 +146,7 @@ func resourceAliyunVpcUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceAliyunVpcDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	if err := conn.DeleteVpc(d.Id()); err != nil {
 		return err

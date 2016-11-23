@@ -62,7 +62,7 @@ func resourceAliyunDiskCreate(d *schema.ResourceData, meta interface{}) error {
 
 	client := meta.(*AliyunClient)
 
-	conn := client.ec2conn
+	conn := client.ecsconn
 
 	availabilityZone, err := client.DescribeZone(d.Get("availability_zone").(string))
 	if err != nil {
@@ -141,7 +141,7 @@ func resourceAliyunDiskRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAliyunDiskUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*AliyunClient)
-	conn := client.ec2conn
+	conn := client.ecsconn
 
 	d.Partial(true)
 
@@ -183,7 +183,7 @@ func resourceAliyunDiskUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceAliyunDiskDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	err := conn.DeleteDisk(d.Id())
 	if err != nil {

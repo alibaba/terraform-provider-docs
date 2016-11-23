@@ -49,7 +49,7 @@ func resourceAliyunEip() *schema.Resource {
 }
 
 func resourceAliyunEipCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	args, err := buildAliyunEipArgs(d, meta)
 	if err != nil {
@@ -95,7 +95,7 @@ func resourceAliyunEipRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAliyunEipUpdate(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	d.Partial(true)
 
@@ -114,7 +114,7 @@ func resourceAliyunEipUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceAliyunEipDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	err := conn.ReleaseEipAddress(d.Id())
 	if err != nil {

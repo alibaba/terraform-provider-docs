@@ -37,7 +37,7 @@ func resourceAliyunSecurityGroup() *schema.Resource {
 }
 
 func resourceAliyunSecurityGroupCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	args, err := buildAliyunSecurityGroupArgs(d, meta)
 	if err != nil {
@@ -55,7 +55,7 @@ func resourceAliyunSecurityGroupCreate(d *schema.ResourceData, meta interface{})
 }
 
 func resourceAliyunSecurityGroupRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	args := &ecs.DescribeSecurityGroupAttributeArgs{
 		SecurityGroupId: d.Id(),
@@ -79,7 +79,7 @@ func resourceAliyunSecurityGroupRead(d *schema.ResourceData, meta interface{}) e
 
 func resourceAliyunSecurityGroupUpdate(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	d.Partial(true)
 
@@ -118,7 +118,7 @@ func resourceAliyunSecurityGroupUpdate(d *schema.ResourceData, meta interface{})
 
 func resourceAliyunSecurityGroupDelete(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	if err := conn.DeleteSecurityGroup(getRegion(d, meta), d.Id()); err != nil {
 		return err

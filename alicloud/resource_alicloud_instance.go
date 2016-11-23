@@ -150,7 +150,7 @@ func resourceAliyunInstance() *schema.Resource {
 }
 
 func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	args, err := buildAliyunInstanceArgs(d, meta)
 	if err != nil {
@@ -195,7 +195,7 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 }
 
 func resourceAliyunInstanceRead(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	instance, err := conn.DescribeInstanceAttribute(d.Id())
 	if err != nil {
@@ -256,7 +256,7 @@ func resourceAliyunInstanceRead(d *schema.ResourceData, meta interface{}) error 
 func resourceAliyunInstanceUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	client := meta.(*AliyunClient)
-	conn := client.ec2conn
+	conn := client.ecsconn
 
 	d.Partial(true)
 
@@ -347,7 +347,7 @@ func resourceAliyunInstanceUpdate(d *schema.ResourceData, meta interface{}) erro
 
 func resourceAliyunInstanceDelete(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	instance, err := conn.DescribeInstanceAttribute(d.Id())
 	if err != nil {

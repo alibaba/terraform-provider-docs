@@ -45,7 +45,7 @@ func resourceAliyunSubnet() *schema.Resource {
 
 func resourceAliyunSwitchCreate(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	args, err := buildAliyunSwitchArgs(d, meta)
 	if err != nil {
@@ -69,7 +69,7 @@ func resourceAliyunSwitchCreate(d *schema.ResourceData, meta interface{}) error 
 
 func resourceAliyunSwitchRead(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	args := &ecs.DescribeVSwitchesArgs{
 		VpcId:     d.Get("vpc_id").(string),
@@ -104,7 +104,7 @@ func resourceAliyunSwitchRead(d *schema.ResourceData, meta interface{}) error {
 
 func resourceAliyunSwitchUpdate(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	d.Partial(true)
 
@@ -142,7 +142,7 @@ func resourceAliyunSwitchUpdate(d *schema.ResourceData, meta interface{}) error 
 }
 
 func resourceAliyunSwitchDelete(d *schema.ResourceData, meta interface{}) error {
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	if err := conn.DeleteVSwitch(d.Id()); err != nil {
 		return err
