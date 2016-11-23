@@ -5,6 +5,13 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 )
 
+type InstanceNetWork string
+
+const (
+	ClassicNet = InstanceNetWork("Classic")
+	VpcNet = InstanceNetWork("Vpc")
+)
+
 const defaultTimeout = 120
 
 func getRegion(d *schema.ResourceData, meta interface{}) common.Region {
