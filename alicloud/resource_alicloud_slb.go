@@ -56,7 +56,7 @@ func resourceAliyunSlb() *schema.Resource {
 
 			"listener": &schema.Schema{
 				Type:     schema.TypeSet,
-				Required: true,
+				Optional:     true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"instance_port": &schema.Schema{
@@ -97,7 +97,6 @@ func resourceAliyunSlb() *schema.Resource {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
-				Computed: true,
 				Set:      schema.HashString,
 			},
 
@@ -108,7 +107,7 @@ func resourceAliyunSlb() *schema.Resource {
 
 			"vpc_id": &schema.Schema{
 				Type:     schema.TypeString,
-				Computed: true,
+				Optional: true,
 			},
 		},
 	}

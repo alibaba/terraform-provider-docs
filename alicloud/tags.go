@@ -25,7 +25,7 @@ func tagsSchema() *schema.Schema {
 // tags field to be named "tags"
 func setTags(client *AliyunClient, resourceType ecs.TagResourceType, d *schema.ResourceData) error {
 
-	conn := client.ec2conn
+	conn := client.ecsconn
 
 	if d.HasChange("tags") {
 		oraw, nraw := d.GetChange("tags")

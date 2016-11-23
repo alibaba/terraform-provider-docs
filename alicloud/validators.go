@@ -115,7 +115,7 @@ func validateIoOptimized(v interface{}, k string) (ws []string, errors []error) 
 	if value := v.(string); value != "" {
 		ioOptimized := ecs.IoOptimized(value)
 		if ioOptimized != ecs.IoOptimizedNone &&
-			ioOptimized != ecs.IoOptimizedOptimized {
+				ioOptimized != ecs.IoOptimizedOptimized {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid IoOptimized, expected %s or %s, got %q",
 				k, ecs.IoOptimizedNone, ecs.IoOptimizedOptimized, ioOptimized))
@@ -125,11 +125,24 @@ func validateIoOptimized(v interface{}, k string) (ws []string, errors []error) 
 	return
 }
 
+// validateInstanceNetworkType ensures that the string value is a Classic or VPC
+func validateInstanceNetworkType(v interface{}, k string) (ws []string, errors []error){
+	if value := v.(string); value != "" {
+		network := InstanceNetWork(value)
+		if network != ClassicNet &&
+				network != VpcNet {
+			errors = append(errors, fmt.Errorf(
+				"%q must contain a valid InstanceNetworkType, expected Clasic or Vpc", k))
+		}
+	}
+	return
+}
+
 func validateInstanceChargeType(v interface{}, k string) (ws []string, errors []error) {
 	if value := v.(string); value != "" {
 		chargeType := common.InstanceChargeType(value)
 		if chargeType != common.PrePaid &&
-			chargeType != common.PostPaid {
+				chargeType != common.PostPaid {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid InstanceChargeType, expected %s or %s, got %q",
 				k, common.PrePaid, common.PostPaid, chargeType))
@@ -143,7 +156,7 @@ func validateInternetChargeType(v interface{}, k string) (ws []string, errors []
 	if value := v.(string); value != "" {
 		chargeType := common.InternetChargeType(value)
 		if chargeType != common.PayByBandwidth &&
-			chargeType != common.PayByTraffic {
+				chargeType != common.PayByTraffic {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid InstanceChargeType, expected %s or %s, got %q",
 				k, common.PayByBandwidth, common.PayByTraffic, chargeType))
@@ -183,7 +196,7 @@ func validateSlbName(v interface{}, k string) (ws []string, errors []error) {
 func validateSlbInternetChargeType(v interface{}, k string) (ws []string, errors []error) {
 	if value := v.(string); value != "" {
 		if value != "paybybandwidth" &&
-			value != "paybytraffic" {
+				value != "paybytraffic" {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid InstanceChargeType, expected %s or %s, got %q",
 				k, "paybybandwidth", "paybytraffic", value))
