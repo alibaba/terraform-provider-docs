@@ -18,7 +18,7 @@ type Config struct {
 // AliyunClient of aliyun
 type AliyunClient struct {
 	Region  common.Region
-	ec2conn *ecs.Client
+	ecsconn *ecs.Client
 	vpcconn *ecs.Client
 	slbconn *slb.Client
 }
@@ -30,7 +30,7 @@ func (client *AliyunClient) DescribeEipAddress(allocationId string) (*ecs.EipAdd
 		AllocationId: allocationId,
 	}
 
-	eips, _, err := client.ec2conn.DescribeEipAddresses(&args)
+	eips, _, err := client.ecsconn.DescribeEipAddresses(&args)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (client *AliyunClient) DescribeNatGateway(natGatewayId string) (*NatGateway
 		NatGatewayId: natGatewayId,
 	}
 
-	natGateways, _, err := DescribeNatGateways(client.ec2conn, args)
+	natGateways, _, err := DescribeNatGateways(client.ecsconn, args)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func (client *AliyunClient) DescribeImage(imageId string) (*ecs.ImageType, error
 	var allImages []ecs.ImageType
 
 	for {
-		images, _, err := client.ec2conn.DescribeImages(&args)
+		images, _, err := client.ecsconn.DescribeImages(&args)
 		if err != nil {
 			break
 		}
@@ -114,7 +114,7 @@ func (client *AliyunClient) DescribeVpc(vpcId string) (*ecs.VpcSetType, error) {
 		VpcId:    vpcId,
 	}
 
-	vpcs, _, err := client.ec2conn.DescribeVpcs(&args)
+	vpcs, _, err := client.ecsconn.DescribeVpcs(&args)
 	if err != nil {
 		if notFoundError(err) {
 			return nil, nil
@@ -131,7 +131,7 @@ func (client *AliyunClient) DescribeVpc(vpcId string) (*ecs.VpcSetType, error) {
 
 // DescribeZone validate zoneId is valid in region
 func (client *AliyunClient) DescribeZone(zoneID string) (*ecs.ZoneType, error) {
-	zones, err := client.ec2conn.DescribeZones(client.Region)
+	zones, err := client.ecsconn.DescribeZones(client.Region)
 	if err != nil {
 		return nil, fmt.Errorf("error to list zones not found")
 	}
@@ -192,7 +192,7 @@ func (c *Config) Client() (*AliyunClient, error) {
 		return nil, err
 	}
 
-	ec2conn, err := c.ec2Conn()
+	ecsconn, err := c.ecsConn()
 	if err != nil {
 		return nil, err
 	}
@@ -209,7 +209,7 @@ func (c *Config) Client() (*AliyunClient, error) {
 
 	return &AliyunClient{
 		Region:  c.Region,
-		ec2conn: ec2conn,
+		ecsconn: ecsconn,
 		vpcconn: vpcconn,
 		slbconn: slbconn,
 	}, nil
@@ -235,7 +235,7 @@ func (c *Config) validateRegion() error {
 	return fmt.Errorf("Not a valid region: %s", c.Region)
 }
 
-func (c *Config) ec2Conn() (*ecs.Client, error) {
+func (c *Config) ecsConn() (*ecs.Client, error) {
 	client := ecs.NewClient(c.AccessKey, c.SecretKey)
 	_, err := client.DescribeRegions()
 
@@ -253,7 +253,7 @@ func (c *Config) slbConn() (*slb.Client, error) {
 }
 
 func (c *Config) vpcConn() (*ecs.Client, error) {
-	_, err := c.ec2Conn()
+	_, err := c.ecsConn()
 
 	if err != nil {
 		return nil, err

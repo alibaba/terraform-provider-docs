@@ -33,7 +33,7 @@ func resourceAliyunEipAssociation() *schema.Resource {
 
 func resourceAliyunEipAssociationCreate(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	allocationId := d.Get("allocation_id").(string)
 	instanceId := d.Get("instance_id").(string)
@@ -76,7 +76,7 @@ func resourceAliyunEipAssociationRead(d *schema.ResourceData, meta interface{}) 
 
 func resourceAliyunEipAssociationDelete(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	allocationId, instanceId, err := getAllocationIdAndInstanceId(d, meta)
 	if err != nil {

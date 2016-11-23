@@ -38,7 +38,7 @@ func resourceAliyunDiskAttachment() *schema.Resource {
 
 func resourceAliyunDiskAttachmentCreate(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	diskID := d.Get("disk_id").(string)
 	instanceID := d.Get("instance_id").(string)
@@ -73,7 +73,7 @@ func resourceAliyunDiskAttachmentRead(d *schema.ResourceData, meta interface{}) 
 
 func resourceAliyunDiskAttachmentDelete(d *schema.ResourceData, meta interface{}) error {
 
-	conn := meta.(*AliyunClient).ec2conn
+	conn := meta.(*AliyunClient).ecsconn
 
 	diskID, instanceID, err := getDisIDAndInstanceID(d, meta)
 	if err != nil {

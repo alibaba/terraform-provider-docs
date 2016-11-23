@@ -5,8 +5,8 @@ variable "image_id" { default = "ubuntu1404_64_40G_cloudinit_20160727.raw" }
 variable "role" {}
 variable "datacenter" {}
 variable "short_name" { default = "hi" }
-variable "ec2_type" {}
-variable "ec2_password" {}
+variable "ecs_type" {}
+variable "ecs_password" {}
 variable "availability_zones" {}
 variable "security_group_id" {}
 variable "ssh_username" { default = "root" }
@@ -32,7 +32,7 @@ resource "alicloud_instance" "instance" {
   instance_name = "${var.short_name}-${var.role}-${format(var.count_format, count.index+1)}"
   host_name = "${var.short_name}-${var.role}-${format(var.count_format, count.index+1)}"
   image_id = "${var.image_id}"
-  instance_type = "${var.ec2_type}"
+  instance_type = "${var.ecs_type}"
   count = "${var.count}"
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
   security_group_id = "${var.security_group_id}"
@@ -41,7 +41,7 @@ resource "alicloud_instance" "instance" {
   internet_max_bandwidth_out = "${var.internet_max_bandwidth_out}"
   instance_network_type = "${var.instance_network_type}"
 
-  password = "${var.ec2_password}"
+  password = "${var.ecs_password}"
 
   subnet_id = "${var.subnet_id}"
 

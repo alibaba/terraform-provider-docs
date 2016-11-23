@@ -1,17 +1,17 @@
-variable "ec2_password" { default = "Test12345" }
+variable "ecs_password" { default = "Test12345" }
   
 variable "control_count" { default = "3" }
 variable "control_count_format" { default = "%02d" }
-variable "control_ec2_type" { default = "ecs.n1.medium" }
+variable "control_ecs_type" { default = "ecs.n1.medium" }
 variable "control_disk_size" { default = "100" }
  
 variable "edge_count" { default = "2" }
 variable "edge_count_format" { default = "%02d" }
-variable "edge_ec2_type" { default = "ecs.n1.small" }
+variable "edge_ecs_type" { default = "ecs.n1.small" }
  
 variable "worker_count" { default = "1" }
 variable "worker_count_format" { default = "%03d" }
-variable "worker_ec2_type" { default = "ecs.n1.small" }
+variable "worker_ecs_type" { default = "ecs.n1.small" }
   
 variable "short_name" { default = "hi" }
 variable "ssh_username" { default = "root" }
@@ -46,8 +46,8 @@ module "control-nodes" {
   count = "${var.control_count}"
   role = "control"
   datacenter = "${var.datacenter}"
-  ec2_type = "${var.control_ec2_type}"
-  ec2_password = "${var.ec2_password}"
+  ecs_type = "${var.control_ecs_type}"
+  ecs_password = "${var.ecs_password}"
   disk_size = "${var.control_disk_size}"
   ssh_username = "${var.ssh_username}"
   short_name = "${var.short_name}"
@@ -61,8 +61,8 @@ module "edge-nodes" {
   count = "${var.edge_count}"
   role = "edge"
   datacenter = "${var.datacenter}"
-  ec2_type = "${var.edge_ec2_type}"
-  ec2_password = "${var.ec2_password}"
+  ecs_type = "${var.edge_ecs_type}"
+  ecs_password = "${var.ecs_password}"
   ssh_username = "${var.ssh_username}"
   short_name = "${var.short_name}"
   availability_zones = "${module.vpc.availability_zones}"
@@ -75,8 +75,8 @@ module "worker-nodes" {
   count = "${var.worker_count}"
   role = "worker"
   datacenter = "${var.datacenter}"
-  ec2_type = "${var.worker_ec2_type}"
-  ec2_password = "${var.ec2_password}"
+  ecs_type = "${var.worker_ecs_type}"
+  ecs_password = "${var.ecs_password}"
   ssh_username = "${var.ssh_username}"
   short_name = "${var.short_name}"
   availability_zones = "${module.vpc.availability_zones}"
