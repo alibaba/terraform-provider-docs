@@ -19,7 +19,7 @@ variable "disk_category" { default = "cloud_ssd" }
 variable "disk_size" { default = "40" }
 variable "device_name" { default = "/dev/xvdb" }
 
-variable "subnet_id" {}
+variable "subnet_id" { default = "" }
 
 resource "alicloud_disk" "disk" {
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
