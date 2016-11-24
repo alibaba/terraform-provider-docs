@@ -1,7 +1,7 @@
 variable "name" { default = "slb_alicloud" }
 variable "instances" {
   type = "list"
-  default = ["i-25kojm48j","i-2zei6bjj50wex2kj5cfg"]
+  default = ["i-25kojm48j","i-2zedq821wnpah25zglps"]
 }
 
 variable "internet_charge_type" { default = "paybybandwidth" }
