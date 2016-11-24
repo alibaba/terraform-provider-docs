@@ -195,11 +195,12 @@ func validateSlbName(v interface{}, k string) (ws []string, errors []error) {
 
 func validateSlbInternetChargeType(v interface{}, k string) (ws []string, errors []error) {
 	if value := v.(string); value != "" {
-		if value != "paybybandwidth" &&
-				value != "paybytraffic" {
+		chargeType := common.InternetChargeType(value)
+		if chargeType != common.SlbPayByBandwidth &&
+				chargeType != common.SlbPayByTraffic {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid InstanceChargeType, expected %s or %s, got %q",
-				k, "paybybandwidth", "paybytraffic", value))
+				k, common.SlbPayByBandwidth, common.SlbPayByTraffic, value))
 		}
 	}
 
