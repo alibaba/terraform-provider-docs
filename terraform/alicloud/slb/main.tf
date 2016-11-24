@@ -1,14 +1,24 @@
-variable "name" { default = "slb_alicloud" }
+variable "name" {
+  default = "slb_alicloud"
+}
 variable "instances" {
   type = "list"
-  default = ["i-25kojm48j","i-2zedq821wnpah25zglps"]
+  default = [
+    "i-25kojm48j",
+    "i-2zedq821wnpah25zglps"]
 }
 
-variable "internet_charge_type" { default = "paybybandwidth" }
+variable "internet_charge_type" {
+  default = "paybybandwidth"
+}
 
-variable "bandwidth" { default = 10 }
+variable "bandwidth" {
+  default = 10
+}
 
-variable "internet" { default = true }
+variable "internet" {
+  default = true
+}
 
 
 resource "alicloud_slb" "instance" {
@@ -24,7 +34,8 @@ resource "alicloud_slb" "instance" {
       "lb_port" = "3376"
       "lb_protocol" = "tcp"
       "bandwidth" = "5"
-    },{
+    },
+    {
       "instance_port" = "81"
       "instance_protocol" = "http"
       "lb_port" = "8080"

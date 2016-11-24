@@ -212,7 +212,6 @@ func resourceAliyunSlbUpdate(d *schema.ResourceData, meta interface{}) error {
 		d.SetPartial("name")
 	}
 
-
 	if d.Get("vswitch_id") == "" {
 		//don't intranet web, then can modify bandwidth
 		if d.HasChange("bandwidth") {
@@ -228,7 +227,6 @@ func resourceAliyunSlbUpdate(d *schema.ResourceData, meta interface{}) error {
 			d.SetPartial("bandwidth")
 		}
 	}
-
 
 	if d.HasChange("listener") {
 		o, n := d.GetChange("listener")

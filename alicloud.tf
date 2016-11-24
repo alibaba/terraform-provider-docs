@@ -1,21 +1,42 @@
-variable "ecs_password" { default = "" }
+variable "ecs_password" {
+  default = "Test12345"
+}
 
-variable "worker_count" { default = "1" }
-variable "worker_count_format" { default = "%03d" }
-variable "worker_ecs_type" { default = "ecs.n1.small" }
+variable "worker_count" {
+  default = "1"
+}
+variable "worker_count_format" {
+  default = "%03d"
+}
+variable "worker_ecs_type" {
+  default = "ecs.n1.small"
+}
 
+variable "short_name" {
+  default = "hi"
+}
+variable "ssh_username" {
+  default = "root"
+}
 
-variable "short_name" { default = "hi" }
-variable "ssh_username" { default = "root" }
+variable "region" {
+  default = "cn-beijing"
+}
 
-variable "region" { default = "cn-beijing"}
+variable "secrity_group" {
+  default = "sg-25y6ag32b"
+}
+variable "availability_zones" {
+  default = "cn-beijing-b"
+}
 
-variable "secrity_group" {default = "sg-25y6ag32b"}
-variable "availability_zones" {default = "cn-beijing-b"}
+variable "internet_charge_type" {
+  default = "PayByTraffic"
+}
 
-variable "internet_charge_type" { default = "PayByTraffic" }
-
-variable "datacenter" { default = "beijing" }
+variable "datacenter" {
+  default = "beijing"
+}
 
 provider "alicloud" {
   region = "${var.region}"
