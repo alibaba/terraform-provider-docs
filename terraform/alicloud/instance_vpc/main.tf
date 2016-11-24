@@ -21,6 +21,7 @@ variable "region" { default = "cn-beijing"}
 variable "availability_zones" {default = "cn-beijing-c"}
 
 variable "internet_charge_type" { default = "PayByTraffic" }
+variable "instance_network_type" { default = "Vpc" }
 
 variable "datacenter" { default = "beijing" }
 
@@ -53,7 +54,7 @@ module "control-nodes" {
   short_name = "${var.short_name}"
   availability_zones = "${module.vpc.availability_zones}"
   security_group_id = "${module.security-groups.control_security_group}"
-  subnet_id = "${module.vpc.subnet_ids}"
+  vswitch_id = "${module.vpc.vswitch_ids}"
 }
 
 module "edge-nodes" {
@@ -67,7 +68,7 @@ module "edge-nodes" {
   short_name = "${var.short_name}"
   availability_zones = "${module.vpc.availability_zones}"
   security_group_id = "${module.security-groups.worker_security_group}"
-  subnet_id = "${module.vpc.subnet_ids}"
+  vswitch_id = "${module.vpc.vswitch_ids}"
 }
 
 module "worker-nodes" {
@@ -81,6 +82,6 @@ module "worker-nodes" {
   short_name = "${var.short_name}"
   availability_zones = "${module.vpc.availability_zones}"
   security_group_id = "${module.security-groups.worker_security_group}"
-  subnet_id = "${module.vpc.subnet_ids}"
+  vswitch_id = "${module.vpc.vswitch_ids}"
   internet_charge_type = "${var.internet_charge_type}"
 }

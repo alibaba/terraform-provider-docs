@@ -19,7 +19,7 @@ variable "disk_category" { default = "cloud_ssd" }
 variable "disk_size" { default = "40" }
 variable "device_name" { default = "/dev/xvdb" }
 
-variable "subnet_id" { default = "" }
+variable "vswitch_id" { default = "" }
 
 resource "alicloud_disk" "disk" {
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
@@ -43,7 +43,7 @@ resource "alicloud_instance" "instance" {
 
   password = "${var.ecs_password}"
 
-  subnet_id = "${var.subnet_id}"
+  vswitch_id = "${var.vswitch_id}"
 
   instance_charge_type = "PostPaid"
   period = "1"

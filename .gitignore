@@ -5,5 +5,6 @@ terraform-provider-alicloud
 crash.log
 terraform.tfstate
 terraform.tfstate.backup
-*.bak 
+terraform.log
+*.bak
 \.gitignore.swp 

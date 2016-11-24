@@ -46,7 +46,7 @@ output "vpc_id" {
   value = "${alicloud_vpc.main.id}"
 }
 
-output "subnet_ids" {
+output "vswitch_ids" {
   value = "${join(",", alicloud_subnet.main.*.id)}"
 }
 
