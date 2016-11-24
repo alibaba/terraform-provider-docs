@@ -212,17 +212,20 @@ func resourceAliyunSlbUpdate(d *schema.ResourceData, meta interface{}) error {
 		d.SetPartial("name")
 	}
 
-	if d.HasChange("bandwidth") {
-		args := &slb.ModifyLoadBalancerInternetSpecArgs{
-			LoadBalancerId: d.Id(),
-			Bandwidth:      d.Get("bandwidth").(int),
-		}
-		err := slbconn.ModifyLoadBalancerInternetSpec(args)
-		if err != nil {
-			return err
-		}
+	if d.Get("vswitch_id") == "" {
+		//don't intranet web, then can modify bandwidth
+		if d.HasChange("bandwidth") {
+			args := &slb.ModifyLoadBalancerInternetSpecArgs{
+				LoadBalancerId: d.Id(),
+				Bandwidth:      d.Get("bandwidth").(int),
+			}
+			err := slbconn.ModifyLoadBalancerInternetSpec(args)
+			if err != nil {
+				return err
+			}
 
-		d.SetPartial("bandwidth")
+			d.SetPartial("bandwidth")
+		}
 	}
 
 	if d.HasChange("listener") {

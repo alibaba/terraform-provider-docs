@@ -108,7 +108,14 @@ func resourceAliyunInstance() *schema.Resource {
 				Computed: true,
 			},
 
+			//subnet_id and vswitch_id both exists, cause compatible old version, and aws habit.
 			"subnet_id": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				ForceNew: true,
+			},
+
+			"vswitch_id": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				ForceNew: true,
@@ -169,8 +176,9 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 	d.SetPartial("instance_name")
 	d.SetPartial("description")
 	d.SetPartial("password")
-	if(d.Get("subnet_id") != ""){
+	if (d.Get("subnet_id") != "" || d.Get("vswitch_id") != "") {
 		d.SetPartial("subnet_id")
+		d.SetPartial("vswitch_id")
 	}
 	d.SetPartial("system_disk_category")
 	d.SetPartial("instance_charge_type")
@@ -230,11 +238,12 @@ func resourceAliyunInstanceRead(d *schema.ResourceData, meta interface{}) error 
 
 	}
 
-	if(d.Get("instance_network_type") == "Classic"){
+	if (d.Get("instance_network_type") == "Classic") {
 		d.Set("private_ip", instance.InnerIpAddress)
 	} else {
 		d.Set("private_ip", instance.VpcAttributes.PrivateIpAddress.IpAddress[0])
 		d.Set("subnet_id", instance.VpcAttributes.VSwitchId)
+		d.Set("vswitch_id", instance.VpcAttributes.VSwitchId)
 	}
 
 	tags, _, err := conn.DescribeTags(&ecs.DescribeTagsArgs{
@@ -442,8 +451,12 @@ func buildAliyunInstanceArgs(d *schema.ResourceData, meta interface{}) (*ecs.Cre
 		args.IoOptimized = ecs.IoOptimized(v)
 	}
 
-	if v := d.Get("subnet_id").(string); v != "" {
-		args.VSwitchId = v
+	vswitchValue := d.Get("subnet_id").(string)
+	if vswitchValue == "" {
+		vswitchValue = d.Get("vswitch_id").(string)
+	}
+	if (vswitchValue != "") {
+		args.VSwitchId = vswitchValue
 	}
 
 	if v := d.Get("instance_charge_type").(string); v != "" {
