@@ -176,7 +176,7 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 	d.SetPartial("instance_name")
 	d.SetPartial("description")
 	d.SetPartial("password")
-	if(d.Get("subnet_id") != "" || d.Get("vswitch_id") != ""){
+	if (d.Get("subnet_id") != "" || d.Get("vswitch_id") != "") {
 		d.SetPartial("subnet_id")
 		d.SetPartial("vswitch_id")
 	}
@@ -238,7 +238,7 @@ func resourceAliyunInstanceRead(d *schema.ResourceData, meta interface{}) error 
 
 	}
 
-	if(d.Get("instance_network_type") == "Classic"){
+	if (d.Get("instance_network_type") == "Classic") {
 		d.Set("private_ip", instance.InnerIpAddress)
 	} else {
 		d.Set("private_ip", instance.VpcAttributes.PrivateIpAddress.IpAddress[0])
@@ -455,7 +455,7 @@ func buildAliyunInstanceArgs(d *schema.ResourceData, meta interface{}) (*ecs.Cre
 	if vswitchValue == "" {
 		vswitchValue = d.Get("vswitch_id").(string)
 	}
-	if(vswitchValue != ""){
+	if (vswitchValue != "") {
 		args.VSwitchId = vswitchValue
 	}
 

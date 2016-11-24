@@ -14,7 +14,9 @@ func TestAccAliCloudVpc_basic(t *testing.T) {
 	var vpc ecs.VpcSetType
 
 	resource.Test(t, resource.TestCase{
-		PreCheck:     func() { testAccPreCheck(t) },
+		PreCheck:     func() {
+			testAccPreCheck(t)
+		},
 		Providers:    testAccProviders,
 		CheckDestroy: testAccCheckVpcDestroy,
 		Steps: []resource.TestStep{

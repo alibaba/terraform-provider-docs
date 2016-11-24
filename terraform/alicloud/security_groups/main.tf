@@ -1,5 +1,7 @@
-variable "short_name" {}
-variable "vpc_id" {}
+variable "short_name" {
+}
+variable "vpc_id" {
+}
 
 resource "alicloud_security_group" "default" {
   name = "${var.short_name}-default"
