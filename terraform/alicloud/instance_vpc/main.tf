@@ -51,8 +51,13 @@ variable "availability_zones" {
 }
 
 variable "internet_charge_type" {
-  default = "PayByTraffic"
+  default = ""
 }
+
+variable "slb_internet_charge_type" {
+  default = "paybytraffic"
+}
+
 variable "instance_network_type" {
   default = "Vpc"
 }
@@ -91,6 +96,7 @@ module "control-nodes" {
   availability_zones = "${module.vpc.availability_zones}"
   security_group_id = "${module.security-groups.control_security_group}"
   vswitch_id = "${module.vpc.vswitch_ids}"
+  internet_charge_type = "${var.internet_charge_type}"
 }
 
 module "edge-nodes" {
@@ -105,6 +111,7 @@ module "edge-nodes" {
   availability_zones = "${module.vpc.availability_zones}"
   security_group_id = "${module.security-groups.worker_security_group}"
   vswitch_id = "${module.vpc.vswitch_ids}"
+  internet_charge_type = "${var.internet_charge_type}"
 }
 
 module "worker-nodes" {

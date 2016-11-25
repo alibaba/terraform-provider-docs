@@ -5,15 +5,11 @@ variable "instances" {
   type = "list"
   default = [
     "i-25kojm48j",
-    "i-2ze4ipzpabr2le8tsyo9"]
+    "i-2ze9m8g19q0j5swvonth"]
 }
 
 variable "internet_charge_type" {
-  default = "PayByTraffic"
-}
-
-variable "bandwidth" {
-  default = 10
+  default = "paybytraffic"
 }
 
 variable "internet" {
@@ -25,7 +21,6 @@ resource "alicloud_slb" "instance" {
   name = "${var.name}"
   instances = "${var.instances}"
   internet_charge_type = "${var.internet_charge_type}"
-  bandwidth = "${var.bandwidth}"
   internet = "${var.internet}"
   listener = [
     {
