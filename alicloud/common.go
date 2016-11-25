@@ -12,6 +12,7 @@ const (
 	VpcNet = InstanceNetWork("Vpc")
 )
 
+
 const defaultTimeout = 120
 
 func getRegion(d *schema.ResourceData, meta interface{}) common.Region {
