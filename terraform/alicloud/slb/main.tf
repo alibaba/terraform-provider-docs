@@ -5,11 +5,11 @@ variable "instances" {
   type = "list"
   default = [
     "i-25kojm48j",
-    "i-2zedq821wnpah25zglps"]
+    "i-2ze4ipzpabr2le8tsyo9"]
 }
 
 variable "internet_charge_type" {
-  default = "paybybandwidth"
+  default = "PayByTraffic"
 }
 
 variable "bandwidth" {
