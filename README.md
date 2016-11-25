@@ -27,12 +27,30 @@
 		 "terraform get"
 		 "terraform plan" //input the tips parameters, such as access_key, secret_key , or zone, ecs instance name etc.
 		 "terraform apply"
+		 
+3. or used export setting parameters below:
+
+		export ALICLOUD_ACCESS_KEY=*** 
+		export ALICLOUD_SECRET_KEY=***
+		terraform get
+		terraform plan
+		terraform apply
+		terraform destroy
+		...
 
 ### Folder description
+
+	* notice: if you will run the special *.tf file, need enter the folder, then run terraform get etc commands.
+
+
 1. The /alicloud.tf file is Terraform template for Terraform module, It's link source to terraform/alicloud/instance/main.tf, so run the template(.tf) will create the instance of classic web, if update the zone or region etc parameters, then create instance used the updated parameters.
-2. The terraform/alicloud/main.tf will create the ecs instance.
-3. The security_groups/main.tf will create the security groups in special VPC
-4. The vpc/main.tf will create the VPC and VSwitch and NatGateway.
+2. The terraform/alicloud/instance/main.tf will create the ecs instance.
+3. The terraform/alicloud/instanc_vpc/main.tf will create the VPC cluster, include ECS\VPC\VSWithc\NetGateWay\SecurityGroup.
+4. The terraform/alicloud/slb/main.tf will create SLB and addition ECS servers, and addition listeners.
+5. The terraform/alicloud/slb_vpc/main.tf will create SLB in VPC.
+6. The security_groups/main.tf will create the security groups in special VPC
+7. The vpc/main.tf will create the VPC and VSwitch and NatGateway.
+
 
 ### How to contribute code
 * We expect contribute the code in this repository for aliyun production and the terraform template, you have pull request it.

@@ -185,11 +185,23 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 	d.SetPartial("availability_zone")
 	d.SetPartial("allocate_public_ip")
 
+	if (d.Get("allocate_public_ip").(bool)) {
+		ipAddress, err := conn.AllocatePublicIpAddress(d.Id())
+		if err != nil {
+			log.Printf("[DEBUG] AllocatePublicIpAddress for instance got error: %s", err)
+		} else {
+			d.Set("public_ip", ipAddress)
+		}
+	}
+
+
 	// after instance created, its status is pending,
 	// so we need to wait it become to stopped and then start it
 	if err := conn.WaitForInstance(d.Id(), ecs.Stopped, defaultTimeout); err != nil {
 		log.Printf("[DEBUG] WaitForInstance %s got error: %s", ecs.Stopped, err)
 	}
+
+
 
 	if err := conn.StartInstance(d.Id()); err != nil {
 		return fmt.Errorf("Start instance got error: %s", err)
@@ -227,16 +239,6 @@ func resourceAliyunInstanceRead(d *schema.ResourceData, meta interface{}) error 
 	d.Set("io_optimized", instance.IoOptimized)
 
 	d.Set("host_name", instance.HostName)
-
-	if (d.Get("allocate_public_ip").(bool)) {
-		ipAddress, err := conn.AllocatePublicIpAddress(d.Id())
-		if err != nil {
-			log.Printf("[DEBUG] AllocatePublicIpAddress for instance got error: %s", err)
-		} else {
-			d.Set("public_ip", ipAddress)
-		}
-
-	}
 
 	if (d.Get("instance_network_type") == "Classic") {
 		d.Set("private_ip", instance.InnerIpAddress)
@@ -463,9 +465,10 @@ func buildAliyunInstanceArgs(d *schema.ResourceData, meta interface{}) (*ecs.Cre
 		args.InstanceChargeType = common.InstanceChargeType(v)
 	}
 
+	log.Printf("[DEBUG] period is %s", d.Get("period").(int))
 	if v := d.Get("period").(int); v != 0 {
 		args.Period = v
-	} else if args.InstanceChargeType == common.PrePaid {
+	} else if args.InstanceChargeType != common.PrePaid {
 		return nil, fmt.Errorf("period is required for instance_charge_type is PrePaid")
 	}
 
