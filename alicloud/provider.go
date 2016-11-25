@@ -38,7 +38,9 @@ func Provider() terraform.ResourceProvider {
 			"alicloud_security_group":  resourceAliyunSecurityGroup(),
 			"alicloud_vpc":             resourceAliyunVpc(),
 			"alicloud_nat_gateway":     resourceAliyunNatGateway(),
+			//both subnet and vswith exists,cause compatible old version, and compatible aws habit.
 			"alicloud_subnet":          resourceAliyunSubnet(),
+			"alicloud_vswitch":          resourceAliyunSubnet(),
 			"alicloud_eip":             resourceAliyunEip(),
 			"alicloud_eip_association": resourceAliyunEipAssociation(),
 			"alicloud_slb":             resourceAliyunSlb(),
