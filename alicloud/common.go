@@ -12,10 +12,6 @@ const (
 	VpcNet = InstanceNetWork("Vpc")
 )
 
-<<<<<<< HEAD
-=======
-
->>>>>>> alibaba-dev
 const defaultTimeout = 120
 
 func getRegion(d *schema.ResourceData, meta interface{}) common.Region {

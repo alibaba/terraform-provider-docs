@@ -184,8 +184,6 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 	d.SetPartial("instance_charge_type")
 	d.SetPartial("availability_zone")
 	d.SetPartial("allocate_public_ip")
-<<<<<<< HEAD
-=======
 
 	if (d.Get("allocate_public_ip").(bool)) {
 		ipAddress, err := conn.AllocatePublicIpAddress(d.Id())
@@ -195,7 +193,7 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 			d.Set("public_ip", ipAddress)
 		}
 	}
->>>>>>> alibaba-dev
+
 
 	// after instance created, its status is pending,
 	// so we need to wait it become to stopped and then start it
@@ -242,19 +240,6 @@ func resourceAliyunInstanceRead(d *schema.ResourceData, meta interface{}) error 
 
 	d.Set("host_name", instance.HostName)
 
-<<<<<<< HEAD
-	if (d.Get("allocate_public_ip").(bool)) {
-		ipAddress, err := conn.AllocatePublicIpAddress(d.Id())
-		if err != nil {
-			log.Printf("[DEBUG] AllocatePublicIpAddress for instance got error: %s", err)
-		} else {
-			d.Set("public_ip", ipAddress)
-		}
-
-	}
-
-=======
->>>>>>> alibaba-dev
 	if (d.Get("instance_network_type") == "Classic") {
 		d.Set("private_ip", instance.InnerIpAddress)
 	} else {

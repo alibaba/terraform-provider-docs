@@ -196,17 +196,12 @@ func validateSlbName(v interface{}, k string) (ws []string, errors []error) {
 func validateSlbInternetChargeType(v interface{}, k string) (ws []string, errors []error) {
 	if value := v.(string); value != "" {
 		chargeType := common.InternetChargeType(value)
-<<<<<<< HEAD
-		if chargeType != common.SlbPayByBandwidth &&
-				chargeType != common.SlbPayByTraffic {
-=======
 
 		if chargeType != "paybybandwidth" &&
 				chargeType != "paybytraffic" {
->>>>>>> alibaba-dev
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid InstanceChargeType, expected %s or %s, got %q",
-				k, common.SlbPayByBandwidth, common.SlbPayByTraffic, value))
+				k, "paybybandwidth", "paybytraffic", value))
 		}
 	}
 
