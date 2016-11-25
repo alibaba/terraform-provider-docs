@@ -44,7 +44,7 @@ func resourceAliyunSlb() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ForceNew:     true,
-				//ValidateFunc: validateSlbInternetChargeType,
+				ValidateFunc: validateInternetChargeType,
 			},
 
 			"bandwidth": &schema.Schema{
@@ -139,7 +139,8 @@ func resourceAliyunSlbCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if v, ok := d.GetOk("internet_charge_type"); ok && v.(string) != "" {
-		slbArgs.InternetChargeType = common.InternetChargeType(v.(string))
+		chargeType := strings.ToLower(v.(string))
+		slbArgs.InternetChargeType = common.InternetChargeType(chargeType)
 	}
 
 	if v, ok := d.GetOk("bandwidth"); ok && v.(int) != 0 {
