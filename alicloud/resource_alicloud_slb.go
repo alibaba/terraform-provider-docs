@@ -44,7 +44,7 @@ func resourceAliyunSlb() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ForceNew:     true,
-				ValidateFunc: validateSlbInternetChargeType,
+				//ValidateFunc: validateSlbInternetChargeType,
 			},
 
 			"bandwidth": &schema.Schema{
