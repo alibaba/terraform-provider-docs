@@ -1,12 +1,6 @@
 variable "name" {
   default = "slb_alicloud"
 }
-variable "instances" {
-  type = "list"
-  default = [
-    "i-2zed2q5rh97ew2ylmxhg",
-    "i-2ze1luzgqvdvy4rzp2dg"]
-}
 variable "vpc_id" {
   default = "vpc-2zefstl5ld0ysotubvzm6"
 }
@@ -25,7 +19,6 @@ variable "internet" {
 
 resource "alicloud_slb" "instance" {
   name = "${var.name}"
-  instances = "${var.instances}"
   vpc_id = "${var.vpc_id}"
   vswitch_id = "${var.vswitch_id}"
   internet_charge_type = "${var.internet_charge_type}"
@@ -40,10 +33,10 @@ resource "alicloud_slb" "instance" {
     }]
 }
 
-output "slbname" {
-  value = "${alicloud_slb.instance.name}"
+output "slb_id" {
+  value = "${alicloud_slb.instance.id}"
 }
 
-output "instances" {
-  value = "${alicloud_slb.instance.instances}"
+output "slbname" {
+  value = "${alicloud_slb.instance.name}"
 }

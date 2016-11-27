@@ -47,10 +47,6 @@ variable "device_name" {
   default = "/dev/xvdb"
 }
 
-variable "vswitch_id" {default = ""}
-variable "load_balancer" {}
-variable "load_balancer_weight" {}
-
 resource "alicloud_disk" "disk" {
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
   category = "${var.disk_category}"
@@ -66,7 +62,6 @@ resource "alicloud_instance" "instance" {
   count = "${var.count}"
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
   security_group_id = "${var.security_group_id}"
-  vswitch_id = "${var.vswitch_id}"
 
   internet_charge_type = "${var.internet_charge_type}"
   internet_max_bandwidth_out = "${var.internet_max_bandwidth_out}"
@@ -78,8 +73,6 @@ resource "alicloud_instance" "instance" {
   period = "1"
   system_disk_category = "cloud_efficiency"
 
-  load_balancer = "${var.load_balancer}"
-  load_balancer_weight = "${var.load_balancer_weight}"
 
   tags {
     role = "${var.role}"

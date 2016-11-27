@@ -9,39 +9,38 @@ variable "image_id" {
 }
 
 variable "role" {
-  default = "worder"
 }
 variable "datacenter" {
-  default = "beijing"
 }
 variable "short_name" {
   default = "hi"
 }
 variable "ecs_type" {
-  default = "ecs.n1.small"
 }
 variable "ecs_password" {
-  default = "Test12345"
 }
 variable "availability_zones" {
-  default = "cn-beijing-b"
 }
 variable "security_group_id" {
-  default = "sg-25y6ag32b"
 }
 variable "ssh_username" {
   default = "root"
 }
 
+//if instance_charge_type is "PrePaid", then must be set period, the value is 1 to 30, unit is month
+variable "instance_charge_type" {
+  default = "PostPaid"
+}
+
+variable "system_disk_category" {
+  default = "cloud_efficiency"
+}
+
 variable "internet_charge_type" {
   default = "PayByTraffic"
 }
-
-variable "slb_internet_charge_type" {
-  default = "paybytraffic"
-}
 variable "instance_network_type" {
-  default = "Classic"
+  default = "Vpc"
 }
 variable "internet_max_bandwidth_out" {
   default = 5
@@ -57,17 +56,7 @@ variable "device_name" {
   default = "/dev/xvdb"
 }
 
-variable "slb_name" {
-  default = "slb_worder"
-}
-
-variable "internet" {
-  default = true
-}
-
-variable "load_balancer_weight" {
-  default = "100"
-}
+variable "vswitch_id" {default = ""}
 
 resource "alicloud_disk" "disk" {
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
@@ -84,6 +73,7 @@ resource "alicloud_instance" "instance" {
   count = "${var.count}"
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
   security_group_id = "${var.security_group_id}"
+  vswitch_id = "${var.vswitch_id}"
 
   internet_charge_type = "${var.internet_charge_type}"
   internet_max_bandwidth_out = "${var.internet_max_bandwidth_out}"
@@ -91,18 +81,14 @@ resource "alicloud_instance" "instance" {
 
   password = "${var.ecs_password}"
 
-  instance_charge_type = "PostPaid"
-  period = "1"
-  system_disk_category = "cloud_efficiency"
+  instance_charge_type = "${var.instance_charge_type}"
+  system_disk_category = "${var.system_disk_category}"
 
 
   tags {
     role = "${var.role}"
     dc = "${var.datacenter}"
   }
-
-  load_balancer = "${alicloud_slb.instance.id}"
-  load_balancer_weight = "${var.load_balancer_weight}"
 
 }
 
@@ -111,28 +97,6 @@ resource "alicloud_disk_attachment" "instance-attachment" {
   disk_id = "${element(alicloud_disk.disk.*.id, count.index)}"
   instance_id = "${element(alicloud_instance.instance.*.id, count.index)}"
   device_name = "${var.device_name}"
-}
-
-resource "alicloud_slb" "instance" {
-  name = "${var.slb_name}"
-  internet_charge_type = "${var.slb_internet_charge_type}"
-  internet = "${var.internet}"
-
-  listener = [{
-    "instance_port" = "2375"
-    "instance_protocol" = "tcp"
-    "lb_port" = "3376"
-    "lb_protocol" = "tcp"
-    "bandwidth" = "5"
-  }]
-}
-
-output "slb_id" {
-  value = "${alicloud_slb.instance.id}"
-}
-
-output "slbname" {
-  value = "${alicloud_slb.instance.name}"
 }
 
 output "hostname_list" {

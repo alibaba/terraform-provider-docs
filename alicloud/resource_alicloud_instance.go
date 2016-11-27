@@ -528,7 +528,7 @@ func buildAliyunInstanceArgs(d *schema.ResourceData, meta interface{}) (*ecs.Cre
 	log.Printf("[DEBUG] period is %s", d.Get("period").(int))
 	if v := d.Get("period").(int); v != 0 {
 		args.Period = v
-	} else if args.InstanceChargeType != common.PrePaid {
+	} else if args.InstanceChargeType == common.PrePaid {
 		return nil, fmt.Errorf("period is required for instance_charge_type is PrePaid")
 	}
 

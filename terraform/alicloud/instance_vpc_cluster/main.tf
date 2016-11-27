@@ -54,14 +54,6 @@ variable "internet_charge_type" {
   default = ""
 }
 
-variable "slb_internet_charge_type" {
-  default = "paybytraffic"
-}
-
-variable "instance_network_type" {
-  default = "Vpc"
-}
-
 variable "datacenter" {
   default = "beijing"
 }
@@ -84,7 +76,7 @@ module "security-groups" {
 }
 
 module "control-nodes" {
-  source = "../instance"
+  source = "../instance_vpc_base"
   count = "${var.control_count}"
   role = "control"
   datacenter = "${var.datacenter}"
@@ -100,7 +92,7 @@ module "control-nodes" {
 }
 
 module "edge-nodes" {
-  source = "../instance"
+  source = "../instance_vpc_base"
   count = "${var.edge_count}"
   role = "edge"
   datacenter = "${var.datacenter}"
@@ -115,7 +107,7 @@ module "edge-nodes" {
 }
 
 module "worker-nodes" {
-  source = "../instance"
+  source = "../instance_vpc_base"
   count = "${var.worker_count}"
   role = "worker"
   datacenter = "${var.datacenter}"
@@ -128,3 +120,4 @@ module "worker-nodes" {
   vswitch_id = "${module.vpc.vswitch_ids}"
   internet_charge_type = "${var.internet_charge_type}"
 }
+
