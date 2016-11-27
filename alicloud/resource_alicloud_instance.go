@@ -7,6 +7,7 @@ import (
 	"github.com/denverdino/aliyungo/common"
 	"github.com/denverdino/aliyungo/ecs"
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/denverdino/aliyungo/slb"
 )
 
 func resourceAliyunInstance() *schema.Resource {
@@ -152,6 +153,16 @@ func resourceAliyunInstance() *schema.Resource {
 			},
 
 			"tags": tagsSchema(),
+
+			"load_balancer":  &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+			},
+
+			"load_balancer_weight": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+			},
 		},
 	}
 }
@@ -182,6 +193,7 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 	}
 	d.SetPartial("system_disk_category")
 	d.SetPartial("instance_charge_type")
+	d.SetPartial("internet_charge_type")
 	d.SetPartial("availability_zone")
 	d.SetPartial("allocate_public_ip")
 
@@ -193,6 +205,7 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 			d.Set("public_ip", ipAddress)
 		}
 	}
+
 
 	// after instance created, its status is pending,
 	// so we need to wait it become to stopped and then start it
@@ -267,6 +280,7 @@ func resourceAliyunInstanceUpdate(d *schema.ResourceData, meta interface{}) erro
 
 	client := meta.(*AliyunClient)
 	conn := client.ecsconn
+	slbconn := client.slbconn
 
 	d.Partial(true)
 
@@ -350,9 +364,55 @@ func resourceAliyunInstanceUpdate(d *schema.ResourceData, meta interface{}) erro
 		d.SetPartial("host_name")
 	}
 
+	if d.HasChange("load_balancer") || d.HasChange("load_balancer_weight"){
+		log.Printf("[DEBUG] ModifyInstanceAttribute load_balancer")
+		loadBalanderId := d.Get("load_balancer").(string)
+
+
+		var weight int = 100
+		if v, ok := d.GetOk("load_balancer_weight"); ok {
+			weight = v.(int)
+		}
+
+		log.Printf("[DEBUG] load_balancer weight is %s", weight)
+
+		addBackendServerList := complexBackendServer(d.Id(), weight)
+		removeBackendServerList := complexBackendServer(d.Id(), weight)
+
+
+		if len(removeBackendServerList) > 0{
+			removeBackendServers := make([]string, 0, 1)
+			removeBackendServers = append(removeBackendServers, d.Id())
+			_, err := slbconn.RemoveBackendServers(loadBalanderId, removeBackendServers)
+			if err != nil {
+				return fmt.Errorf("RemoveBackendServers got error: %s", err)
+			}
+		}
+
+		if len(addBackendServerList) > 0{
+			_,err := slbconn.AddBackendServers(loadBalanderId, addBackendServerList)
+			if err != nil{
+				return fmt.Errorf("AddBackendServers got error: %s", err)
+			}
+		}
+
+
+		d.SetPartial("load_balancer")
+	}
+
 	d.Partial(false)
 
 	return resourceAliyunInstanceRead(d, meta)
+}
+
+func complexBackendServer(instanceId string, weight int) []slb.BackendServerType {
+	result := make([]slb.BackendServerType, 0, 1)
+	backendServer := slb.BackendServerType{
+		ServerId: instanceId,
+		Weight: weight,
+	}
+	result = append(result, backendServer)
+	return result
 }
 
 func resourceAliyunInstanceDelete(d *schema.ResourceData, meta interface{}) error {
@@ -432,6 +492,7 @@ func buildAliyunInstanceArgs(d *schema.ResourceData, meta interface{}) (*ecs.Cre
 		args.Description = v
 	}
 
+	log.Printf("[DEBUG] internet_charge_type is %s", d.Get("internet_charge_type").(string))
 	if v := d.Get("internet_charge_type").(string); v != "" {
 		args.InternetChargeType = common.InternetChargeType(v)
 	}
@@ -467,7 +528,7 @@ func buildAliyunInstanceArgs(d *schema.ResourceData, meta interface{}) (*ecs.Cre
 	log.Printf("[DEBUG] period is %s", d.Get("period").(int))
 	if v := d.Get("period").(int); v != 0 {
 		args.Period = v
-	} else if args.InstanceChargeType != common.PrePaid {
+	} else if args.InstanceChargeType == common.PrePaid {
 		return nil, fmt.Errorf("period is required for instance_charge_type is PrePaid")
 	}
 

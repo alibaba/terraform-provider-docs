@@ -1,5 +1,5 @@
 variable "availability_zones" {
-  default = "cn-beijing-b"
+  default = "cn-beijing-c"
 }
 
 variable "cidr_blocks" {
