@@ -51,10 +51,7 @@ variable "availability_zones" {
 }
 
 variable "internet_charge_type" {
-  default = "PayByTraffic"
-}
-variable "instance_network_type" {
-  default = "Vpc"
+  default = ""
 }
 
 variable "datacenter" {
@@ -79,7 +76,7 @@ module "security-groups" {
 }
 
 module "control-nodes" {
-  source = "../instance"
+  source = "../instance_vpc_base"
   count = "${var.control_count}"
   role = "control"
   datacenter = "${var.datacenter}"
@@ -91,10 +88,11 @@ module "control-nodes" {
   availability_zones = "${module.vpc.availability_zones}"
   security_group_id = "${module.security-groups.control_security_group}"
   vswitch_id = "${module.vpc.vswitch_ids}"
+  internet_charge_type = "${var.internet_charge_type}"
 }
 
 module "edge-nodes" {
-  source = "../instance"
+  source = "../instance_vpc_base"
   count = "${var.edge_count}"
   role = "edge"
   datacenter = "${var.datacenter}"
@@ -105,10 +103,11 @@ module "edge-nodes" {
   availability_zones = "${module.vpc.availability_zones}"
   security_group_id = "${module.security-groups.worker_security_group}"
   vswitch_id = "${module.vpc.vswitch_ids}"
+  internet_charge_type = "${var.internet_charge_type}"
 }
 
 module "worker-nodes" {
-  source = "../instance"
+  source = "../instance_vpc_base"
   count = "${var.worker_count}"
   role = "worker"
   datacenter = "${var.datacenter}"
@@ -121,3 +120,4 @@ module "worker-nodes" {
   vswitch_id = "${module.vpc.vswitch_ids}"
   internet_charge_type = "${var.internet_charge_type}"
 }
+

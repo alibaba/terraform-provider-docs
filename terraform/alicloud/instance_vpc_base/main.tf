@@ -27,11 +27,20 @@ variable "ssh_username" {
   default = "root"
 }
 
+//if instance_charge_type is "PrePaid", then must be set period, the value is 1 to 30, unit is month
+variable "instance_charge_type" {
+  default = "PostPaid"
+}
+
+variable "system_disk_category" {
+  default = "cloud_efficiency"
+}
+
 variable "internet_charge_type" {
   default = "PayByTraffic"
 }
 variable "instance_network_type" {
-  default = "Classic"
+  default = "Vpc"
 }
 variable "internet_max_bandwidth_out" {
   default = 5
@@ -46,6 +55,8 @@ variable "disk_size" {
 variable "device_name" {
   default = "/dev/xvdb"
 }
+
+variable "vswitch_id" {default = ""}
 
 resource "alicloud_disk" "disk" {
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
@@ -62,6 +73,7 @@ resource "alicloud_instance" "instance" {
   count = "${var.count}"
   availability_zone = "${element(split(",", var.availability_zones), count.index)}"
   security_group_id = "${var.security_group_id}"
+  vswitch_id = "${var.vswitch_id}"
 
   internet_charge_type = "${var.internet_charge_type}"
   internet_max_bandwidth_out = "${var.internet_max_bandwidth_out}"
@@ -69,9 +81,8 @@ resource "alicloud_instance" "instance" {
 
   password = "${var.ecs_password}"
 
-  instance_charge_type = "PostPaid"
-  period = "1"
-  system_disk_category = "cloud_efficiency"
+  instance_charge_type = "${var.instance_charge_type}"
+  system_disk_category = "${var.system_disk_category}"
 
 
   tags {

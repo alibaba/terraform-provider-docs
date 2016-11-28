@@ -44,13 +44,12 @@ func resourceAliyunSlb() *schema.Resource {
 				Type:         schema.TypeString,
 				Optional:     true,
 				ForceNew:     true,
-				ValidateFunc: validateInternetChargeType,
+				ValidateFunc: validateSlbInternetChargeType,
 			},
 
 			"bandwidth": &schema.Schema{
 				Type:         schema.TypeInt,
 				Optional:     true,
-				Default:      1,
 				ValidateFunc: validateSlbBandwidth,
 			},
 
@@ -139,8 +138,7 @@ func resourceAliyunSlbCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	if v, ok := d.GetOk("internet_charge_type"); ok && v.(string) != "" {
-		chargeType := strings.ToLower(v.(string))
-		slbArgs.InternetChargeType = common.InternetChargeType(chargeType)
+		slbArgs.InternetChargeType = common.InternetChargeType(v.(string))
 	}
 
 	if v, ok := d.GetOk("bandwidth"); ok && v.(int) != 0 {
@@ -321,7 +319,7 @@ func resourceAliyunSlbListenerHash(v interface{}) int {
 }
 
 func createListener(conn *slb.Client, loadBalancerId string, listener *Listener) error {
-	if listener.Protocol == "tcp" {
+	if listener.Protocol == strings.ToLower("tcp") {
 		args := &slb.CreateLoadBalancerTCPListenerArgs{
 			LoadBalancerId:    loadBalancerId,
 			ListenerPort:      listener.LoadBalancerPort,
@@ -333,7 +331,7 @@ func createListener(conn *slb.Client, loadBalancerId string, listener *Listener)
 		}
 	}
 
-	if listener.Protocol == "http" {
+	if listener.Protocol == strings.ToLower("http") {
 		args := &slb.CreateLoadBalancerHTTPListenerArgs{
 			LoadBalancerId:    loadBalancerId,
 			ListenerPort:      listener.LoadBalancerPort,
