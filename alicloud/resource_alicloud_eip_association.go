@@ -5,6 +5,10 @@ import (
 	"strings"
 
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/resource"
+	"time"
+	"github.com/denverdino/aliyungo/common"
+	"log"
 )
 
 func resourceAliyunEipAssociation() *schema.Resource {
@@ -83,11 +87,25 @@ func resourceAliyunEipAssociationDelete(d *schema.ResourceData, meta interface{}
 		return err
 	}
 
-	if err := conn.UnassociateEipAddress(allocationId, instanceId); err != nil {
-		return err
-	}
+	return resource.Retry(5*time.Minute, func() *resource.RetryError {
+		err := conn.UnassociateEipAddress(allocationId, instanceId)
+		if err == nil {
+			return nil
+		}
 
-	return nil
+		e, _ := err.(*common.Error)
+		errCode := e.ErrorResponse.Code
+		if errCode == "IncorrectEipStatus" || errCode == "IncorrectInstanceStatus" || errCode == "IncorrectHaVipStatus" {
+			return resource.RetryableError(fmt.Errorf("Eip in use - trying again while make it unassociated."))
+		}
+
+		if errCode == "InvalidInstanceId.NotFound" || errCode == "InvalidHaVip.NotFound" || errCode == "ResourceNotAssociated" {
+			return nil
+		}
+
+		log.Println("[ERROR] Make EIP unassociated failed.")
+		return resource.NonRetryableError(err)
+	})
 }
 
 func getAllocationIdAndInstanceId(d *schema.ResourceData, meta interface{}) (string, string, error) {

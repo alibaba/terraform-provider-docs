@@ -6,6 +6,10 @@ import (
 
 	"github.com/denverdino/aliyungo/ecs"
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/resource"
+	"time"
+	"github.com/denverdino/aliyungo/common"
+	"log"
 )
 
 func resourceAliyunDiskAttachment() *schema.Resource {
@@ -74,17 +78,29 @@ func resourceAliyunDiskAttachmentRead(d *schema.ResourceData, meta interface{}) 
 func resourceAliyunDiskAttachmentDelete(d *schema.ResourceData, meta interface{}) error {
 
 	conn := meta.(*AliyunClient).ecsconn
-
 	diskID, instanceID, err := getDisIDAndInstanceID(d, meta)
 	if err != nil {
 		return err
 	}
 
-	if err := conn.DetachDisk(instanceID, diskID); err != nil {
-		return err
-	}
+	return resource.Retry(5*time.Minute, func() *resource.RetryError {
+		err := conn.DetachDisk(instanceID, diskID)
+		if err == nil {
+			return resource.RetryableError(fmt.Errorf("Disk is in detaching - trying again while it detaches"))
+		}
 
-	return nil
+		e, _ := err.(*common.Error)
+		if e.ErrorResponse.Code == "IncorrectDiskStatus" || e.ErrorResponse.Code == "InstanceLockedForSecurity" {
+			return resource.RetryableError(fmt.Errorf("Disk in use - trying again while it detaches"))
+		}
+
+		if e.ErrorResponse.Code == "DependencyViolation" {
+			return nil
+		}
+
+		log.Printf("[ERROR] Disk %s is not detached.", diskID)
+		return resource.NonRetryableError(err)
+	})
 }
 
 func getDisIDAndInstanceID(d *schema.ResourceData, meta interface{}) (string, string, error) {

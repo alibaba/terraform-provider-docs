@@ -4,6 +4,10 @@ import (
 	"fmt"
 
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/denverdino/aliyungo/common"
+	"log"
+	"github.com/hashicorp/terraform/helper/resource"
+	"time"
 )
 
 func resourceAliyunNatGateway() *schema.Resource {
@@ -226,25 +230,44 @@ func resourceAliyunNatGatewayDelete(d *schema.ResourceData, meta interface{}) er
 		return err
 	}
 
-	for _, e := range packages {
-		err = DeleteBandwidthPackage(client.vpcconn, &DeleteBandwidthPackageArgs{
-			RegionId:           getRegion(d, meta),
-			BandwidthPackageId: e.BandwidthPackageId,
-		})
-		if err != nil {
-			return err
+	return resource.Retry(5*time.Minute, func() *resource.RetryError {
+		for _, e := range packages {
+			err = DeleteBandwidthPackage(client.vpcconn, &DeleteBandwidthPackageArgs{
+				RegionId:           getRegion(d, meta),
+				BandwidthPackageId: e.BandwidthPackageId,
+			})
+
+			if err != nil {
+				er, _ := err.(*common.Error)
+				if er.ErrorResponse.Code == "Forbidden.SomeIpReferredByForwardEntry" {
+					return resource.RetryableError(fmt.Errorf("Bandwidth package in use - trying again while it is deleted."))
+				}
+
+				if e.BandwidthPackageId != "" && er.ErrorResponse.Code == "InvalidBandwidthPackageId.NotFound" {
+					continue
+				}
+
+				log.Println("[ERROR] Delete bandwidth package is failed, bandwidthPackageId: %", e.BandwidthPackageId)
+				return resource.NonRetryableError(err)
+			}
 		}
-	}
 
-	args := &DeleteNatGatewayArgs{
-		RegionId:     client.Region,
-		NatGatewayId: d.Id(),
-	}
+		args := &DeleteNatGatewayArgs{
+			RegionId:     client.Region,
+			NatGatewayId: d.Id(),
+		}
 
-	err = DeleteNatGateway(client.vpcconn, args)
-	if err != nil {
-		return err
-	}
+		err = DeleteNatGateway(client.vpcconn, args)
+		if err == nil {
+			return nil
+		}
 
-	return nil
+		er, _ := err.(*common.Error)
+		if er.ErrorResponse.Code == "DependencyViolation.BandwidthPackages" {
+			return resource.RetryableError(fmt.Errorf("NatGateway in use - trying again while it is deleted."))
+		}
+
+		log.Println("[ERROR] Delete NatGateway is failed.")
+		return resource.NonRetryableError(err)
+	})
 }

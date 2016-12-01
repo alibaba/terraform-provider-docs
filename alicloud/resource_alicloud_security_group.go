@@ -5,6 +5,10 @@ import (
 
 	"github.com/denverdino/aliyungo/ecs"
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/resource"
+	"time"
+	"github.com/denverdino/aliyungo/common"
+	"log"
 )
 
 func resourceAliyunSecurityGroup() *schema.Resource {
@@ -120,11 +124,21 @@ func resourceAliyunSecurityGroupDelete(d *schema.ResourceData, meta interface{})
 
 	conn := meta.(*AliyunClient).ecsconn
 
-	if err := conn.DeleteSecurityGroup(getRegion(d, meta), d.Id()); err != nil {
-		return err
-	}
+	return resource.Retry(5*time.Minute, func() *resource.RetryError{
+		err := conn.DeleteSecurityGroup(getRegion(d, meta), d.Id())
 
-	return nil
+		if err == nil {
+			return nil
+		}
+
+		e, _ := err.(*common.Error)
+		if e.ErrorResponse.Code == "DependencyViolation" {
+			return resource.RetryableError(fmt.Errorf("Security group in use - trying again while it is deleted."))
+		}
+
+		log.Printf("[ERROR] Delete security group is failed.")
+		return resource.NonRetryableError(err)
+	})
 }
 
 func buildAliyunSecurityGroupArgs(d *schema.ResourceData, meta interface{}) (*ecs.CreateSecurityGroupArgs, error) {
