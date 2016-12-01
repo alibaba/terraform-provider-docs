@@ -89,21 +89,16 @@ func resourceAliyunDiskAttachmentDelete(d *schema.ResourceData, meta interface{}
 			return resource.RetryableError(fmt.Errorf("Disk is in detaching - trying again while it detaches"))
 		}
 
-		e, ok := err.(*common.Error)
-		if e.ErrorResponse.Code == "IncorrectDiskStatus" {
+		e, _ := err.(*common.Error)
+		if e.ErrorResponse.Code == "IncorrectDiskStatus" || e.ErrorResponse.Code == "InstanceLockedForSecurity" {
 			return resource.RetryableError(fmt.Errorf("Disk in use - trying again while it detaches"))
 		}
 
 		if e.ErrorResponse.Code == "DependencyViolation" {
-			log.Printf("[INFO] Disk %s is detached.", diskID)
 			return nil
 		}
 
-		if !ok {
-			log.Printf("[ERROR] Disk %s is not detached.", diskID)
-			return resource.NonRetryableError(err)
-		}
-
+		log.Printf("[ERROR] Disk %s is not detached.", diskID)
 		return resource.NonRetryableError(err)
 	})
 }

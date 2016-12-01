@@ -5,6 +5,10 @@ import (
 
 	"github.com/denverdino/aliyungo/ecs"
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform/helper/resource"
+	"time"
+	"github.com/denverdino/aliyungo/common"
+	"log"
 )
 
 func resourceAliyunSubnet() *schema.Resource {
@@ -144,11 +148,21 @@ func resourceAliyunSwitchUpdate(d *schema.ResourceData, meta interface{}) error 
 func resourceAliyunSwitchDelete(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AliyunClient).ecsconn
 
-	if err := conn.DeleteVSwitch(d.Id()); err != nil {
-		return err
-	}
+	return resource.Retry(5*time.Minute, func() *resource.RetryError {
+		err := conn.DeleteVSwitch(d.Id())
 
-	return nil
+		if err == nil {
+			return nil
+		}
+
+		e, _ := err.(*common.Error)
+		if e.ErrorResponse.Code == "InvalidRegionId.NotFound" {
+			log.Printf("[ERROR] Delete Switch is failed.")
+			return resource.NonRetryableError(err)
+		}
+
+		return resource.RetryableError(fmt.Errorf("Switch in use. -- trying again while it is deleted."))
+	})
 }
 
 func buildAliyunSwitchArgs(d *schema.ResourceData, meta interface{}) (*ecs.CreateVSwitchArgs, error) {
