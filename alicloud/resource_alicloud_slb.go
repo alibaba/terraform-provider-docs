@@ -293,7 +293,7 @@ func resourceAliyunSlbUpdate(d *schema.ResourceData, meta interface{}) error {
 func resourceAliyunSlbDelete(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AliyunClient).slbconn
 
-	return resource.Retry(5*time.Minute, func() *resource.RetryError {
+	return resource.Retry(5 * time.Minute, func() *resource.RetryError {
 		err := conn.DeleteLoadBalancer(d.Id())
 		if err == nil {
 			return nil

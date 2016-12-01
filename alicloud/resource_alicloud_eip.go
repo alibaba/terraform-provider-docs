@@ -120,7 +120,7 @@ func resourceAliyunEipUpdate(d *schema.ResourceData, meta interface{}) error {
 func resourceAliyunEipDelete(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AliyunClient).ecsconn
 
-	return resource.Retry(5*time.Minute, func() *resource.RetryError {
+	return resource.Retry(5 * time.Minute, func() *resource.RetryError {
 		err := conn.ReleaseEipAddress(d.Id())
 		if err == nil {
 			return nil

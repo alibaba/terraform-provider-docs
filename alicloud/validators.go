@@ -115,7 +115,7 @@ func validateIoOptimized(v interface{}, k string) (ws []string, errors []error) 
 	if value := v.(string); value != "" {
 		ioOptimized := ecs.IoOptimized(value)
 		if ioOptimized != ecs.IoOptimizedNone &&
-				ioOptimized != ecs.IoOptimizedOptimized {
+			ioOptimized != ecs.IoOptimizedOptimized {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid IoOptimized, expected %s or %s, got %q",
 				k, ecs.IoOptimizedNone, ecs.IoOptimizedOptimized, ioOptimized))
@@ -130,7 +130,7 @@ func validateInstanceNetworkType(v interface{}, k string) (ws []string, errors [
 	if value := v.(string); value != "" {
 		network := InstanceNetWork(value)
 		if network != ClassicNet &&
-				network != VpcNet {
+			network != VpcNet {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid InstanceNetworkType, expected Clasic or Vpc", k))
 		}
@@ -142,7 +142,7 @@ func validateInstanceChargeType(v interface{}, k string) (ws []string, errors []
 	if value := v.(string); value != "" {
 		chargeType := common.InstanceChargeType(value)
 		if chargeType != common.PrePaid &&
-				chargeType != common.PostPaid {
+			chargeType != common.PostPaid {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid InstanceChargeType, expected %s or %s, got %q",
 				k, common.PrePaid, common.PostPaid, chargeType))
@@ -156,7 +156,7 @@ func validateInternetChargeType(v interface{}, k string) (ws []string, errors []
 	if value := v.(string); value != "" {
 		chargeType := common.InternetChargeType(value)
 		if chargeType != common.PayByBandwidth &&
-				chargeType != common.PayByTraffic {
+			chargeType != common.PayByTraffic {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid InstanceChargeType, expected %s or %s, got %q",
 				k, common.PayByBandwidth, common.PayByTraffic, chargeType))
@@ -198,7 +198,7 @@ func validateSlbInternetChargeType(v interface{}, k string) (ws []string, errors
 		chargeType := common.InternetChargeType(value)
 
 		if chargeType != "paybybandwidth" &&
-				chargeType != "paybytraffic" {
+			chargeType != "paybytraffic" {
 			errors = append(errors, fmt.Errorf(
 				"%q must contain a valid InstanceChargeType, expected %s or %s, got %q",
 				k, "paybybandwidth", "paybytraffic", value))

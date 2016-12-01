@@ -124,7 +124,7 @@ func resourceAliyunSecurityGroupDelete(d *schema.ResourceData, meta interface{})
 
 	conn := meta.(*AliyunClient).ecsconn
 
-	return resource.Retry(5*time.Minute, func() *resource.RetryError{
+	return resource.Retry(5 * time.Minute, func() *resource.RetryError {
 		err := conn.DeleteSecurityGroup(getRegion(d, meta), d.Id())
 
 		if err == nil {

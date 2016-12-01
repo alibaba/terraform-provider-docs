@@ -87,7 +87,7 @@ func resourceAliyunEipAssociationDelete(d *schema.ResourceData, meta interface{}
 		return err
 	}
 
-	return resource.Retry(5*time.Minute, func() *resource.RetryError {
+	return resource.Retry(5 * time.Minute, func() *resource.RetryError {
 		err := conn.UnassociateEipAddress(allocationId, instanceId)
 		if err == nil {
 			return nil

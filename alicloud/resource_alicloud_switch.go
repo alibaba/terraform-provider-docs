@@ -148,7 +148,7 @@ func resourceAliyunSwitchUpdate(d *schema.ResourceData, meta interface{}) error 
 func resourceAliyunSwitchDelete(d *schema.ResourceData, meta interface{}) error {
 	conn := meta.(*AliyunClient).ecsconn
 
-	return resource.Retry(5*time.Minute, func() *resource.RetryError {
+	return resource.Retry(5 * time.Minute, func() *resource.RetryError {
 		err := conn.DeleteVSwitch(d.Id())
 
 		if err == nil {

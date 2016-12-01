@@ -213,8 +213,6 @@ func resourceAliyunInstanceCreate(d *schema.ResourceData, meta interface{}) erro
 		log.Printf("[DEBUG] WaitForInstance %s got error: %s", ecs.Stopped, err)
 	}
 
-
-
 	if err := conn.StartInstance(d.Id()); err != nil {
 		return fmt.Errorf("Start instance got error: %s", err)
 	}
@@ -364,10 +362,9 @@ func resourceAliyunInstanceUpdate(d *schema.ResourceData, meta interface{}) erro
 		d.SetPartial("host_name")
 	}
 
-	if d.HasChange("load_balancer") || d.HasChange("load_balancer_weight"){
+	if d.HasChange("load_balancer") || d.HasChange("load_balancer_weight") {
 		log.Printf("[DEBUG] ModifyInstanceAttribute load_balancer")
 		loadBalanderId := d.Get("load_balancer").(string)
-
 
 		var weight int = 100
 		if v, ok := d.GetOk("load_balancer_weight"); ok {
@@ -379,8 +376,7 @@ func resourceAliyunInstanceUpdate(d *schema.ResourceData, meta interface{}) erro
 		addBackendServerList := complexBackendServer(d.Id(), weight)
 		removeBackendServerList := complexBackendServer(d.Id(), weight)
 
-
-		if len(removeBackendServerList) > 0{
+		if len(removeBackendServerList) > 0 {
 			removeBackendServers := make([]string, 0, 1)
 			removeBackendServers = append(removeBackendServers, d.Id())
 			_, err := slbconn.RemoveBackendServers(loadBalanderId, removeBackendServers)
@@ -389,13 +385,12 @@ func resourceAliyunInstanceUpdate(d *schema.ResourceData, meta interface{}) erro
 			}
 		}
 
-		if len(addBackendServerList) > 0{
-			_,err := slbconn.AddBackendServers(loadBalanderId, addBackendServerList)
-			if err != nil{
+		if len(addBackendServerList) > 0 {
+			_, err := slbconn.AddBackendServers(loadBalanderId, addBackendServerList)
+			if err != nil {
 				return fmt.Errorf("AddBackendServers got error: %s", err)
 			}
 		}
-
 
 		d.SetPartial("load_balancer")
 	}
