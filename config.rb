@@ -1,44 +1,42 @@
-###
-# Page options, layouts, aliases and proxies
-###
+set :base_url, "https://www.terraform.io/"
 
-# Per-page layout changes:
-#
-# With no layout
-page '/*.xml', layout: false
-page '/*.json', layout: false
-page '/*.txt', layout: false
-
-# With alternative layout
-# page "/path/to/file.html", layout: :otherlayout
-
-# Proxy pages (http://middlemanapp.com/basics/dynamic-pages/)
-# proxy "/this-page-has-no-template.html", "/template-file.html", locals: {
-#  which_fake_page: "Rendering a fake page with a local variable" }
-
-# General configuration
-
-# Reload the browser automatically whenever files change
-configure :development do
-  activate :livereload
+activate :hashicorp do |h|
+  h.name        = "terraform"
+  h.version     = "0.7.9"
+  h.github_slug = "hashicorp/terraform"
 end
 
-###
-# Helpers
-###
+helpers do
+  # Get the title for the page.
+  #
+  # @param [Middleman::Page] page
+  #
+  # @return [String]
+  def title_for(page)
+    if page && page.data.page_title
+      return "#{page.data.page_title} - Terraform by HashiCorp"
+    end
 
-# Methods defined in the helpers block are available in templates
-# helpers do
-#   def some_helper
-#     "Helping"
-#   end
-# end
+     "Terraform by HashiCorp"
+   end
 
-# Build-specific configuration
-configure :build do
-  # Minify CSS on build
-  # activate :minify_css
+  # Get the description for the page
+  #
+  # @param [Middleman::Page] page
+  #
+  # @return [String]
+  def description_for(page)
+    return escape_html(page.data.description || "")
+  end
 
-  # Minify Javascript on build
-  # activate :minify_javascript
+  # This helps by setting the "active" class for sidebar nav elements
+  # if the YAML frontmatter matches the expected value.
+  def sidebar_current(expected)
+    current = current_page.data.sidebar_current || ""
+    if current == expected or (expected.is_a?(Regexp) and expected.match(current))
+      return " class=\"active\""
+    else
+      return ""
+    end
+  end
 end
