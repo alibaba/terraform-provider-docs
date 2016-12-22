@@ -50,9 +50,6 @@ resource "alicloud_vswitch" "foo" {
 
 resource "alicloud_slb" "test_vpc" {
   name = "test-slb-tf"
-  internet = false
-  internet_charge_type = "paybybandwidth"
-  bandwidth = 5
   vpc_id =  "${alicloud_vpc.foo.id}"
   vswitch_id = "${alicloud_vswitch.foo.id}"
 }
@@ -65,9 +62,9 @@ The following arguments are supported:
 * `name` - (Optional) The name of the SLB. This name must be unique within your AliCloud account, can have a maximum of 80 characters, 
 must contain only alphanumeric characters or hyphens, such as "-","/",".","_", and must not begin or end with a hyphen. If not specified, 
 Terraform will autogenerate a name beginning with `tf-lb`.
-* `internet` - (Optional, Forces New Resource) If true, the SLB addressType will be internet, false will be intranet, Default is false.
+* `internet` - (Optional, Forces New Resource) If true, the SLB addressType will be internet, false will be intranet, Default is false. If load balancer launched in VPC, this value must be "false".
 * `internet_charge_type` - (Optional, Forces New Resource) Valid
-  values are `paybybandwidth`, `paybytraffic`. If this value is "paybybandwidth", then argument "internet" must be "true". Default is "paybytraffic".
+  values are `paybybandwidth`, `paybytraffic`. If this value is "paybybandwidth", then argument "internet" must be "true". Default is "paybytraffic". If load balancer launched in VPC, this value must be "paybytraffic".
 * `bandwidth` - (Optional) Valid
   value is between 1 and 1000, If argument "internet_charge_type" is "paybytraffic", then this value will be ignore.
 * `listener` - (Optional) Additional SLB listener. See [Block listener](#block-listener) below for details.
