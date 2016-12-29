@@ -1,7 +1,7 @@
 ---
 layout: "alicloud"
 page_title: "Alicloud: alicloud_nat_gateway"
-sidebar_current: "docs-alicloud-resource-nat_gateway"
+sidebar_current: "docs-alicloud-resource-nat-gateway"
 description: |-
   Provides a resource to create a VPC NAT Gateway.
 ---
