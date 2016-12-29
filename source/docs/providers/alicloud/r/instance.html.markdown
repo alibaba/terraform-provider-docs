@@ -14,15 +14,15 @@ Provides a ECS instance resource.
 
 ```
 # Create a new ECS instance for classic
-resource "alicloud_security_group" "tf_test_foo" {
+resource "alicloud_security_group" "classic" {
 	name = "tf_test_foo"
 	description = "foo"
 }
 
-resource "alicloud_instance" "foo" {
+resource "alicloud_instance" "classic" {
 	# cn-beijing
 	availability_zone = "cn-beijing-b"
-	security_group_id = "${alicloud_security_group.tf_test_foo.id}"
+	security_group_id = "${alicloud_security_group.classic.id}"
 
 	allocate_public_ip = "true"
 
@@ -35,18 +35,18 @@ resource "alicloud_instance" "foo" {
 }
 
 # Create a new ECS instance for VPC
-resource "alicloud_vpc" "foo" {
-  # Other parameters...
+resource "alicloud_vpc" "default" {
+	# Other parameters...
 }
 
-resource "alicloud_vswitch" "foo" {
-  # Other parameters...
+resource "alicloud_vswitch" "default" {
+	# Other parameters...
 }
 
-resource "alicloud_slb" "test_vpc" {
-  name = "test-slb-tf"
-  vpc_id =  "${alicloud_vpc.foo.id}"
-  vswitch_id = "${alicloud_vswitch.foo.id}"
+resource "alicloud_slb" "vpc" {
+	name = "test-slb-tf"
+	vpc_id =  "${alicloud_vpc.default.id}"
+	vswitch_id = "${alicloud_vswitch.default.id}"
 }
 ```
 
@@ -96,6 +96,5 @@ The following attributes are exported:
 * `internet_charge_type` - The instance internet charge type.
 * `io_optimized` - The instance whether I/O optimized.
 * `private_ip` - The instance private ip.
-* `subnet_id` - If the instance created in VPC, then the subnet id have value that is same with vswitch_id.
 * `vswitch_id` - If the instance created in VPC, then this value is  virtual switch ID.
 * `tags` - The instance tags.
