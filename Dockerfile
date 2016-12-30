@@ -29,5 +29,5 @@ COPY source /usr/src/web/
 WORKDIR /usr/src/web
 RUN bundle install 
 EXPOSE 4567
-CMD cd /usr/src/web && bundle exec middleman
+CMD cd /usr/src/web/source && bundle exec middleman
 # ENTRYPOINT ["bundle","middleman"]
