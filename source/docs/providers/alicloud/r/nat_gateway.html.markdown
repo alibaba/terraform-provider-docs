@@ -71,7 +71,4 @@ The following attributes are exported:
 * `description` - The description of the nat gateway.
 * `spec` - The specification of the nat gateway.
 * `vpc_id` - The VPC ID for the nat gateway.
-* `bandwidth_packages.#` - The length of the bandwidth packages.
-* `bandwidth_packages.N.ip_count` - The IP number of the Nth bandwidth package.
-* `bandwidth_packages.N.bandwidth` - The bandwidth of the Nth bandwidth package.
-* `bandwidth_packages.N.zone` - The AZ of the Nth bandwidth package.
+* `bandwidth_package_ids` - A list ID of the bandwidth packages, and split them with commas
