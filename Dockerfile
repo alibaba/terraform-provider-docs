@@ -27,5 +27,5 @@ RUN mkdir -p /usr/src/web
 COPY * /usr/src/web/
 WORKDIR /usr/src/web
 RUN bundle 
-#RUN bundle exec middleman
+RUN bundle exec middleman
 EXPOSE 4567
