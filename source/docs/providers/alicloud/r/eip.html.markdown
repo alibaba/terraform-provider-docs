@@ -14,7 +14,7 @@ Provides a ECS EIP resource.
 
 ```
 # Create a new EIP.
-resource "alicloud_eip" "foo" {
+resource "alicloud_eip" "example" {
     band_width ＝ "10"
     internet_charge_type ＝ "PayByBandwidth"
 }

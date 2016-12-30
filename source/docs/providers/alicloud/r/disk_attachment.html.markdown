@@ -12,15 +12,17 @@ Provides an Alicloud ECS Disk Attachment as a resource, to attach and detach dis
 
 ## Example Usage
 
+Basic usage
+
 ```
 # Create a new ECS disk-attachment and use it attach one disk to a new instance.
 
-resource "alicloud_security_group" "group" {
+resource "alicloud_security_group" "ecs_sg" {
     name = "terraform-test-group"
     description = "New security group"
 }
 
-resource "alicloud_disk" "disk" {
+resource "alicloud_disk" "ecs_disk" {
     availability_zone = "cn-beijing-a"
     size = "50"
 
@@ -29,11 +31,11 @@ resource "alicloud_disk" "disk" {
     }
 }
 
-resource "alicloud_instance" "instance" {
+resource "alicloud_instance" "ecs_instance" {
     image_id = "ubuntu1404_64_40G_cloudinit_20160727.raw"
     instance_type = "ecs.s1.small"
     availability_zone = "cn-beijing-a"
-    security_group_id = "${alicloud_security_group.group.id}"
+    security_groups = ["${alicloud_security_group.ecs_sg.id}"]
     instance_name = "Hello"
     instance_network_type = "Classic"
     internet_charge_type = "PayByBandwidth"
@@ -43,9 +45,9 @@ resource "alicloud_instance" "instance" {
     }
 }
 
-resource "alicloud_disk_attachment" "disk-att" {
-    disk_id = "${alicloud_disk.disk.id}"
-    instance_id = "${alicloud_instance.instance.id}"
+resource "alicloud_disk_attachment" "ecs_disk_att" {
+    disk_id = "${alicloud_disk.ecs_disk.id}"
+    instance_id = "${alicloud_instance.ecs_instance.id}"
     device_name = "/dev/xvdb"
 }
 ```

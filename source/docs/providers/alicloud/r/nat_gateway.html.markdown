@@ -15,19 +15,19 @@ Provides a resource to create a VPC NAT Gateway.
 Basic usage
 
 ```
-resource "alicloud_vpc" "foo" {
+resource "alicloud_vpc" "vpc" {
 	name = "tf_test_foo"
 	cidr_block = "172.16.0.0/12"
 }
 
-resource "alicloud_vswitch" "foo" {
-	vpc_id = "${alicloud_vpc.foo.id}"
+resource "alicloud_vswitch" "vsw" {
+	vpc_id = "${alicloud_vpc.vpc.id}"
 	cidr_block = "172.16.0.0/21"
 	availability_zone = "cn-beijing-b"
 }
 
-resource "alicloud_nat_gateway" "foo" {
-	vpc_id = "${alicloud_vpc.foo.id}"
+resource "alicloud_nat_gateway" "nat_gateway" {
+	vpc_id = "${alicloud_vpc.vpc.id}"
 	spec = "Small"
 	name = "test_foo"
 	bandwidth_packages = [{
@@ -40,7 +40,7 @@ resource "alicloud_nat_gateway" "foo" {
 	  zone = "cn-beijing-b"
 	}]
 	depends_on = [
-    	"alicloud_vswitch.foo"]
+    	"alicloud_vswitch.vsw"]
 }
 ```
 

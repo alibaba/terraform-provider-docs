@@ -10,13 +10,13 @@ description: |-
 
 Provides a ECS disk resource.
 
-~> **NOTE:** One of `size` or `snapshot_id` is required when specifying an ECS disk. Currently, `alicloud_disk` doesn't resize disk.
+~> **NOTE:** One of `size` or `snapshot_id` is required when specifying an ECS disk. If all of them be specified, `size` must more than the size of snapshot which `snapshot_id` represents. Currently, `alicloud_disk` doesn't resize disk.
 
 ## Example Usage
 
 ```
 # Create a new ECS disk.
-resource "alicloud_disk" "foo" {
+resource "alicloud_disk" "ecs_disk" {
     # cn-beijing
     availability_zone = "cn-beijing-b"
     name = "New-disk"

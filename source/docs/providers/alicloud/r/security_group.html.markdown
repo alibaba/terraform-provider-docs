@@ -25,7 +25,7 @@ resource "alicloud_security_group" "group" {
 Basic usage for vpc
 
 ```
-resource "alicloud_security_group" "foo" {
+resource "alicloud_security_group" "group" {
     name = "new-group"
     vpc_id = "${alicloud_vpc.vpc.id}"
 }

@@ -19,24 +19,24 @@ Provides an Alicloud EIP Association resource, to associate and disassociate Ela
 ```
 # Create a new EIP association and use it to associate a EIP form a instance.
 
-resource "alicloud_vpc" "main" {
+resource "alicloud_vpc" "vpc" {
     cidr_block = "10.1.0.0/21"
 }
 
-resource "alicloud_vswitch" "main" {
-    vpc_id = "${alicloud_vpc.main.id}"
+resource "alicloud_vswitch" "vsw" {
+    vpc_id = "${alicloud_vpc.vpc.id}"
     cidr_block = "10.1.1.0/24"
     availability_zone = "cn-beijing-a"
     depends_on = [
-    "alicloud_vpc.main"]
+    "alicloud_vpc.vpc"]
 }
 
-resource "alicloud_instance" "instance" {
+resource "alicloud_instance" "ecs_instance" {
     image_id = "ubuntu1404_64_40G_cloudinit_20160727.raw"
     instance_type = "ecs.s1.small"
     availability_zone = "cn-beijing-a"
     security_groups = ["${alicloud_security_group.group.id}"]
-    vswitch_id = "${alicloud_vswitch.main.id}"
+    vswitch_id = "${alicloud_vswitch.vsw.id}"
     instance_name = "hello"
 
     tags {
@@ -47,15 +47,15 @@ resource "alicloud_instance" "instance" {
 resource "alicloud_eip" "eip" {
 }
 
-resource "alicloud_eip_association" "foo" {
+resource "alicloud_eip_association" "eip_asso" {
     allocation_id = "${alicloud_eip.eip.id}"
-    instance_id = "${alicloud_instance.instance.id}"
+    instance_id = "${alicloud_instance.ecs_instance.id}"
 }
 
 resource "alicloud_security_group" "group" {
     name = "terraform-test-group"
     description = "New security group"
-    vpc_id = "${alicloud_vpc.main.id}"
+    vpc_id = "${alicloud_vpc.vpc.id}"
 }
 ```
 
