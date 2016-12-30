@@ -25,8 +25,7 @@ RUN gem install rails
 RUN gem install middleman
 RUN mkdir -p /usr/src/web
 COPY * /usr/src/web/
-COPY * /
 WORKDIR /usr/src/web
 RUN bundle install 
-# RUN bundle exec middleman
 EXPOSE 4567
+ENTRYPOINT ["bundle", "exec","middleman"]
