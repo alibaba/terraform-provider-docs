@@ -15,8 +15,8 @@ RUN mkdir -p "$GEM_HOME" "$BUNDLE_BIN" \
 RUN gem install bundler --version "$BUNDLER_VERSION" \
 	&& bundle config --global path "$GEM_HOME" \
 	&& bundle config --global bin "$GEM_HOME/bin"\
-	&& bundle config mirror.https://rubygems.org https://ruby.taobao.org\
-    && bundle config mirror.http://rubygems.org https://ruby.taobao.org
+#	&& bundle config mirror.https://rubygems.org https://ruby.taobao.org\
+#    && bundle config mirror.http://rubygems.org https://ruby.taobao.org
 
 ENV BUNDLE_APP_CONFIG $GEM_HOME
 
