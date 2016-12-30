@@ -28,4 +28,4 @@ COPY * /usr/src/web/
 WORKDIR /usr/src/web
 RUN bundle install 
 EXPOSE 4567
-ENTRYPOINT ["bundle", "exec","middleman"]
+ENTRYPOINT ["cd /usr/src/web","bundle","middleman"]
