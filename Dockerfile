@@ -21,7 +21,7 @@ RUN gem install bundler --version "$BUNDLER_VERSION" \
 ENV BUNDLE_APP_CONFIG $GEM_HOME
 
 
-RUN gem install rails
+#RUN gem install rails
 RUN gem install middleman
 RUN mkdir -p /usr/src/web
 COPY * /usr/src/web/
