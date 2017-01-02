@@ -20,14 +20,19 @@ RUN gem install bundler --version "$BUNDLER_VERSION" \
 
 ENV BUNDLE_APP_CONFIG $GEM_HOME
 
+RUN mkdir -p /usr/src/web
+COPY * /usr/src/web/
+COPY source /usr/src/web/source
+WORKDIR /usr/src/web
 
 RUN gem install rails
 RUN gem install middleman
-RUN mkdir -p /usr/src/web
-COPY * /usr/src/web/
-COPY source /usr/src/web/
-WORKDIR /usr/src/web
+RUN gem install therubyracer
+RUN gem install rb-inotify 
+RUN gem install middleman-hashicorp  --version "0.3.2"
+RUN bundle 
 RUN bundle install 
+
 EXPOSE 4567
-CMD cd /usr/src/web/source && bundle exec middleman
+CMD cd /usr/src/web && bundle exec middleman
 # ENTRYPOINT ["bundle","middleman"]
