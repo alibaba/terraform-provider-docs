@@ -30,7 +30,7 @@ RUN gem install rails
 RUN gem install middleman
 RUN gem install therubyracer
 RUN gem install rb-inotify 
-RUN gem install middleman-hashicorp  --version "0.3.2"
+RUN gem install middleman-hashicorp 
 RUN bundle 
 RUN bundle install 
 
