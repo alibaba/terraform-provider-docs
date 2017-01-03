@@ -23,6 +23,7 @@ ENV BUNDLE_APP_CONFIG $GEM_HOME
 RUN mkdir -p /usr/src/web
 COPY * /usr/src/web/
 COPY source /usr/src/web/source
+RUN ls -l /usr/src/web/
 WORKDIR /usr/src/web
 
 RUN gem install rails
