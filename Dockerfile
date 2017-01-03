@@ -20,11 +20,11 @@ RUN gem install bundler --version "$BUNDLER_VERSION" \
 
 ENV BUNDLE_APP_CONFIG $GEM_HOME
 
-RUN mkdir -p /usr/src/web
-COPY * /usr/src/web/
-COPY source /usr/src/web/source
-RUN ls -l /usr/src/web/
-WORKDIR /usr/src/web
+RUN mkdir -p /usr/src/app/
+COPY * /usr/src/app/
+COPY source /usr/src/app/source
+RUN ls -l /usr/src/app/
+WORKDIR /usr/src/app
 
 RUN gem install rails
 RUN gem install middleman
@@ -35,5 +35,5 @@ RUN bundle
 RUN bundle install 
 
 EXPOSE 4567
-CMD cd /usr/src/web && bundle exec middleman
+CMD cd /usr/src/app && bundle exec middleman
 # ENTRYPOINT ["bundle","middleman"]
