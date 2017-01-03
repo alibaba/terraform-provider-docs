@@ -30,7 +30,7 @@ resource "alicloud_instance" "classic" {
 	instance_type = "ecs.n1.medium"
 	io_optimized = "optimized"
 	system_disk_category = "cloud_efficiency"
-	image_id = "ubuntu1404_64_40G_cloudinit_20160727.raw"
+	image_id = "ubuntu_140405_64_40G_cloudinit_20161115.vhd"
 	instance_name = "test_foo"
 }
 
@@ -93,8 +93,7 @@ The following attributes are exported:
 * `status` - The instance status.
 * `image_id` - The instance Image Id.
 * `instance_type` - The instance type.
-* `internet_charge_type` - The instance internet charge type.
 * `io_optimized` - The instance whether I/O optimized.
 * `private_ip` - The instance private ip.
 * `vswitch_id` - If the instance created in VPC, then this value is  virtual switch ID.
-* `tags` - The instance tags.
+* `output_tags` - The instance tags.
