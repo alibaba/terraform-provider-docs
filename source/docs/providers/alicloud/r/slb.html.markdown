@@ -67,7 +67,6 @@ Terraform will autogenerate a name beginning with `tf-lb`.
 * `bandwidth` - (Optional) Valid
   value is between 1 and 1000, If argument "internet_charge_type" is "paybytraffic", then this value will be ignore.
 * `listener` - (Optional) Additional SLB listener. See [Block listener](#block-listener) below for details.
-* `vpc_id` -  (Required for a VPC SLB) The VPC ID to launch in.
 * `vswitch_id` - (Required for a VPC SLB, Forces New Resource) The VSwitch ID to launch in.
 
 ## Block listener
@@ -88,6 +87,5 @@ The following attributes are exported:
 * `internet` - The internet of the load balancer.
 * `internet_charge_type` - The internet_charge_type of the load balancer.
 * `bandwidth` - The bandwidth of the load balancer.
-* `vpc_id` - The VPC ID of the load balancer. Only available on SLB launched in a VPC.
 * `vswitch_id` - The VSwitch ID of the load balancer. Only available on SLB launched in a VPC.
 * `address` - The IP address of the load balancer.
