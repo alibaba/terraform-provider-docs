@@ -96,4 +96,4 @@ The following attributes are exported:
 * `io_optimized` - The instance whether I/O optimized.
 * `private_ip` - The instance private ip.
 * `vswitch_id` - If the instance created in VPC, then this value is  virtual switch ID.
-* `output_tags` - The instance tags.
+* `tags` - The instance tags, use jsonencode(item) to display the value.

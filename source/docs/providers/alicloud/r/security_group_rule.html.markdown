@@ -58,4 +58,4 @@ The following attributes are exported:
 * `type` - The type of rule, `ingress` or `egress`
 * `name` - The name of the security group
 * `port_range` - The range of port numbers
-* `ip_protocol` - The range of port numbers
+* `ip_protocol` - The protocol of the security group rule
