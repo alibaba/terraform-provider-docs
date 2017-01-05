@@ -67,7 +67,7 @@ Terraform will autogenerate a name beginning with `tf-ecs`.
 * `system_disk_category` - (Optional) Valid values are `cloud`, `cloud_efficiency`, `cloud_ssd`, For I/O optimized instance type, `cloud_ssd` and `cloud_efficiency` disks are supported. For non I/O Optimized instance type, `cloud` disk are supported. 
 * `system_disk_size` - (Optional) Size of the system disk, value range: 40GB ~ 500GB. Default is 40GB.
 * `description` - (Optional) Description of the instance, This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
-* `instance_network_type` - (Optional) Valid values are `Classic`, `Vpc`, If `Classic`, the instance will be create in classic network. If `Vpc`, the instance will be create in VPC network.
+* `instance_network_type` - (Optional) Valid values are `classic`, `vpc`, If `classic`, the instance will be create in classic network. If `vpc`, the instance will be create in VPC network.
 * `internet_charge_type` - (Optional) Internet charge type of the instance, Valid values are `PayByBandwidth`, `PayByTraffic`. Default is `PayByBandwidth`. 
 * `internet_max_bandwidth_in` - (Optional) Maximum incoming bandwidth from the public network, measured in Mbps (Mega bit per second). Value range: [1, 200]. If this value is not specified, then automatically sets it to 200 Mbps.
 * `internet_max_bandwidth_out` - (Optional) Maximum outgoing bandwidth to the public network, measured in Mbps (Mega bit per second). Value range: 
