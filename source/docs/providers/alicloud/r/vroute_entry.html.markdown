@@ -29,25 +29,25 @@ resource "alicloud_route_entry" "default" {
 }
 
 resource "alicloud_instance" "snat" {
+    // ...
 }
 ```
 ## Argument Reference
 
 The following arguments are supported:
 
-* `router_id` - (Required, Forces new resource) The AZ for the switch.
-* `route_table_id` - (Required, Forces new resource) The VPC ID.
-* `destination_cidrblock` - (Optional, Forces new resource) The CIDR block for the switch.
-* `nexthop_type` - (Optional, Forces new resource) The CIDR block for the switch.
-* `nexthop_id` - (Optional, Forces new resource) The CIDR block for the switch.
+* `router_id` - (Required, Forces new resource) The ID of the virtual router attached to Vpc.
+* `route_table_id` - (Required, Forces new resource) The ID of the route table.
+* `destination_cidrblock` - (Required, Forces new resource) The RouteEntry's target network segment.
+* `nexthop_type` - (Required, Forces new resource) The next hop type. Available value is Instance.
+* `nexthop_id` - (Required, Forces new resource) The route entry's next hop.
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-* `id` - The ID of the switch.
-* `availability_zone` The AZ for the switch.
-* `cidr_block` - The CIDR block for the switch.
-* `vpc_id` - The VPC ID.
-* `name` - The name of the switch.
-* `description` - The description of the switch.
+* `router_id` - (Required, Forces new resource) The ID of the virtual router attached to Vpc.
+* `route_table_id` - (Required, Forces new resource) The ID of the route table.
+* `destination_cidrblock` - (Required, Forces new resource) The RouteEntry's target network segment.
+* `nexthop_type` - (Required, Forces new resource) The next hop type. Available value is Instance.
+* `nexthop_id` - (Required, Forces new resource) The route entry's next hop.
