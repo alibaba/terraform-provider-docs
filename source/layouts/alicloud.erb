@@ -10,6 +10,21 @@
                     <a href="/docs/providers/alicloud/index.html">Alicloud Provider</a>
                 </li>
 
+                 <li<%= sidebar_current(/^docs-alicloud-datasource/) %>>
+                    <a href="#">Data Sources</a>
+                    <ul class="nav nav-visible">
+                        <li<%= sidebar_current("docs-alicloud-datasource-instance-types") %>>
+                            <a href="/docs/providers/alicloud/d/instance_types.html">alicloud_instance_types</a>
+                        </li>
+                        <li<%= sidebar_current("docs-alicloud-datasource-images") %>>
+                            <a href="/docs/providers/alicloud/d/images.html">alicloud_images</a>
+                        </li>
+                        <li<%= sidebar_current("docs-alicloud-datasource-zones") %>>
+                            <a href="/docs/providers/alicloud/d/zones.html">alicloud_zones</a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li<%= sidebar_current(/^docs-alicloud-resource-ecs/) %>>
                     <a href="#">ECS Resources</a>
                     <ul class="nav nav-visible">
@@ -52,6 +67,9 @@
                         <li<%= sidebar_current("docs-alicloud-resource-vswitch") %>>
                             <a href="/docs/providers/alicloud/r/vswitch.html">alicloud_vswitch</a>
                         </li>
+                        <li<%= sidebar_current("docs-alicloud-resource-route-entry") %>>
+                            <a href="/docs/providers/alicloud/r/vroute_entry.html">alicloud_route_entry</a>
+                        </li>
                         <li<%= sidebar_current("docs-alicloud-resource-security-group") %>>
                             <a href="/docs/providers/alicloud/r/security_group.html">alicloud_security_group</a>
                         </li>
@@ -61,6 +79,16 @@
                         <li<%= sidebar_current("docs-alicloud-resource-nat-gateway") %>>
                             <a href="/docs/providers/alicloud/r/nat_gateway.html">alicloud_nat_gateway</a>
                         </li>
+                    </ul>
+                </li>
+
+                <li<%= sidebar_current(/^docs-alicloud-resource-rds/) %>>
+                    <a href="#">RDS Resources</a>
+                    <ul class="nav nav-visible">
+                        <li<%= sidebar_current("docs-alicloud-resource-rds") %>>
+                            <a href="/docs/providers/alicloud/r/db_instance.html">alicloud_rds</a>
+                        </li>
+
                     </ul>
                 </li>
 
