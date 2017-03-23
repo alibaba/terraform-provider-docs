@@ -24,7 +24,7 @@ resource "alicloud_instance" "classic" {
 	availability_zone = "cn-beijing-b"
 	security_group_id = "${alicloud_security_group.classic.id}"
 
-	allocate_public_ip = "true"
+	allocate_public_ip = true
 
 	# series II
 	instance_type = "ecs.n1.medium"
@@ -61,14 +61,14 @@ The following arguments are supported:
 * `availability_zone` - (Optional) The Zone to start the instance in.
 * `instance_name` - (Optional) The name of the ECS. This instance_name can have a string of 2 to 128 characters, must contain only alphanumeric characters or hyphens, such as "-",".","_", and must not begin or end with a hyphen, and must not begin with http:// or https://. If not specified, 
 Terraform will autogenerate a default name is `ECS-Instance`.
-* `allocate_public_ip` - (Optional) Associate a public ip address with an instance in a VPC or Classic. Boolean value, Default is false.
+* `allocate_public_ip` - (Optional) Associate a public ip address with an instance in a VPC or Classic. Boolean value, Default is false. if set `internet_max_bandwidth_out` value is not zero, then will auto allocate public ip.
 * `system_disk_category` - (Optional) Valid values are `cloud`, `cloud_efficiency`, `cloud_ssd`, For I/O optimized instance type, `cloud_ssd` and `cloud_efficiency` disks are supported. For non I/O Optimized instance type, `cloud` disk are supported. 
 * `system_disk_size` - (Optional) Size of the system disk, value range: 40GB ~ 500GB. Default is 40GB.
 * `description` - (Optional) Description of the instance, This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
+
 * `internet_charge_type` - (Optional) Internet charge type of the instance, Valid values are `PayByBandwidth`, `PayByTraffic`. Default is `PayByBandwidth`.
 * `internet_max_bandwidth_in` - (Optional) Maximum incoming bandwidth from the public network, measured in Mbps (Mega bit per second). Value range: [1, 200]. If this value is not specified, then automatically sets it to 200 Mbps.
-* `internet_max_bandwidth_out` - (Optional) Maximum outgoing bandwidth to the public network, measured in Mbps (Mega bit per second). Value range: 
-`internet_charge_type` is `PayByBandwidth`: this value range [0, 100], If this value is not specified, then automatically sets it to 0 Mbps; If `internet_charge_type` is `PayByTraffic`: this value range [1, 100]. this value must be set value, such as 5.
+* `internet_max_bandwidth_out` - (Optional) Maximum outgoing bandwidth to the public network, measured in Mbps (Mega bit per second). Value range:  [0, 100], If this value is not specified, then automatically sets it to 0 Mbps.
 * `host_name` - (Optional) Host name of the ECS, which is a string of at least two characters. “hostname” cannot start or end with “.” or “-“. In addition, two or more consecutive “.” or “-“ symbols are not allowed. On Windows, the host name can contain a maximum of 15 characters, which can be a combination of uppercase/lowercase letters, numerals, and “-“. The host name cannot contain dots (“.”) or contain only numeric characters.
 On other OSs such as Linux, the host name can contain a maximum of 30 characters, which can be segments separated by dots (“.”), where each segment can contain uppercase/lowercase letters, numerals, or “_“.
 * `password` - (Optional) Password to an instance is a string of 8 to 30 characters. It must contain uppercase/lowercase letters and numerals, but cannot contain special symbols.
