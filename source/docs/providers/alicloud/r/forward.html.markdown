@@ -16,38 +16,45 @@ Basic Usage
 
 ```
 resource "alicloud_vpc" "foo" {
-	...
+  ...
 }
 
 resource "alicloud_vswitch" "foo" {
-	...
+  ...
 }
 
 resource "alicloud_nat_gateway" "foo" {
-	vpc_id = "${alicloud_vpc.foo.id}"
-	spec = "Small"
-	name = "test_foo"
-	bandwidth_packages = [{
-	  ip_count = 2
-	  bandwidth = 5
-	  zone = ""
-	},{
-	  ip_count = 1
-	  bandwidth = 6
-	  zone = "cn-beijing-b"
-	}]
-	depends_on = [
-    	"alicloud_vswitch.foo"
-    ]
+  vpc_id = "${alicloud_vpc.foo.id}"
+  spec   = "Small"
+  name   = "test_foo"
+
+  bandwidth_packages = [
+    {
+      ip_count  = 2
+      bandwidth = 5
+      zone      = ""
+    },
+    {
+      ip_count  = 1
+      bandwidth = 6
+      zone      = "cn-beijing-b"
+    }
+  ]
+
+  depends_on = [
+    "alicloud_vswitch.foo",
+  ]
 }
-resource "alicloud_forward_entry" "foo"{
-	forward_table_id = "${alicloud_nat_gateway.foo.forward_table_ids}"
-	external_ip = "${alicloud_nat_gateway.foo.bandwidth_packages.0.public_ip_addresses}"
-	external_port = "80"
-	ip_protocol = "tcp"
-	internal_ip = "172.16.0.3"
-	internal_port = "8080"
+
+resource "alicloud_forward_entry" "foo" {
+  forward_table_id = "${alicloud_nat_gateway.foo.forward_table_ids}"
+  external_ip      = "${alicloud_nat_gateway.foo.bandwidth_packages.0.public_ip_addresses}"
+  external_port    = "80"
+  ip_protocol      = "tcp"
+  internal_ip      = "172.16.0.3"
+  internal_port    = "8080"
 }
+
 ```
 ## Argument Reference
 
