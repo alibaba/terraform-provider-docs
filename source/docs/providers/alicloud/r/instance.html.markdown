@@ -54,7 +54,7 @@ resource "alicloud_slb" "vpc" {
 
 The following arguments are supported:
 
-* `image_id` - (Required) The Image to use for the instance.
+* `image_id` - (Required) The Image to use for the instance. ECS instance's image can be replaced via changing 'image_id'.
 * `instance_type` - (Required) The type of instance to start.
 * `io_optimized` - (Required) Valid values are `none`, `optimized`, If `optimized`, the launched ECS instance will be I/O optimized.
 * `security_groups` - (Optional)  A list of security group ids to associate with.
@@ -63,7 +63,7 @@ The following arguments are supported:
 Terraform will autogenerate a default name is `ECS-Instance`.
 * `allocate_public_ip` - (Optional) Associate a public ip address with an instance in a VPC or Classic. Boolean value, Default is false.
 * `system_disk_category` - (Optional) Valid values are `cloud`, `cloud_efficiency`, `cloud_ssd`, For I/O optimized instance type, `cloud_ssd` and `cloud_efficiency` disks are supported. For non I/O Optimized instance type, `cloud` disk are supported. 
-* `system_disk_size` - (Optional) Size of the system disk, value range: 40GB ~ 500GB. Default is 40GB.
+* `system_disk_size` - (Optional) Size of the system disk, value range: 40GB ~ 500GB. Default is 40GB. ECS instance's system disk can be reset when replacing system disk.
 * `description` - (Optional) Description of the instance, This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
 * `internet_charge_type` - (Optional) Internet charge type of the instance, Valid values are `PayByBandwidth`, `PayByTraffic`. Default is `PayByBandwidth`.
 * `internet_max_bandwidth_in` - (Optional) Maximum incoming bandwidth from the public network, measured in Mbps (Mega bit per second). Value range: [1, 200]. If this value is not specified, then automatically sets it to 200 Mbps.
