@@ -104,7 +104,7 @@ The following arguments are supported:
 
 * `bucket` - (Optional, Forces New Resorce) The name of the bucket. If omitted, Terraform will assign a random and unique name.
 * `acl` - (Optional) The [canned ACL](https://help.aliyun.com/document_detail/31843.html?spm=5176.doc31842.2.2.j7C2nn) to apply. Defaults to "private".
-* `core_rule` - (Optional) A rule of [Cross-Origin Resource Sharing](https://help.aliyun.com/document_detail/32001.html?spm=5176.doc32000.6.886.Hd5dYP) (documented below).
+* `core_rule` - (Optional) A rule of [Cross-Origin Resource Sharing](https://help.aliyun.com/document_detail/32001.html?spm=5176.doc32000.6.886.Hd5dYP) (documented below). The items of core rule are no more than 10 for every OSS bucket.
 * `website` - (Optional) A website object(documented below).
 * `logging` - (Optional) A Settings of [bucket logging](https://help.aliyun.com/document_detail/31961.html?spm=5176.doc31868.2.4.jjuG5O) (documented below).
 * `logging_isenable` - (Optional) The flag of using logging enable container. Defaults true.
