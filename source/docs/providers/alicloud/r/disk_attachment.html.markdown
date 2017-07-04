@@ -57,7 +57,7 @@ The following arguments are supported:
 
 * `instance_id` - (Required, Forces new resource) ID of the Instance to attach to.
 * `disk_id` - (Required, Forces new resource) ID of the Disk to be attached.
-* `device_name` - (Required, Forces new resource) The device name to expose to the instance (for example, /dev/xvdb).
+* `device_name` - (Deprecated) The device name has been deprecated, and when attaching disk, it will be allocated automatically by system according to default order from /dev/xvdb to /dev/xvdz.
 
 ## Attributes Reference
 
