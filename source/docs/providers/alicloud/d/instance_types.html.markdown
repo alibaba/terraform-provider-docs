@@ -38,6 +38,7 @@ The following arguments are supported:
 * `memory_size` - (Optional) Limit search to specific memory size.
 * `instance_type_family` - (Optional) Allows to filter list of Instance Types based on their
 family name, for example 'ecs.n4'.
+* output_file - (Optional) The name of file that can save instance types data source after running `terraform plan`.
 
 ## Attributes Reference
 

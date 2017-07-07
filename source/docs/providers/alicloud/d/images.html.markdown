@@ -27,6 +27,7 @@ The following arguments are supported:
 * `name_regex` - (Optional) A regex string to apply to the image list returned by Alicloud. 
 * `most_recent` - (Optional) If more than one result is returned, use the most recent image.
 * `owners` - (Optional) Limit search to specific image owners. Valid items are `system`, `self`, `others`, `marketplace`.
+* output_file - (Optional) The name of file that can save images data source after running `terraform plan`.
 
 ## Attributes Reference
 

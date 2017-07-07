@@ -15,7 +15,7 @@ The Zones data source allows access to the list of Alicloud Zones which can be a
 ```
 # Declare the data source
 data "alicloud_zones" "default" {
-	"available_instance_type"= "ecs.s2.large"
+	"available_instance_type"= "ecs.n4.large"
 	"available_disk_category"= "cloud_ssd"
 }
 
@@ -36,6 +36,7 @@ The following arguments are supported:
 * `available_instance_type` - (Optional) Limit search to specific instance type.
 * `available_resource_creation` - (Optional) Limit search to specific resource type. The following values are allowed `Instance`, `Disk` and `VSwitch`.
 * `available_disk_category` - (Optional) Limit search to specific disk category. Can be either `cloud`, `ephemeral`, or `ephemeral_ssd`.
+* output_file - (Optional) The name of file that can save zones data source after running `terraform plan`.
 
 ## Attributes Reference
 
