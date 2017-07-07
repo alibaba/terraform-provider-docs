@@ -26,7 +26,7 @@ resource "alicloud_ess_scaling_configuration" "config" {
   scaling_group_id  = "${alicloud_ess_scaling_group.scaling.id}"
 
   image_id          = "ubuntu_140405_64_40G_cloudinit_20161115.vhd"
-  instance_type     = "ecs.s2.large"
+  instance_type     = "ecs.n4.large"
   security_group_id = "${alicloud_security_group.classic.id}"
 }
 
@@ -39,13 +39,13 @@ The following arguments are supported:
 * `scaling_group_id` - (Required) ID of the scaling group of a scaling configuration.
 * `image_id` - (Required) ID of an image file, indicating the image resource selected when an instance is enabled.
 * `instance_type` - (Required) Resource type of an ECS instance.
-* `io_optimized` - (Required) Valid values are `none`, `optimized`, If `optimized`, the launched ECS instance will be I/O optimized.
+* `io_optimized` - (Deprecated) It is deprecated on instance resource. All the launched alicloud instances are IO optimized.
 * `security_group_id` - (Required) ID of the security group to which a newly created instance belongs.
 * `scaling_configuration_name` - (Optional) Name shown for the scheduled task. If this parameter value is not specified, the default value is ScalingConfigurationId.
 * `internet_charge_type` - (Optional) Network billing type, Values: PayByBandwidth or PayByTraffic. If this parameter value is not specified, the default value is PayByBandwidth.
 * `internet_max_bandwidth_in` - (Optional) Maximum incoming bandwidth from the public network, measured in Mbps (Mega bit per second). The value range is [1,200].
 * `internet_max_bandwidth_out` - (Optional) Maximum outgoing bandwidth from the public network, measured in Mbps (Mega bit per second). The value range for PayByBandwidth is [1,100].
-* `system_disk_category` - (Optional) Category of the system disk. The parameter value options are cloud and ephemeral. 
+* `system_disk_category` - (Optional) Category of the system disk. The parameter value options are `cloud_efficiency`, `cloud_ssd`.
 * `data_disk` - (Optional) DataDisk mappings to attach to ecs instance. See [Block datadisk](#block-datadisk) below for details. 
 * `instance_ids` - (Optional) ID of the ECS instance to be attached to the scaling group after it is enabled. You can input up to 20 IDs. 
 
@@ -78,7 +78,6 @@ The following attributes are exported:
 * `active` - Wether the current scaling configuration is actived.
 * `image_id` - The ecs instance Image id.
 * `instance_type` - The ecs instance type.
-* `io_optimized` - The ecs instance whether I/O optimized.
 * `security_group_id` - ID of the security group to which a newly created instance belongs.
 * `scaling_configuration_name` - Name of scaling configuration.
 * `internet_charge_type` - Internet charge type of ecs instance.

@@ -33,10 +33,11 @@ resource "alicloud_instance" "instance" {
 
 The following arguments are supported:
 
+* `availability_zone` - (Optional) The Zone that supports available instance types.
 * `cpu_core_count` - (Optional) Limit search to specific cpu core count.
 * `memory_size` - (Optional) Limit search to specific memory size.
 * `instance_type_family` - (Optional) Allows to filter list of Instance Types based on their
-family name, for example 'ecs.n1'.
+family name, for example 'ecs.n4'.
 
 ## Attributes Reference
 

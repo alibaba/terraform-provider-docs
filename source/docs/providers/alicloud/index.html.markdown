@@ -34,8 +34,7 @@ resource "alicloud_instance" "web" {
   instance_network_type = "Classic"
   internet_charge_type  = "PayByBandwidth"
 
-  instance_type        = "ecs.n1.medium"
-  io_optimized         = "optimized"
+  instance_type        = "ecs.n4.medium"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.default.id}"]
   instance_name        = "web"
