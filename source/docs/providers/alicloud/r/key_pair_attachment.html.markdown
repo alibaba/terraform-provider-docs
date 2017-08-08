@@ -37,8 +37,8 @@ resource "alicloud_key_pair_attachment" "attach" {
 
 The following arguments are supported:
 
-* `key_name` - (Required, Forces new resource) The name of key pair used to bind.
-* `instance_ids` - (Required, Forces new resource) The list of ECS instance's IDs.
+* `key_name` - (Required, Force new resource) The name of key pair used to bind.
+* `instance_ids` - (Required, Force new resource) The list of ECS instance's IDs.
 
 ## Attributes Reference
 
