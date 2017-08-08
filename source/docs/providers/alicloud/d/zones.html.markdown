@@ -36,11 +36,11 @@ The following arguments are supported:
 * `available_instance_type` - (Optional) Limit search to specific instance type.
 * `available_resource_creation` - (Optional) Limit search to specific resource type. The following values are allowed `Instance`, `Disk` and `VSwitch`.
 * `available_disk_category` - (Optional) Limit search to specific disk category. Can be either `cloud`, `ephemeral`, or `ephemeral_ssd`.
-* output_file - (Optional) The name of file that can save zones data source after running `terraform plan`.
+* `output_file` - (Optional) The name of file that can save zones data source after running `terraform plan`.
 
 ## Attributes Reference
 
-The following attributes are exported:
+A list of zones will be exported and its every element contains the following attributes:
 
 * `id` - ID of the zone.
 * `local_name` - Name of the zone in the local language.

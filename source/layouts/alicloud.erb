@@ -13,6 +13,9 @@
                  <li<%= sidebar_current(/^docs-alicloud-datasource/) %>>
                     <a href="#">Data Sources</a>
                     <ul class="nav nav-visible">
+                        <li<%= sidebar_current("docs-alicloud-datasource-regions") %>>
+                            <a href="/docs/providers/alicloud/d/regions.html">alicloud_regions</a>
+                        </li>
                         <li<%= sidebar_current("docs-alicloud-datasource-instance-types") %>>
                             <a href="/docs/providers/alicloud/d/instance_types.html">alicloud_instance_types</a>
                         </li>
@@ -21,6 +24,9 @@
                         </li>
                         <li<%= sidebar_current("docs-alicloud-datasource-zones") %>>
                             <a href="/docs/providers/alicloud/d/zones.html">alicloud_zones</a>
+                        </li>
+                        <li<%= sidebar_current("docs-alicloud-datasource-key-pairs") %>>
+                            <a href="/docs/providers/alicloud/d/key_pairs.html">alicloud_key-pairs</a>
                         </li>
                     </ul>
                 </li>
@@ -42,6 +48,12 @@
                         </li>
                         <li<%= sidebar_current("docs-alicloud-resource-eip-association") %>>
                             <a href="/docs/providers/alicloud/r/eip_association.html">alicloud_eip_association</a>
+                        </li>
+                        <li<%= sidebar_current("docs-alicloud-resource-key-pair") %>>
+                            <a href="/docs/providers/alicloud/r/key_pair.html">alicloud_key_pair</a>
+                        </li>
+                        <li<%= sidebar_current("docs-alicloud-resource-key-pair-attachment") %>>
+                            <a href="/docs/providers/alicloud/r/key_pair.html">alicloud_key_pair_attachment</a>
                         </li>
                     </ul>
                 </li>
@@ -119,6 +131,15 @@
                         </li>
                         <li<%= sidebar_current("docs-alicloud-resource-oss") %>>
                             <a href="/docs/providers/alicloud/r/oss_bucket_object.html">alicloud_oss_bucket_object</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li<%= sidebar_current(/^docs-alicloud-resource-container/) %>>
+                    <a href="#">Container Resources</a>
+                    <ul class="nav nav-visible">
+                        <li<%= sidebar_current("docs-alicloud-resource-container") %>>
+                            <a href="/docs/providers/alicloud/r/container_cluster.html">alicloud_container_cluster</a>
                         </li>
                     </ul>
                 </li>
