@@ -33,7 +33,7 @@ The following arguments are supported:
 
 * `name` - (Force new resource) The container cluster's name. It is the only in one Alicloud account.
 * `name_prefix` - (Force new resource) The container cluster name's prefix. It is conflict with `name`. If it is specified, terraform will using it to build the only cluster name.
-* `size` - The ES node number of the container cluster. Its value choices are 1~20, and default to 1.
+* `size` - The ECS node number of the container cluster. Its value choices are 1~20, and default to 1.
 * `cidr_block` - (Required, Force new resource) The CIDR block for the Container. Its valid value are `192.168.X.0/24` or `172.16.X.0/24` ~ `172.31.X.0/24`, and it can't be conflict with VSwitch's.
 * `image_id` - (Force new resource) The image ID of ECS instance node used. Default to System automate allocated.
 * `instance_type` - (Required, Force new resource) The type of ECS instance node.
