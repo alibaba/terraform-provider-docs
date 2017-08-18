@@ -15,22 +15,31 @@ Provides a RAM Group Policy attachment resource.
 ```
 # Create a RAM Group Policy attachment.
 resource "alicloud_ram_group" "group" {
-  group_name = "test_group"
+  name = "test_group"
   comments = "this is a group comments."
   force = true
 }
 
 resource "alicloud_ram_policy" "policy" {
-  policy_name = "test_policy"
-  policy_document = "{\"Statement\": [{\"Action\": [\"ram:ListGroups\", \"ram:CreateGroup\"], \"Effect\": \"Allow\", \"Resource\": [\"acs:ram:*:${AccountId}:group/*\"]}], \"Version\": \"1\"}"
+  name = "test_policy"
+  statement = [
+      {
+        effect = "Allow"
+        action = [
+          "oss:ListObjects",
+          "oss:GetObject"]
+        resource = [
+          "acs:oss:*:*:mybucket",
+          "acs:oss:*:*:mybucket/*"]
+      }]
   description = "this is a policy test"
   force = true
 }
 
 resource "alicloud_ram_group_policy_attachment" "attach" {
-  policy_name = "${alicloud_ram_policy.policy.policy_name}"
-  policy_type = "${alicloud_ram_policy.policy.policy_type}"
-  group_name = "${alicloud_ram_group.group.group_name}"
+  policy_name = "${alicloud_ram_policy.policy.name}"
+  policy_type = "${alicloud_ram_policy.policy.type}"
+  group_name = "${alicloud_ram_group.group.name}"
 }
 ```
 ## Argument Reference

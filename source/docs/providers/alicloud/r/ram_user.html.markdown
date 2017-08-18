@@ -17,7 +17,7 @@ Provides a RAM User resource.
 ```
 # Create a new RAM user.
 resource "alicloud_ram_user" "user" {
-  user_name = "user_test"
+  name = "user_test"
   display_name = "user_display_name"
   mobile = "86-18688888888"
   email = "hello.uuu@aaa.com"
@@ -29,7 +29,7 @@ resource "alicloud_ram_user" "user" {
 
 The following arguments are supported:
 
-* `user_name` - (Required) Name of the RAM user. This name can have a string of 1 to 64 characters, must contain only alphanumeric characters or hyphens, such as "-",".","_", and must not begin with a hyphen.
+* `name` - (Required) Name of the RAM user. This name can have a string of 1 to 64 characters, must contain only alphanumeric characters or hyphens, such as "-",".","_", and must not begin with a hyphen.
 * `display_name` - (Optional) Name of the RAM user which for display. This name can have a string of 1 to 12 characters or Chinese characters, must contain only alphanumeric characters or Chinese characters or hyphens, such as "-",".", and must not end with a hyphen.
 * `mobile` - (Optional) Phone number of the RAM user. This number must contain an international area code prefix, just look like this: 86-18600008888.
 * `email` - (Optional) Email of the RAM user.
@@ -41,9 +41,8 @@ The following arguments are supported:
 The following attributes are exported:
 
 * `id` - The user ID.
-* `user_name` - The user name.
+* `name` - The user name.
 * `display_name` - The user display name.
 * `mobile` - The user phone number.
 * `email` - The user email.
 * `comments` - The user comments.
-* `create_date` - The user create date.

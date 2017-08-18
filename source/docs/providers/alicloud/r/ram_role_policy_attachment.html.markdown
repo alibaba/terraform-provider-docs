@@ -15,23 +15,33 @@ Provides a RAM Role attachment resource.
 ```
 # Create a RAM Role Policy attachment.
 resource "alicloud_ram_role" "role" {
-  role_name = "test_role"
-  assume_role_policy = "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"RAM\":[\"acs:ram::${AccountId}:root\"]}}],\"Version\":\"1\"}"
+  name = "test_role"
+  ram_users = ["acs:ram::${your_account_id}:root", "acs:ram::${other_account_id}:user/username"]
+  services = ["apigateway.aliyuncs.com", "ecs.aliyuncs.com"]
   description = "this is a role test."
   force = true
 }
 
 resource "alicloud_ram_policy" "policy" {
-  policy_name = "test_policy"
-  policy_document = "{\"Statement\": [{\"Action\": [\"ram:ListGroups\", \"ram:CreateGroup\"], \"Effect\": \"Allow\", \"Resource\": [\"acs:ram:*:${AccountId}:group/*\"]}], \"Version\": \"1\"}"
+  name = "test_policy"
+  statement = [
+          {
+            effect = "Allow"
+            action = [
+              "oss:ListObjects",
+              "oss:GetObject"]
+            resource = [
+              "acs:oss:*:*:mybucket",
+              "acs:oss:*:*:mybucket/*"]
+          }]
   description = "this is a policy test"
   force = true
 }
 
 resource "alicloud_ram_role_policy_attachment" "attach" {
-  policy_name = "${alicloud_ram_policy.policy.policy_name}"
-  policy_type = "${alicloud_ram_policy.policy.policy_type}"
-  role_name = "${alicloud_ram_role.role.role_name}"
+  policy_name = "${alicloud_ram_policy.policy.name}"
+  policy_type = "${alicloud_ram_policy.policy.type}"
+  role_name = "${alicloud_ram_role.role.name}"
 }
 ```
 ## Argument Reference

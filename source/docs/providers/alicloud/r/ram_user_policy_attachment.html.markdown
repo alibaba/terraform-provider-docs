@@ -15,7 +15,7 @@ Provides a RAM User Policy attachment resource.
 ```
 # Create a RAM User Policy attachment.
 resource "alicloud_ram_user" "user" {
-  user_name = "user_test"
+  name = "user_test"
   display_name = "user_display_name"
   mobile = "86-18688888888"
   email = "hello.uuu@aaa.com"
@@ -24,16 +24,25 @@ resource "alicloud_ram_user" "user" {
 }
 
 resource "alicloud_ram_policy" "policy" {
-  policy_name = "test_policy"
-  policy_document = "{\"Statement\": [{\"Action\": [\"ram:ListGroups\", \"ram:CreateGroup\"], \"Effect\": \"Allow\", \"Resource\": [\"acs:ram:*:${AccountId}:group/*\"]}], \"Version\": \"1\"}"
+  name = "test_policy"
+  statement = [
+          {
+            effect = "Allow"
+            action = [
+              "oss:ListObjects",
+              "oss:GetObject"]
+            resource = [
+              "acs:oss:*:*:mybucket",
+              "acs:oss:*:*:mybucket/*"]
+          }]
   description = "this is a policy test"
   force = true
 }
 
 resource "alicloud_ram_user_policy_attachment" "attach" {
-  policy_name = "${alicloud_ram_policy.policy.policy_name}"
-  policy_type = "${alicloud_ram_policy.policy.policy_type}"
-  user_name = "${alicloud_ram_user.user.user_name}"
+  policy_name = "${alicloud_ram_policy.policy.name}"
+  policy_type = "${alicloud_ram_policy.policy.type}"
+  user_name = "${alicloud_ram_user.user.name}"
 }
 ```
 ## Argument Reference
