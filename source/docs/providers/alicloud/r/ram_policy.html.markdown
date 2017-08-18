@@ -12,15 +12,22 @@ Provides a RAM Policy resource.
 
 ~> **NOTE:** When you want to destroy this resource forcefully(means remove all the relationships associated with it automatically and then destroy it) without set `force`  with `true` at beginning, you need add `force = true` to configuration file and run `terraform plan`, then you can delete resource forcefully.
 
-~> **NOTE:** The `policy_document` in example contains a variable `${AccountId}`, you should replace it with your own account id when you use it.
-
 ## Example Usage
 
 ```
 # Create a new RAM Policy.
 resource "alicloud_ram_policy" "policy" {
-  policy_name = "test_policy"
-  policy_document = "{\"Statement\": [{\"Action\": [\"ram:ListGroups\", \"ram:CreateGroup\"], \"Effect\": \"Allow\", \"Resource\": [\"acs:ram:*:${AccountId}:group/*\"]}], \"Version\": \"1\"}"
+  name = "test_policy"
+  statement = [
+        {
+          effect = "Allow"
+          action = [
+            "oss:ListObjects",
+            "oss:GetObject"]
+          resource = [
+            "acs:oss:*:*:mybucket",
+            "acs:oss:*:*:mybucket/*"]
+        }]
   description = "this is a policy test"
   force = true
 }
@@ -29,8 +36,12 @@ resource "alicloud_ram_policy" "policy" {
 
 The following arguments are supported:
 
-* `policy_name` - (Required, Forces new resource) Name of the RAM policy. This name can have a string of 1 to 128 characters, must contain only alphanumeric characters or hyphen "-", and must not begin with a hyphen.
-* `policy_document` - (Required) Document of the RAM policy. This parameter can have no more than 2048 characters. This document must be a json string.
+* `name` - (Required, Forces new resource) Name of the RAM policy. This name can have a string of 1 to 128 characters, must contain only alphanumeric characters or hyphen "-", and must not begin with a hyphen.
+* `statement` - (Required,  Type: list) Statements of the RAM policy document.
+     * `resource` - (Required, Type: list) List of specific objects which will be authorized.
+     * `action` - (Required, Type: list) List of operations for the `resource`.
+     * `effect` - (Required) This parameter indicates whether or not the `action` is allowed. Valid values are `Allow` and `Deny`.
+* `version` - (Optional) Version of the RAM policy document. Valid value is `1`. Default value is `1`.
 * `description` - (Optional, Forces new resource) Description of the RAM policy. This name can have a string of 1 to 1024 characters.
 * `force` - (Optional) This parameter is used for resource destroy. Default value is `false`.
 
@@ -39,11 +50,10 @@ The following arguments are supported:
 The following attributes are exported:
 
 * `id` - The policy ID.
-* `policy_name` - The policy name.
-* `policy_type` - The policy type.
+* `name` - The policy name.
+* `type` - The policy type.
 * `description` - The policy description.
-* `create_date` - The policy create date.
-* `update_date` - The policy update date.
-* `policy_document` - The policy document.
-* `default_version` - The policy default version.
+* `statement` - List of statement of the policy document.
+* `document` - The policy document.
+* `version` - The policy document version.
 * `attachment_count` - The policy attachment count.

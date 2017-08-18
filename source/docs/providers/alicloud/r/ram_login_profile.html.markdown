@@ -16,7 +16,7 @@ Provides a RAM User Login Profile resource.
 ```
 # Create a RAM login profile.
 resource "alicloud_ram_user" "user" {
-  user_name = "user_test"
+  name = "user_test"
   display_name = "user_display_name"
   mobile = "86-18688888888"
   email = "hello.uuu@aaa.com"
@@ -25,7 +25,7 @@ resource "alicloud_ram_user" "user" {
 }
 
 resource "alicloud_ram_login_profile" "profile" {
-  user_name = "${alicloud_ram_user.user.user_name}"
+  user_name = "${alicloud_ram_user.user.name}"
   password = "Haha..1234"
 }
 ```

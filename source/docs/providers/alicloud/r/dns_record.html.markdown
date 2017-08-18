@@ -37,6 +37,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 * `id` - The record id.
+* `name` - (Required) The record domain name.
+* `type` - (Required) The record type.
 * `host_record` - The host record of record.
 * `value` - The record value.
 * `ttl` - The record effective time.

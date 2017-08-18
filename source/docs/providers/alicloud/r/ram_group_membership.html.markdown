@@ -15,13 +15,13 @@ Provides a RAM Group membership resource.
 ```
 # Create a RAM Group membership.
 resource "alicloud_ram_group" "group" {
-  group_name = "test_group"
+  name = "test_group"
   comments = "this is a group comments."
   force = true
 }
 
 resource "alicloud_ram_user" "user" {
-  user_name = "user_test"
+  name = "user_test"
   display_name = "user_display_name"
   mobile = "86-18688888888"
   email = "hello.uuu@aaa.com"
@@ -30,7 +30,7 @@ resource "alicloud_ram_user" "user" {
 }
 
 resource "alicloud_ram_user" "user1" {
-  user_name = "user_test1"
+  name = "user_test1"
   display_name = "user_display_name1"
   mobile = "86-18688888889"
   email = "hello.uuu@aaa.com"
@@ -39,8 +39,8 @@ resource "alicloud_ram_user" "user1" {
 }
 
 resource "alicloud_ram_group_membership" "membership" {
-  group_name = "${alicloud_ram_group.group.group_name}"
-  users = ["${alicloud_ram_user.user.user_name}"，"${alicloud_ram_user.user1.user_name}"]
+  group_name = "${alicloud_ram_group.group.name}"
+  user_names = ["${alicloud_ram_user.user.name}"，"${alicloud_ram_user.user1.name}"]
 }
 ```
 ## Argument Reference
@@ -48,7 +48,7 @@ resource "alicloud_ram_group_membership" "membership" {
 The following arguments are supported:
 
 * `group_name` - (Required, Forces new resource) Name of the RAM group. This name can have a string of 1 to 64 characters, must contain only alphanumeric characters or hyphen "-", and must not begin with a hyphen.
-* `users` - (Required) Set of user name which will be added to group. Each name can have a string of 1 to 64 characters, must contain only alphanumeric characters or hyphens, such as "-",".","_", and must not begin with a hyphen.
+* `user_names` - (Required) Set of user name which will be added to group. Each name can have a string of 1 to 64 characters, must contain only alphanumeric characters or hyphens, such as "-",".","_", and must not begin with a hyphen.
 
 ## Attributes Reference
 
@@ -56,4 +56,4 @@ The following attributes are exported:
 
 * `id` - The membership ID.
 * `group_name` - The group name.
-* `users` - The group users.
+* `user_names` - The list of names of users which in the group.

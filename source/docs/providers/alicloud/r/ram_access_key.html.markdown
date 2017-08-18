@@ -17,7 +17,7 @@ Provides a RAM User access key resource.
 ```
 # Create a new RAM access key for user.
 resource "alicloud_ram_user" "user" {
-  user_name = "user_test"
+  name = "user_test"
   display_name = "user_display_name"
   mobile = "86-18688888888"
   email = "hello.uuu@aaa.com"
@@ -26,7 +26,7 @@ resource "alicloud_ram_user" "user" {
 }
 
 resource "alicloud_ram_access_key" "ak" {
-  user_name = "${alicloud_ram_user.user.user_name}"
+  user_name = "${alicloud_ram_user.user.name}"
   secret_file = "/xxx/xxx/xxx.txt"
 }
 ```
@@ -35,7 +35,7 @@ resource "alicloud_ram_access_key" "ak" {
 The following arguments are supported:
 
 * `user_name` - (Required, Forces new resource) Name of the RAM user. This name can have a string of 1 to 64 characters, must contain only alphanumeric characters or hyphens, such as "-",".","_", and must not begin with a hyphen.
-* `secret_file` - (Optional, Forces new resource) File path for the access key to save.
+* `secret_file` - (Optional, Forces new resource) The name of file that can save access key id and access key secret. Strongly suggest you to specified it when you creating access key, otherwise, you wouldn't get its secret ever.
 * `status` - (Optional) Status of access key. It must be `Active` or `Inactive`. Default value is `Active`.
 
 ## Attributes Reference
@@ -44,4 +44,3 @@ The following attributes are exported:
 
 * `id` - The access key ID.
 * `status` - The access key status.
-* `create_date` - The access key create date.
