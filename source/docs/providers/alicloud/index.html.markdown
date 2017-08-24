@@ -31,8 +31,8 @@ resource "alicloud_instance" "web" {
   availability_zone = "cn-beijing-b"
   image_id          = "ubuntu_140405_32_40G_cloudinit_20161115.vhd"
 
-  instance_network_type = "Classic"
   internet_charge_type  = "PayByBandwidth"
+  allocate_public_ip = true
 
   instance_type        = "ecs.n4.medium"
   system_disk_category = "cloud_efficiency"
