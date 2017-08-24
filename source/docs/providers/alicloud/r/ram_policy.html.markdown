@@ -23,11 +23,14 @@ resource "alicloud_ram_policy" "policy" {
       effect = "Allow"
       action = [
         "oss:ListObjects",
-        "oss:GetObject"]
+        "oss:GetObject"
+      ]
       resource = [
         "acs:oss:*:*:mybucket",
-        "acs:oss:*:*:mybucket/*"]
-    }]
+        "acs:oss:*:*:mybucket/*"
+      ]
+    }
+  ]
   description = "this is a policy test"
   force = true
 }
