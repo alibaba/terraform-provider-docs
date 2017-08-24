@@ -19,15 +19,18 @@ Provides a RAM Policy resource.
 resource "alicloud_ram_policy" "policy" {
   name = "test_policy"
   statement = [
-        {
-          effect = "Allow"
-          action = [
-            "oss:ListObjects",
-            "oss:GetObject"]
-          resource = [
-            "acs:oss:*:*:mybucket",
-            "acs:oss:*:*:mybucket/*"]
-        }]
+    {
+      effect = "Allow"
+      action = [
+        "oss:ListObjects",
+        "oss:GetObject"
+      ]
+      resource = [
+        "acs:oss:*:*:mybucket",
+        "acs:oss:*:*:mybucket/*"
+      ]
+    }
+  ]
   description = "this is a policy test"
   force = true
 }
