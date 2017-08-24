@@ -15,8 +15,8 @@ Provides a ECS EIP resource.
 ```
 # Create a new EIP.
 resource "alicloud_eip" "example" {
-    bandwidth ＝ "10"
-    internet_charge_type ＝ "PayByBandwidth"
+  bandwidth            = "10"
+  internet_charge_type = "PayByBandwidth"
 }
 ```
 ## Argument Reference
@@ -35,4 +35,3 @@ The following attributes are exported:
 * `internet_charge_type` - The EIP internet charge type.
 * `status` - The EIP current status.
 * `ip_address` - The elastic ip address
-* `instance` - The ID of the instance which is associated with the EIP.

@@ -21,37 +21,36 @@ Use the navigation to the left to read about the available resources.
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.secret_key}"
-  region = "${var.region}"
+  region     = "${var.region}"
 }
 
 # Create a web server
 resource "alicloud_instance" "web" {
   # cn-beijing
-  provider = "alicloud"
+  provider          = "alicloud"
   availability_zone = "cn-beijing-b"
-  image_id = "ubuntu_140405_32_40G_cloudinit_20161115.vhd"
+  image_id          = "ubuntu_140405_32_40G_cloudinit_20161115.vhd"
 
-  instance_network_type = "Classic"
-  internet_charge_type = "PayByBandwidth"
+  internet_charge_type  = "PayByBandwidth"
+  allocate_public_ip = true
 
-  instance_type = "ecs.n1.medium"
-  io_optimized = "optimized"
+  instance_type        = "ecs.n4.medium"
   system_disk_category = "cloud_efficiency"
-  security_groups = ["${alicloud_security_group.default.id}"]
-  instance_name = "web"
+  security_groups      = ["${alicloud_security_group.default.id}"]
+  instance_name        = "web"
 }
 
 # Create security group
 resource "alicloud_security_group" "default" {
-	name = "default"
-	provider = "alicloud"
-	description = "default"
+  name        = "default"
+  provider    = "alicloud"
+  description = "default"
 }
 ```
 
-## Authentication 
+## Authentication
 
-The Alicloud provider offers a flexible means of providing credentials for authentication. 
+The Alicloud provider offers a flexible means of providing credentials for authentication.
 The following methods are supported, in this order, and explained below:
 
 - Static credentials
@@ -62,7 +61,7 @@ The following methods are supported, in this order, and explained below:
 Static credentials can be provided by adding an `access_key` `secret_key` and `region` in-line in the
 alicloud provider block:
 
-Usage: 
+Usage:
 
 ```
 provider "alicloud" {
@@ -86,7 +85,7 @@ provider "alicloud" {}
 Usage:
 
 ```
-$ export ALICLOUD_ACCESS_KEY="anaccesskey" 
+$ export ALICLOUD_ACCESS_KEY="anaccesskey"
 $ export ALICLOUD_SECRET_KEY="asecretkey"
 $ export ALICLOUD_REGION="cn-beijing"
 $ terraform plan

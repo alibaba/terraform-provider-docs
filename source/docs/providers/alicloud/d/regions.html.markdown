@@ -25,10 +25,11 @@ The following arguments are supported:
 
 * `name` - (Optional) The full name of the region to select.
 * `current` - (Optional) Set to true to match only the region configured in the provider.
+* `output_file` - (Optional) The name of file that can save regions data source after running `terraform plan`.
 
 ## Attributes Reference
 
-The following attributes are exported:
+A list of regions will be exported and its every element contains the following attributes:
 
 * `id` - ID of the region.
 * `local_name` - Name of the region in the local language.
