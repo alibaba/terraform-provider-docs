@@ -15,10 +15,10 @@ The Ram Users data source provides a list of Alicloud Ram Users in an Alicloud a
 ```
 data "alicloud_ram_users" "user" {
   output_file = "users.txt"
-  type = "policy"
+  group_name = "group1"
   policy_name = "AliyunACSDefaultAccess"
   policy_type = "Custom"
-  user_name_regex = "^user"
+  name_regex = "^user"
 }
 
 ```
@@ -27,18 +27,17 @@ data "alicloud_ram_users" "user" {
 
 The following arguments are supported:
 
-* `user_name_regex` - (Optional) A regex string to apply to the user list returned by Alicloud.
-* `type` - (Optional) Limit search to specific the type which the Users attach for. Valid items are `group` and `policy`.
-* `group_name` - (Optional) Limit search to specific the group name. This parameter is required when the `type` value is `group`.
-* `policy_name` - (Optional) Limit search to specific the policy name. This parameter is required when the `type` value is `policy`.
-* `policy_type` - (Optional) Limit search to specific the policy type. Valid items are `Custom` and `System`. This parameter is required when the `type` value is `policy`.
+* `name_regex` - (Optional) A regex string to apply to the user list returned by Alicloud.
+* `group_name` - (Optional) Limit search to specific the group name. Found the users which in the specified group. 
+* `policy_type` - (Optional) Limit search to specific the policy type. Valid items are `Custom` and `System`. If you set this parameter, you must set `policy_name` at one time.
+* `policy_name` - (Optional) Limit search to specific the policy name. If you set this parameter without set `policy_type`, we will specified it as `System`. Found the users which attached with the specified policy.
 * `output_file` - (Optional) The name of file that can save users data source after running `terraform plan`.
 
 ## Attributes Reference
 
 A list of users will be exported and its every element contains the following attributes:
 
-* `user_id` - Id of the user.
-* `user_name` - Name of the user.
+* `id` - Id of the user.
+* `name` - Name of the user.
 * `create_date` - Create date of the user.
 * `last_login_date` - Last login date of the user.

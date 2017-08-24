@@ -14,10 +14,10 @@ The Ram Roles data source provides a list of Alicloud Ram Roles in an Alicloud a
 
 ```
 data "alicloud_ram_roles" "role" {
-  role_name_regex = ".*test.*"
+  output_file = "roles.txt"
+  name_regex = ".*test.*"
   policy_name = "AliyunACSDefaultAccess"
   policy_type = "Custom"
-  output_file = "roles.txt"
 }
 
 ```
@@ -26,17 +26,17 @@ data "alicloud_ram_roles" "role" {
 
 The following arguments are supported:
 
-* `role_name_regex` - (Optional) A regex string to apply to the role list returned by Alicloud.
-* `policy_name` - (Optional) Limit search to specific the policy name. This parameter must set with `policy_type` at one time.
-* `policy_type` - (Optional) Limit search to specific the policy type. Valid items are `Custom` and `System`. This parameter must set with `policy_name` at one time. 
+* `name_regex` - (Optional) A regex string to apply to the role list returned by Alicloud.
+* `policy_type` - (Optional) Limit search to specific the policy type. Valid items are `Custom` and `System`. If you set this parameter, you must set `policy_name` at one time.
+* `policy_name` - (Optional) Limit search to specific the policy name. If you set this parameter without set `policy_type`, we will specified it as `System`. Found the roles which attached with the specified policy.
 * `output_file` - (Optional) The name of file that can save roles data source after running `terraform plan`.
 
 ## Attributes Reference
 
 A list of roles will be exported and its every element contains the following attributes:
 
-* `role_id` - Id of the role.
-* `role_name` - Name of the role.
+* `id` - Id of the role.
+* `name` - Name of the role.
 * `arn` - Resource descriptor of the role.
 * `description` - Description of the role.
 * `assume_role_policy_document` - Authorization strategy of the role.
