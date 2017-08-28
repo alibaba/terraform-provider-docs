@@ -74,6 +74,7 @@ On other OSs such as Linux, the host name can contain a maximum of 30 characters
 * `instance_charge_type` - (Optional) Valid values are `PrePaid`, `PostPaid`, The default is `PostPaid`.
 * `period` - (Optional) The time that you have bought the resource, in month. Only valid when instance_charge_type is set as `PrePaid`. Value range [1, 12].
 * `tags` - (Optional) A mapping of tags to assign to the resource.
+* `role_name` - (Optional, Force new resource) The name of ram role. This parameter is supported only when the instance's type is `VPC`. If it is specified, the instance would be attach with the role. This role's policy services must contains `ecs.aliyuncs.com`. 
 * `key_name` - (Optional, Force new resource) The name of key pair that can login ECS instance successfully without password. If it is specified, the password would be invalid.
 
 ## Attributes Reference
@@ -93,4 +94,5 @@ The following attributes are exported:
 * `public_ip` - The instance public ip.
 * `vswitch_id` - If the instance created in VPC, then this value is  virtual switch ID.
 * `tags` - The instance tags, use jsonencode(item) to display the value.
+* `role_name` - The name of ram role that has been bound in ECS instance.
 * `key_name` - The name of key pair that has been bound in ECS instance.
