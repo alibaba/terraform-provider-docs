@@ -39,6 +39,7 @@ A list of roles will be exported and its every element contains the following at
 * `name` - Name of the role.
 * `arn` - Resource descriptor of the role.
 * `description` - Description of the role.
-* `assume_role_policy_document` - Authorization strategy of the role.
+* `assume_role_policy_document` - Authorization strategy of the role. This parameter is deprecated and replaced by `document`.
+* `document` - Authorization strategy of the role.
 * `create_date` - Create date of the role.
 * `update_date` - Update date of the role.
