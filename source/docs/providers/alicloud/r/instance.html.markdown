@@ -10,19 +10,24 @@ description: |-
 
 Provides a ECS instance resource.
 
+~> **NOTE:**
+* You can launch an ECS instance for a VPC network via specifying parameter `vswitch_id`. One instance can only belong to one VSwitch.
+* If a VSwitchId is specified for creating an instance, SecurityGroupId and VSwitchId must belong to one VPC.
+
 ## Example Usage
 
 ```
-# Create a new ECS instance for classic
-resource "alicloud_security_group" "classic" {
+# Create a new ECS instance for a VPC
+resource "alicloud_security_group" "group" {
   name        = "tf_test_foo"
   description = "foo"
+  vpc_id = "${alicloud_vpc.vpc.id}"
 }
 
-resource "alicloud_instance" "classic" {
+resource "alicloud_instance" "instance" {
   # cn-beijing
   availability_zone = "cn-beijing-b"
-  security_groups = ["${alicloud_security_group.classic.*.id}"]
+  security_groups = ["${alicloud_security_group.group.*.id}"]
 
   allocate_public_ip = true
 
@@ -31,21 +36,23 @@ resource "alicloud_instance" "classic" {
   system_disk_category = "cloud_efficiency"
   image_id             = "ubuntu_140405_64_40G_cloudinit_20161115.vhd"
   instance_name        = "test_foo"
+  vswitch_id = "${alicloud_vswitch.vswitch.id}"
 }
 
 # Create a new ECS instance for VPC
-resource "alicloud_vpc" "default" {
+resource "alicloud_vpc" "vpc" {
   # Other parameters...
 }
 
-resource "alicloud_vswitch" "default" {
+resource "alicloud_vswitch" "vswitch" {
+  vpc_id = "${alicloud_vpc.vpc.id}"
   # Other parameters...
 }
 
-resource "alicloud_slb" "vpc" {
+resource "alicloud_slb" "slb" {
   name       = "test-slb-tf"
-  vpc_id     = "${alicloud_vpc.default.id}"
-  vswitch_id = "${alicloud_vswitch.default.id}"
+  vpc_id     = "${alicloud_vpc.vpc.id}"
+  vswitch_id = "${alicloud_vswitch.vswitch.id}"
 }
 ```
 
@@ -75,6 +82,7 @@ On other OSs such as Linux, the host name can contain a maximum of 30 characters
 * `period` - (Optional) The time that you have bought the resource, in month. Only valid when instance_charge_type is set as `PrePaid`. Value range [1, 12].
 * `tags` - (Optional) A mapping of tags to assign to the resource.
 * `key_name` - (Optional, Force new resource) The name of key pair that can login ECS instance successfully without password. If it is specified, the password would be invalid.
+* `role_name` - (Optional, Force new resource) Instance RAM role name. The name is provided and maintained by RAM. You can use `alicloud_ram_role` to create a new one.
 
 ## Attributes Reference
 
@@ -94,3 +102,4 @@ The following attributes are exported:
 * `vswitch_id` - If the instance created in VPC, then this value is  virtual switch ID.
 * `tags` - The instance tags, use jsonencode(item) to display the value.
 * `key_name` - The name of key pair that has been bound in ECS instance.
+* `role_name` - The name of RAM role that has been bound in ECS instance.

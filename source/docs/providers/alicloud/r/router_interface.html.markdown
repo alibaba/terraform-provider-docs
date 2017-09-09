@@ -3,20 +3,15 @@ layout: "alicloud"
 page_title: "Alicloud: alicloud_router_interface"
 sidebar_current: "docs-alicloud-resource-router-interface"
 description: |-
-  Provides a ECS router interface resource.
+  Provides a VPC router interface resource to connect two VPCs.
 ---
 
 # alicloud\_router\_interface
 
-Provides a ECS router interface resource.
+Provides a VPC router interface resource to connect two VPCs by connecting the router interfaces .
 
-~> **NOTE:** At most five interfaces are supported for one router and one account.
+~> **NOTE:** Only one pair of connected router interfaces can exist between two routers. Up to 5 router interfaces can be created for each router and each account.
  
-~> **NOTE:** When the `router_type` is `VBR`, the `role` can only be `InitiatingSide` and `opposite_router_type` can only be `VRouter`.
-
-~> **NOTE:** When the `opposite_router_type` is `VBR`, the `role` can only be `AcceptingSide` and `router_type` can only be `VRouter`.
-
-~> **NOTE:** Please refer to `https://help.aliyun.com/document_detail/44821.html` for the details of the value of `specification`. 
 
 ## Example Usage
 
@@ -40,39 +35,44 @@ resource "alicloud_router_interface" "interface" {
 
 The following arguments are supported:
 
-* `opposite_region` - (Required, Forces new resource) Region of the opposite router. Valid values are `cn-beijing`, `cn-hangzhou`, `cn-shanghai`, `cn-shenzhen`, `cn-hongkong`, `ap-southeast-1`, `us-east-1` and `us-west-1`.
-* `router_type` - (Required, Forces new resource) Type of the router. Valid values are `VRouter` and `VBR`.
-* `opposite_router_type` - (Optional, Forces new resource) Type of the opposite router which will be connected. Valid values are `VRouter` and `VBR`. Default value is `VRouter`.
-* `router_id` - (Required, Forces new resource) Id of the router.
-* `opposite_router_id` - (Optional) Id of the opposite router which will be connected.
-* `role` - (Required, Forces new resource) Role of the router interface. Valid values are `InitiatingSide` and `AcceptingSide`.
-* `specification` - (Optional) Specification of the router interface. Valid values are `Large.1`, `Large.2`, `Small.1`, `Small.2`, `Small.5`, `Middle.1`, `Middle.2`, `Middle.5` and `Negative`. It can only be `Negative` when the `role` is `AcceptingSide`. It is required and can not be `Negative` when the `role` is `InitiatingSide`.
-* `access_point_id` - (Optional, Forces new resource) Access point of the router interface. This parameter is required when the `router_type` is `VBR`.
-* `opposite_access_point_id` - (Optional, Forces new resource) Access point of the opposite router interface. This parameter is required when the `opposite_router_type` is `VBR`.
-* `opposite_interface_id` - (Optional) Id of interface which will be connected.
-* `opposite_interface_owner_id` - (Optional) Id of the account which the opposite interface belongs to.
-* `name` - (Optional) Name of the router interface. This name can have a string of 2 to 128 characters(Chinese or English), must contains only alphanumeric characters or hyphens "-", "_" or ".", and must not begin with "http://", "http://" or a hyphen. 
-* `description` - (Optional) Description of the router interface. This description can have a string of 2 to 256 characters and can not begin with "http://" or "https://".
-* `health_check_source_ip` - (Optional) Source IP of Packet of Line HealthCheck for the scenarios of Disaster Tolerant and ECMP. This parameter and `health_check_target_ip` should be specified or not at one time. It only valid when the `router_type` is `VRouter` and the `opposite_router_type` is `VBR`.
-* `health_check_target_ip` - (Optional) Target IP of Packet of Line HealthCheck for the scenarios of Disaster Tolerant and ECMP. This parameter and `health_check_source_ip` should be specified or not at one time. It only valid when the `router_type` is `VRouter` and the `opposite_router_type` is `VBR`.
+* `opposite_region` - (Required, Force New) The Region of peer side. At present, optional value: `cn-beijing`, `cn-hangzhou`, `cn-shanghai`, `cn-shenzhen`, `cn-hongkong`, `ap-southeast-1`, `us-east-1`, `us-west-1`.
+* `router_type` - (Required, Forces New) Router Type. Optional value: VRouter, VBR.
+* `opposite_router_type` - (Optional, Force New) Peer router type. Optional value: `VRouter`, `VBR`. Default to `VRouter`.
+* `router_id` - (Required, Force New) Router ID. When `router_type` is VBR, the VBR specified by the `router_id` must be in the access point specified by `access_point_id`.
+* `opposite_router_id` - (Optional) Peer router ID. When `opposite_router_type` is VBR, the `opposite_router_id` must be in the access point specified by `opposite_access_point_id`.
+* `role` - (Required, Force New) The role the router interface plays. Optional value: `InitiatingSide`, `AcceptingSide`.
+* `specification` - (Optional) Specification of router interfaces. If `role` is `AcceptingSide`, the value can be ignore or must be `Negative`. For more about the specification, refer to [Router interface specification](https://www.alibabacloud.com/help/doc-detail/52415.htm?spm=a3c0i.o52412zh.b99.10.698e566fdVCfKD).
+* `access_point_id` - (Optional, Force New) Access point ID. Required when `router_type` is `VBR`. Prohibited when `router_type` is `VRouter`.
+* `opposite_access_point_id` - (Optional, Force New) Access point ID of peer side. Required when `opposite_router_type` is `VBR`. Prohibited when `opposite_router_type` is `VRouter`.
+* `opposite_interface_id` - (Optional) Peer router interface ID.
+* `opposite_interface_owner_id` - (Optional) Peer account ID. Log on to the Alibaba Cloud console, select User Info > Account Management to check your account ID.
+* `name` - (Optional) Name of the router interface. Length must be 2-80 characters long. Only Chinese characters, English letters, numbers, period (.), underline (_), or dash (-) are permitted.
+                                                    If it is not specified, the default value is interface ID. The name cannot start with http:// and https://.
+* `description` - (Optional) Description of the router interface. It can be 2-256 characters long or left blank. It cannot start with http:// and https://.
+* `health_check_source_ip` - (Optional) Used as the Packet Source IP of health check for disaster recovery or ECMP. It is only valid when `router_type` is `VRouter` and `opposite_router_type` is `VBR`. The IP must be an unused IP in the local VPC. It and `health_check_target_ip` must be specified at the same time.
+* `health_check_target_ip` - (Optional) Used as the Packet Target IP of health check for disaster recovery or ECMP. It is only valid when `router_type` is `VRouter` and `opposite_router_type` is `VBR`. The IP must be an unused IP in the local VPC. It and `health_check_source_ip` must be specified at the same time.
+
+~> **NOTE:**
+* If `router_type` is `VBR`, the `role` must be `InitiatingSide` and `opposite_router_type` must be `VRouter`.
+* If `opposite_router_type` is `VBR`, the `role` must be `AcceptingSide` and `router_type` must be `VRouter`.
 
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-* `id` - The interface ID.
-* `router_id` - The router ID.
-* `router_type` - The router type.
-* `role` - The interface role.
-* `name` - The interface name.
-* `description` - The interface description.
-* `specification` - The interface specification.
-* `access_point_id` - Access point of the interface.
-* `opposite_access_point_id` - Access point of the opposite interface.
-* `opposite_router_type` - The opposite router type.
-* `opposite_router_id` - The opposite router ID.
-* `opposite_interface_id` - The opposite interface ID.
-* `opposite_interface_owner_id` - The account ID which the opposite interface belongs to.
+* `id` - Router interface ID.
+* `router_id` - Router ID.
+* `router_type` - Router type.
+* `role` - Router interface role.
+* `name` - Router interface name.
+* `description` - Router interface description.
+* `specification` - Router nterface specification.
+* `access_point_id` - Access point of the router interface.
+* `opposite_access_point_id` - Access point of the opposite router interface.
+* `opposite_router_type` - Peer router type.
+* `opposite_router_id` - Peer router ID.
+* `opposite_interface_id` - Peer router interface ID.
+* `opposite_interface_owner_id` - Peer account ID.
 * `health_check_source_ip` - Source IP of Packet of Line HealthCheck.
 * `health_check_target_ip` - Target IP of Packet of Line HealthCheck.
