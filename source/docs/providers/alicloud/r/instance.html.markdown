@@ -13,6 +13,7 @@ Provides a ECS instance resource.
 ~> **NOTE:**
 * You can launch an ECS instance for a VPC network via specifying parameter `vswitch_id`. One instance can only belong to one VSwitch.
 * If a VSwitchId is specified for creating an instance, SecurityGroupId and VSwitchId must belong to one VPC.
+* Several instance types have outdated in some regions and availability zones, such as `ecs.t1.*`, `ecs.s2.*`, `ecs.n1.*` and so on. If you want to keep them, you should set `is_outdated` to true. For more about the upgraded instance type, refer to `alicloud_instance_types` datasource.
 
 ## Example Usage
 
@@ -62,13 +63,14 @@ The following arguments are supported:
 
 * `image_id` - (Required) The Image to use for the instance. ECS instance's image can be replaced via changing 'image_id'.
 * `instance_type` - (Required) The type of instance to start.
-* `io_optimized` - (Deprecated) It is deprecated on instance resource. All the launched alicloud instances are IO optimized.
+* `io_optimized` - (Deprecated) It has been deprecated on instance resource. All the launched alicloud instances will be I/O optimized.
+* `is_outdated` - (Optional) Whether to use outdated instance type. Default to false.
 * `security_groups` - (Required)  A list of security group ids to associate with.
 * `availability_zone` - (Optional) The Zone to start the instance in.
 * `instance_name` - (Optional) The name of the ECS. This instance_name can have a string of 2 to 128 characters, must contain only alphanumeric characters or hyphens, such as "-",".","_", and must not begin or end with a hyphen, and must not begin with http:// or https://. If not specified, 
 Terraform will autogenerate a default name is `ECS-Instance`.
 * `allocate_public_ip` - (Optional) Associate a public ip address with an instance in a VPC or Classic. Boolean value, Default is false.
-* `system_disk_category` - (Optional) Valid values are `cloud_efficiency`, `cloud_ssd`. Default is `cloud_efficiency`.
+* `system_disk_category` - (Optional) Valid values are `cloud_efficiency`, `cloud_ssd` and `cloud`. `cloud` only is used to some no I/O optimized instance. Default to `cloud_efficiency`.
 * `system_disk_size` - (Optional) Size of the system disk, value range: 40GB ~ 500GB. Default is 40GB. ECS instance's system disk can be reset when replacing system disk.
 * `description` - (Optional) Description of the instance, This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
 * `internet_charge_type` - (Optional) Internet charge type of the instance, Valid values are `PayByBandwidth`, `PayByTraffic`. Default is `PayByTraffic`.
