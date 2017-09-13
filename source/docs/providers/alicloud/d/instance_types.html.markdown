@@ -10,6 +10,7 @@ description: |-
 
 The Instance Types data source list the ecs_instance_types of Alicloud.
 ~> **NOTE:**
+
 * Default to provide upgraded instance types. If you want to get outdated instance types, you should set `is_outdated` to true.
 
 
