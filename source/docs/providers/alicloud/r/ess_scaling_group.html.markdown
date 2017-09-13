@@ -9,9 +9,10 @@ description: |-
 # alicloud\_ess\_scaling\_group
 
 Provides a ESS scaling group resource.
+
 ~> **NOTE:**
 
-* You can launch an ECS instance for a VPC network via specifying parameter `vswitch_id`. One instance can only belong to one VSwitch.
+    * You can launch an ECS instance for a VPC network via specifying parameter `vswitch_id`. One instance can only belong to one VSwitch.
 
 ## Example Usage
 

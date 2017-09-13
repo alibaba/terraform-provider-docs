@@ -12,7 +12,7 @@ Provides a VPC router interface resource to connect two VPCs by connecting the r
 
 ~> **NOTE:**
 
-* Only one pair of connected router interfaces can exist between two routers. Up to 5 router interfaces can be created for each router and each account.
+    * Only one pair of connected router interfaces can exist between two routers. Up to 5 router interfaces can be created for each router and each account.
  
 
 ## Example Usage
