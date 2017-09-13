@@ -9,6 +9,9 @@ description: |-
 # alicloud\_instance\_types
 
 The Instance Types data source list the ecs_instance_types of Alicloud.
+~> **NOTE:**
+* Default to provide upgraded instance types. If you want to get outdated instance types, you should set `is_outdated` to true.
+
 
 ## Example Usage
 
@@ -38,6 +41,7 @@ The following arguments are supported:
 * `memory_size` - (Optional) Limit search to specific memory size.
 * `instance_type_family` - (Optional) Allows to filter list of Instance Types based on their
 family name, for example 'ecs.n4'.
+* `is_outdated` - (Optional) Whether to export outdated instance types. Default to false.
 * `output_file` - (Optional) The name of file that can save instance types data source after running `terraform plan`.
 
 ## Attributes Reference
