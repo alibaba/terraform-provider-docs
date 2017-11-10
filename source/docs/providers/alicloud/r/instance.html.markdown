@@ -84,6 +84,7 @@ On other OSs such as Linux, the host name can contain a maximum of 30 characters
 * `instance_charge_type` - (Optional) Valid values are `PrePaid`, `PostPaid`, The default is `PostPaid`.
 * `period` - (Optional) The time that you have bought the resource, in month. Only valid when instance_charge_type is set as `PrePaid`. Value range [1, 12].
 * `tags` - (Optional) A mapping of tags to assign to the resource.
+* `user_data` - (Optional) User-defined data to customize the startup behaviors of an ECS instance and to pass data into an ECS instance.
 * `key_name` - (Optional, Force new resource) The name of key pair that can login ECS instance successfully without password. If it is specified, the password would be invalid.
 * `role_name` - (Optional, Force new resource) Instance RAM role name. The name is provided and maintained by RAM. You can use `alicloud_ram_role` to create a new one.
 
@@ -107,3 +108,4 @@ The following attributes are exported:
 * `tags` - The instance tags, use jsonencode(item) to display the value.
 * `key_name` - The name of key pair that has been bound in ECS instance.
 * `role_name` - The name of RAM role that has been bound in ECS instance.
+* `user_data` - The hash value of the user data.
