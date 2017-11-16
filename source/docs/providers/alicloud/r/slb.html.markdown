@@ -120,8 +120,8 @@ It is mandatory only when "sticky_session" is on and "sticky_session_type" is se
 * `health_check_uri` - (Optinal) URI used for health check. When TCP listener need to use HTTP health check, this parameter will be configured; and when TCP health check is used, the parameter will be ignored. 
 Value：Its length is limited to 1-80 and it must start with /. Only characters such as letters, digits, ‘-’, ‘/’, ‘.’, ‘%’, ‘?’, #’ and ‘&’ are allowed.
 * `health_check_connect_port` - (Optinal) Port used for health check. Value： `1-65535`, Default：None. When the parameter is not set, it means the backend server port is used (BackendServerPort).
-* `healthy_threshold` - (Optinal) Threshold determining the result of the health check is success. Value：`1-10`, Default：3.
-* `unhealthy_threshold` - (Optinal) Threshold determining the result of the health check is fail. Value：`1-10`, Default：3.
+* `healthy_threshold` - (Optinal) Threshold determining the result of the health check is success. Value：`1-10`.
+* `unhealthy_threshold` - (Optinal) Threshold determining the result of the health check is fail. Value：`1-10`.
 * `health_check_timeout` - (Optinal) Maximum timeout of each health check response. When "health_check" is on, the parameter is mandatory; and when "mandatory" is off, the parameter will be ignored. Value：`1-300`（in seconds）. Note: If health_check_timeout < health_check_interval, health_check_timeout is invalid, and the timeout is health_check_interval. Default to 5.
 * `health_check_interval` - (Optinal) Time interval of health checks. 
 When "health_check" is on, the parameter is mandatory; and when "health_check" is off, the parameter will be ignored. Value：`1-50` (in seconds）. Default to 2.
