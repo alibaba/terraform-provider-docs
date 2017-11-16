@@ -58,6 +58,7 @@ The following arguments are supported:
 * `force_delete` - (Optional) The last scaling configuration will be deleted forcibly with deleting its scaling group. Default to false.
 * `data_disk` - (Optional) DataDisk mappings to attach to ecs instance. See [Block datadisk](#block-datadisk) below for details.
 * `instance_ids` - (Optional) ID of the ECS instance to be attached to the scaling group after it is enabled. You can input up to 20 IDs.
+* `tags` - (Optional) A mapping of tags to assign to the resource. It will be applied for ECS instances finally.
 
 ~> **NOTE:** Before enabling the scaling group, it must have a active scaling configuration.
 
@@ -97,3 +98,4 @@ The following attributes are exported:
 * `role_name` - The name of RAM role that has been bound in ECS instance.
 * `user_data` - The hash value of the user data.
 * `force_delete` - Whether delete the last scaling configuration forcibly with deleting its scaling group.
+* `tags` - The scaling instance tags, use jsonencode(item) to display the value.
