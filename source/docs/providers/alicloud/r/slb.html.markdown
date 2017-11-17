@@ -114,18 +114,17 @@ The listener mapping supports the following:
 * `cookie` - (Optinal) The cookie configured on the server 
 It is mandatory only when "sticky_session" is on and "sticky_session_type" is server; otherwise, the parameter will be ignored. Value：String in line with RFC 2965, with length being 1- 200. It only contains characters such as ASCII codes, English letters and digits instead of the comma, semicolon or spacing, and it cannot start with $.
 * `persistence_timeout` - (Optinal) Timeout of connection persistence. Value： 0-3600（in seconds） .Default：0 The value 0 indicates to close it.
-* `health_check` - (Optinal) Whether to enable health check. Value：`on` / `off`
+* `health_check` - (Optinal) Whether to enable health check. Value：`on` / `off`. TCP and UDP listener's HealthCheck is always on, and it will be ignore when launching TCP or UDP listener.
 * `health_check_type` - (Optinal) Type of health check. Value：`tcp` | `http` , Default：`tcp` . TCP supports TCP and HTTP health check mode, you can select the particular mode depending on your application.
-* `health_check_domain` - (Optinal) Domain name used for health check. When TCP listener need to use HTTP health check, this parameter will be configured; and when TCP health check is used, the parameter will be ignored. Value： `$_ip | custom string`. Rules of the custom string: its length is limited to 1-80 and only characters such as letters, digits, ‘-‘ and ‘.’ are allowed. When the parameter is set to $_ip by the user, Server Load Balancer uses the private network IP address of each backend server as Domain used for health check.
+* `health_check_domain` - (Optinal) Domain name used for health check. When TCP listener need to use HTTP health check, this parameter will be configured; and when TCP health check is used, the parameter will be ignored. Its length is limited to 1-80 and only characters such as letters, digits, ‘-‘ and ‘.’ are allowed. When it is not set or empty,  Server Load Balancer uses the private network IP address of each backend server as Domain used for health check.
 * `health_check_uri` - (Optinal) URI used for health check. When TCP listener need to use HTTP health check, this parameter will be configured; and when TCP health check is used, the parameter will be ignored. 
 Value：Its length is limited to 1-80 and it must start with /. Only characters such as letters, digits, ‘-’, ‘/’, ‘.’, ‘%’, ‘?’, #’ and ‘&’ are allowed.
-* `health_check_connect_port` - (Optinal) Port used for health check. Value： `1-65535`, Default：None. When the parameter is not set, it means the backend server port is used (BackendServerPort).
-* `healthy_threshold` - (Optinal) Threshold determining the result of the health check is success. Value：`1-10`.
-* `unhealthy_threshold` - (Optinal) Threshold determining the result of the health check is fail. Value：`1-10`.
-* `health_check_timeout` - (Optinal) Maximum timeout of each health check response. When "health_check" is on, the parameter is mandatory; and when "mandatory" is off, the parameter will be ignored. Value：`1-300`（in seconds）. Note: If health_check_timeout < health_check_interval, health_check_timeout is invalid, and the timeout is health_check_interval. Default to 5.
-* `health_check_interval` - (Optinal) Time interval of health checks. 
-When "health_check" is on, the parameter is mandatory; and when "health_check" is off, the parameter will be ignored. Value：`1-50` (in seconds）. Default to 2.
-* `health_check_http_code` - (Optinal) Regular health check HTTP status code. Multiple codes are segmented by “,”. When "health_check" is on, the parameter is mandatory; and when "health_check" is off, the parameter will be ignored.  Value：`http_2xx` / `http_3xx` / `http_4xx` / `http_5xx`.
+* `health_check_connect_port` - (Optinal) Port used for health check. Value： `1-65535`, Default：None. When the parameter is not set, it means the backnd server port is used (BackendServerPort).
+* `healthy_threshold` - (Optinal) Threshold determining the result of the health check is success. When "health_check" is on, the parameter default to 3, else it will be ignored. Value：`1-10`.
+* `unhealthy_threshold` - (Optinal) Threshold determining the result of the health check is fail. When "health_check" is on, the parameter default to 3, else it will be ignored. Value：`1-10`.
+* `health_check_timeout` - (Optinal) Maximum timeout of each health check response. When "health_check" is on, the parameter default to 5, else it will be ignored. Value：`1-300`（in seconds）. Note: If health_check_timeout < health_check_interval, health_check_timeout is invalid, and the timeout is health_check_interval.
+* `health_check_interval` - (Optinal) Time interval of health checks. When "health_check" is on, the parameter default to 2, else it will be ignored. Value：`1-50` (in seconds)
+* `health_check_http_code` - (Optinal) Regular health check HTTP status code. Multiple codes are segmented by “,”. When "health_check" is on, the parameter default to `http_2xx`, else it will be ignored.  Value：`http_2xx` / `http_3xx` / `http_4xx` / `http_5xx`.
 * `ssl_certificate_id` - (Optinal) Security certificate ID.
 
 ## Attributes Reference
@@ -139,3 +138,4 @@ The following attributes are exported:
 * `bandwidth` - The bandwidth of the load balancer.
 * `vswitch_id` - The VSwitch ID of the load balancer. Only available on SLB launched in a VPC.
 * `address` - The IP address of the load balancer.
+* `listener` - The listeners of the load balancer.
