@@ -39,6 +39,8 @@ The following arguments are supported:
 * `public_key` - (Force new resource) You can import an existing public key and using Alicloud key pair to manage it.
 * `key_file` - (Force new resource) The name of file to save your new key pair's private key. Strongly suggest you to specified it when you creating key pair, otherwise, you wouldn't get its private key ever.
 
+~> **NOTE:** If `key_name` and `key_name_prefix` are not set, terraform will produce a specified ID to replace.
+
 ## Attributes Reference
 
 * `key_name` - The name of the key pair.
