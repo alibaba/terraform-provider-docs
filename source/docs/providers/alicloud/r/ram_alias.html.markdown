@@ -8,25 +8,4 @@ description: |-
 
 # alicloud\_ram\_alias
 
-Provides a RAM cloud account alias.
-
-
-## Example Usage
-
-```
-# Create a alias for cloud account.
-resource "alicloud_ram_alias" "alias" {
-  account_alias = "hallo"
-}
-```
-## Argument Reference
-
-The following arguments are supported:
-
-* `account_alias` - (Required, Forces new resource) Alias of cloud account. This name can have a string of 3 to 32 characters, must contain only alphanumeric characters or hyphens, such as "-", and must not begin with a hyphen.
-
-## Attributes Reference
-
-The following attributes are exported:
-
-* `account_alias` - The account alias.
+~> **NOTE:** This resource has been deprecated from [v1.3.2](https://github.com/alibaba/terraform-provider/releases/tag/V1.3.2). New resource `alicloud_ram_account_alias` will replace.
