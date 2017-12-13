@@ -8,28 +8,4 @@ description: |-
 
 # alicloud\_dns\_domain\_groups
 
-The Dns Domain Groups data source provides a list of Alicloud Dns Domain Groups in an Alicloud account according to the specified filters.
-
-## Example Usage
-
-```
-data "alicloud_dns_domain_groups" "group" {
-  name_regex = "^y[A-Za-z]+"
-  output_file = "groups.txt"
-}
-
-```
-
-## Argument Reference
-
-The following arguments are supported:
-
-* `name_regex` - (Optional) A regex string to apply to the group list returned by Alicloud. 
-* `output_file` - (Optional) The name of file that can save groups data source after running `terraform plan`.
-
-## Attributes Reference
-
-A list of groups will be exported and its every element contains the following attributes:
-
-* `group_id` - Id of the group .
-* `group_name` - Name of the group .
+~> **NOTE:** This datasource has been deprecated from [v1.3.2](https://github.com/alibaba/terraform-provider/releases/tag/V1.3.2). New datasource `alicloud_dns_groups` will replace.

@@ -8,23 +8,4 @@ description: |-
 
 # alicloud\_ram\_account\_alias
 
-The Ram Account Alias data source provides an alias for the Alicloud account.
-
-## Example Usage
-
-```
-data "alicloud_ram_account_alias" "alias" {
-  output_file = "alias.txt"
-}
-
-```
-
-## Argument Reference
-
-The following arguments are supported:
-
-* `output_file` - (Optional) The name of file that can save alias data source after running `terraform plan`.
-
-## Attributes Reference
-
-* `account_alias` - Alias of the account.
+~> **NOTE:** This datasource has been deprecated from [v1.3.2](https://github.com/alibaba/terraform-provider/releases/tag/V1.3.2). New datasource `alicloud_ram_account_aliases` will replace.
