@@ -41,13 +41,14 @@ The following arguments are supported:
 * `scaling_group_id` - (Required) ID of the scaling group of a scaling configuration.
 * `image_id` - (Required) ID of an image file, indicating the image resource selected when an instance is enabled.
 * `instance_type` - (Required) Resource type of an ECS instance.
+* `instance_name` - (Optional) Name of an ECS instance. Default to "ESS-Instance". It is valid from version 1.7.1.
 * `io_optimized` - (Deprecated) It has been deprecated on instance resource. All the launched alicloud instances will be I/O optimized.
 * `is_outdated` - (Optional) Whether to use outdated instance type. Default to false.
 * `security_group_id` - (Required) ID of the security group to which a newly created instance belongs.
 * `scaling_configuration_name` - (Optional) Name shown for the scheduled task. If this parameter value is not specified, the default value is ScalingConfigurationId.
-* `internet_charge_type` - (Optional) Network billing type, Values: PayByBandwidth or PayByTraffic. If this parameter value is not specified, the default value is PayByBandwidth.
+* `internet_charge_type` - (Optional) Network billing type, Values: PayByBandwidth or PayByTraffic. Default to `PayByBandwidth`.
 * `internet_max_bandwidth_in` - (Optional) Maximum incoming bandwidth from the public network, measured in Mbps (Mega bit per second). The value range is [1,200].
-* `internet_max_bandwidth_out` - (Optional) Maximum outgoing bandwidth from the public network, measured in Mbps (Mega bit per second). The value range for PayByBandwidth is [1,100].
+* `internet_max_bandwidth_out` - (Optional) Maximum outgoing bandwidth from the public network, measured in Mbps (Mega bit per second). The value range for PayByBandwidth is [0,100].
 * `system_disk_category` - (Optional) Category of the system disk. The parameter value options are `cloud_efficiency`, `cloud_ssd` and `cloud`. `cloud` only is used to some no I/O optimized instance. Default to `cloud_efficiency`.
 * `enable` - (Optional) Whether enable the specified scaling group(make it active) to which the current scaling configuration belongs.
 * `active` - (Optional) Whether active current scaling configuration in the specified scaling group. Default to `false`.
@@ -99,3 +100,4 @@ The following attributes are exported:
 * `user_data` - The hash value of the user data.
 * `force_delete` - Whether delete the last scaling configuration forcibly with deleting its scaling group.
 * `tags` - The scaling instance tags, use jsonencode(item) to display the value.
+* `instance_name` - The ecs instance name.
