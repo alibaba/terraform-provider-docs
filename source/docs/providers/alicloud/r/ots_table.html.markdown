@@ -49,8 +49,10 @@ resource "alicloud_ots_table" "table" {
 
 The following arguments are supported:
 
-* `table_name` - (Required) The table name of the OTS instance. If changed, a new table would be created.
-* `primary_key` - (Required) The property of `TableMeta` which indicates the structure information of a table. It describes the attribute value of primary key including the name and type. The number of `primary_key` should not be less than one and not be more than four.
+* `table_name` - (Required, ForceNew) The table name of the OTS instance. If changed, a new table would be created.
+* `primary_key` - (Required, Type: List) The property of `TableMeta` which indicates the structure information of a table. It describes the attribute value of primary key. The number of `primary_key` should not be less than one and not be more than four.
+    * `name` - (Required) Name for primary key.
+    * `type` - (Required, Type: list) Type for primary key. Only `Integer`, `String` or `Binary` is allowed.
 * `time_to_live` - (Required) The retention time of data stored in this table (unit: second).
 * `max_version` - (Required) The maximum number of versions stored in this table.
 
