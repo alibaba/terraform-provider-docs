@@ -3,7 +3,7 @@ layout: "alicloud"
 page_title: "Alicloud: alicloud_ots_table"
 sidebar_current: "docs-alicloud-resource-ots-table"
 description: |-
-  Provides an OTS table resource.
+  Provides an OTS (Open Table Service) table resource.
 ---
 
 # alicloud\_ots_table
@@ -17,6 +17,7 @@ Provides an OTS table resource.
 ```
 # Create an OTS table
 provider "alicloud" {
+  ots_instance_name = "${var.ots_instance_name}"
 }
 
 resource "alicloud_ots_table" "table" {
