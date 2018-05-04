@@ -64,3 +64,12 @@ The following attributes are exported:
 * `primary_key` - The property of `TableMeta` which indicates the structure information of a table.
 * `time_to_live` - The retention time of data stored in this table.
 * `max_version` - The maximum number of versions stored in this table.
+
+## Import
+
+OTS table can be imported using table name, e.g.
+
+```
+$ terraform import alicloud_ots_table.table "ots_table"
+```
+
