@@ -14,9 +14,13 @@ with the proper credentials before it can be used.
 
 Use the navigation to the left to read about the available resources.
 
+-> **Note:** When you use terraform on the `Windowns` computer, please install [golang](https://golang.org/dl/) in your computer.
+Otherwise, you may happen the issue from version 1.8.1 and the issue details can refer to [Crash Error](https://github.com/alibaba/terraform-provider/issues/469).
+
+
 ## Example Usage
 
-```
+```hcl
 # Configure the Alicloud Provider
 provider "alicloud" {
   access_key = "${var.access_key}"
@@ -24,27 +28,29 @@ provider "alicloud" {
   region     = "${var.region}"
 }
 
+data "alicloud_instance_types" "2c4g" {
+  cpu_core_count = 2
+  memory_size = 4
+}
+
 # Create a web server
 resource "alicloud_instance" "web" {
   # cn-beijing
-  provider          = "alicloud"
-  availability_zone = "cn-beijing-b"
   image_id          = "ubuntu_140405_32_40G_cloudinit_20161115.vhd"
-
   internet_charge_type  = "PayByBandwidth"
-  allocate_public_ip = true
 
-  instance_type        = "ecs.n4.medium"
+  instance_type        = "${data.alicloud_instance_types.2c4g.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.default.id}"]
   instance_name        = "web"
+  vswitch_id = "vsw-abc12345"
 }
 
 # Create security group
 resource "alicloud_security_group" "default" {
   name        = "default"
-  provider    = "alicloud"
   description = "default"
+  vpc_id = "vpc-abc12345"
 }
 ```
 
@@ -63,7 +69,7 @@ alicloud provider block:
 
 Usage:
 
-```
+```hcl
 provider "alicloud" {
   access_key = "${var.access_key}"
   secret_key = "${var.secret_key}"
@@ -74,17 +80,17 @@ provider "alicloud" {
 
 ###Environment variables
 
-You can provide your credentials via `ALICLOUD_ACCESS_KEY` and `ALICLOUD_SECRET_KEY`, 
+You can provide your credentials via `ALICLOUD_ACCESS_KEY` and `ALICLOUD_SECRET_KEY`,
 environment variables, representing your Alicloud Access Key and Secret Key, respectively.
 `ALICLOUD_REGION` is also used, if applicable:
 
-```
+```hcl
 provider "alicloud" {}
 ```
 
 Usage:
 
-```
+```shell
 $ export ALICLOUD_ACCESS_KEY="anaccesskey"
 $ export ALICLOUD_SECRET_KEY="asecretkey"
 $ export ALICLOUD_REGION="cn-beijing"
@@ -109,4 +115,3 @@ The following arguments are supported:
 ## Testing
 
 Credentials must be provided via the `ALICLOUD_ACCESS_KEY`, and `ALICLOUD_SECRET_KEY` environment variables in order to run acceptance tests.
-
