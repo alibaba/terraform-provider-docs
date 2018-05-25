@@ -6,7 +6,7 @@ description: |-
   Provides an OTS (Open Table Service) table resource.
 ---
 
-# alicloud\_ots_table
+# alicloud\_ots\_table
 
 Provides an OTS table resource.
 
