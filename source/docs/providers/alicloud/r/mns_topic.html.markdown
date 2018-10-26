@@ -24,6 +24,7 @@ resource "alicloud_mns_topic" "topic"{
 }
 
 ```
+
 ## Argument Reference
 
 The following arguments are supported:
@@ -41,6 +42,7 @@ The following attributes are exported:
 ## Import
 
 MNS Topic can be imported using the id or name, e.g.
+
 ```
 $ terraform import alicloud_mns_topic.topic topicName
 
