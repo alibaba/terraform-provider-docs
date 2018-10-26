@@ -1,4 +1,4 @@
---
+---
 layout: "alicloud"
 page_title: "Alicloud: alicloud_mns_topic"
 sidebar_current: "docs-alicloud-resource-mns-topic"
