@@ -35,7 +35,8 @@ resource "alicloud_instance" "instance" {
 The following arguments are supported:
 
 * `available_instance_type` - (Optional) Filter the results by a specific instance type.
-* `available_resource_creation` - (Optional) Filter the results by a specific resource type. The following values are allowed: `Instance`, `Disk`, `VSwitch` and `Rds`.
+* `available_resource_creation` - (Optional) Filter the results by a specific resource type.
+Valid values: `Instance`, `Disk`, `VSwitch`, `Rds`, `KVStore`, `FunctionCompute`.
 * `available_disk_category` - (Optional) Filter the results by a specific disk category. Can be either `cloud`, `cloud_efficiency` or `cloud_ssd`.
 * `multi` - (Optional, type: bool) Indicate whether the zones can be used in a multi AZ configuration. Default to `false`. Multi AZ is usually used to launch RDS instances.
 * `instance_charge_type` - (Optional) Filter the results by a specific ECS instance charge type. Valid values: `PrePaid` and `PostPaid`. Default to `PostPaid`.
@@ -49,9 +50,11 @@ The following arguments are supported:
 
 The following attributes are exported in addition to the arguments listed above:
 
+* `ids` -A list of zone IDs.
 * `zones` - A list of availability zones. Each element contains the following attributes:
   * `id` - ID of the zone.
   * `local_name` - Name of the zone in the local language.
   * `available_instance_types` - Allowed instance types.
   * `available_resource_creation` - Type of resources that can be created.
   * `available_disk_categories` - Set of supported disk categories.
+  * `multi_zone_ids` - A list of zone ids in which the multi zone.

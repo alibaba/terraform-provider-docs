@@ -12,11 +12,9 @@ Distributed Relational Database Service (DRDS) is a lightweight (stateless), fle
 With its compatibility with MySQL protocols and syntaxes, DRDS enables database/table sharding, smooth scaling, configuration upgrade/downgrade,
 transparent read/write splitting, and distributed transactions, providing O&M capabilities for distributed databases throughout their entire lifecycle.
 
--> **NOTE:** Because of replace DRDS instance nodes, change DRDS instance type and specification would cost 1~5 minutes. Please make full preparation before changing them.
+For information about DRDS and how to use it, see [What is DRDS](https://www.alibabacloud.com/help/doc-detail/29659.htm).
 
--> **NOTE:** You can use [DRDS DOC](https://www.alibabacloud.com/help/product/29657.htm) to do it.
-
--> **NOTE:** Current DRDS instance sale regions, only support cn-shenzhen, cn-beijing, cn-hangzhou, cn-hongkong, cn-qingdao, ap-southeast-1.
+-> **NOTE:** At present, DRDS instance only can be supported in the regions: cn-shenzhen, cn-beijing, cn-hangzhou, cn-hongkong, cn-qingdao.
 
 ## Example Usage
 
@@ -46,11 +44,11 @@ The following arguments are supported:
     - `drds.sn1.32c64g` for DRDS instance Extreme Edition;
 * `specification` - (Required, ForceNew) User-defined DRDS instance specification. Value range:
     - `drds.sn1.4c8g` for DRDS instance Starter version; 
-        - value range : `drds.sn1.4c8g.8c16g`,`drds.sn1.4c8g.16c32g`,`drds.sn1.4c8g.32c64g`,`drds.sn1.4c8g.64c128g`
+        - value range : `drds.sn1.4c8g.8c16g`, `drds.sn1.4c8g.16c32g`, `drds.sn1.4c8g.32c64g`, `drds.sn1.4c8g.64c128g`
     - `drds.sn1.8c16g` for DRDS instance Standard edition;
-        - value range : `drds.sn1.8c16g.16c32g`,`drds.sn1.8c16g.32c64g`,`drds.sn1.8c16g.64c128g`
+        - value range : `drds.sn1.8c16g.16c32g`, `drds.sn1.8c16g.32c64g`, `drds.sn1.8c16g.64c128g`
     - `drds.sn1.16c32g` for DRDS instance Enterprise Edition;
-        - value range : `drds.sn1.16c32g.32c64g`,`drds.sn1.16c32g.64c128g`
+        - value range : `drds.sn1.16c32g.32c64g`, `drds.sn1.16c32g.64c128g`
     - `drds.sn1.32c64g` for DRDS instance Extreme Edition;
         - value range : `drds.sn1.32c64g.128c256g`
        
