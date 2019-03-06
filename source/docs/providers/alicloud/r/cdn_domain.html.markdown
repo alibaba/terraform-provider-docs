@@ -8,7 +8,7 @@ description: |-
 
 # alicloud\_cdn\_domain
 
--> **NOTE:**  This resource is based on CDN's old version OpenAPI and it has been deprecated from version 1.34.0.
+-> **DEPRECATED:**  This resource is based on CDN's old version OpenAPI and it has been deprecated from version 1.34.0.
 Please use new resource [alicloud_cdn_domain_new](https://www.terraform.io/docs/providers/alicloud/r/cdn_domain_new.html) and its
 config [alicloud_cdn_domain_config](https://www.terraform.io/docs/providers/alicloud/r/cdn_domain_config.html) instead.
 
