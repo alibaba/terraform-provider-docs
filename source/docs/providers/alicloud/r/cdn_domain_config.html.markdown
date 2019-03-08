@@ -12,6 +12,8 @@ Provides a CDN Accelerated Domain resource.
 
 For information about domain config and how to use it, see [Batch set config](https://www.alibabacloud.com/help/doc-detail/91179.html)
 
+-> **NOTE:** Available in v1.34.0+.
+
 ## Example Usage
 
 Basic Usage

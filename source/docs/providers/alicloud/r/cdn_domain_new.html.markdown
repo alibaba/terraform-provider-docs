@@ -12,6 +12,8 @@ Provides a CDN Accelerated Domain resource. This resource is based on CDN's new 
 
 For information about Cdn Domain New and how to use it, see [Add a domain](https://www.alibabacloud.com/help/doc-detail/91176.html).
 
+-> **NOTE:** Available in v1.34.0+.
+
 ## Example Usage
 
 Basic Usage
