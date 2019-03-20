@@ -45,6 +45,23 @@ resource "alicloud_slb" "vpc" {
 }
 ```
 
+
+```
+# Specify master zone id and slave zone id for the slb instance
+data "alicloud_zones" "default" {
+	"available_resource_creation"= "Slb"
+}
+resource "alicloud_slb" "default" {
+  name                 = "my-master-slb"
+  internet             = true
+  internet_charge_type = "PayByTraffic"
+  bandwidth            = 5
+  specification = "slb.s1.small"
+  master_zone_id       = "${data.alicloud_zones.main.zones.0.id}"
+  slave_zone_id        = "${data.alicloud_zones.main.zones.0.slb_slave_zone_ids.0}"
+}
+```
+
 ## Argument Reference
 
 The following arguments are supported:
