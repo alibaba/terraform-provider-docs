@@ -43,6 +43,7 @@ The following arguments are supported:
 * `instance_id` - (Required, ForceNew) The ID of the CEN.
 * `child_instance_id` - (Required, ForceNew) The ID of the child instance to attach.
 * `child_instance_region_id` - (Required, ForceNew) The region ID of the child instance to attach.
+* `child_instance_owner_id` - (Optional, Available in 1.42.0+) The uid of the child instance. Only used when attach a child instance of other account.
 
 ->**NOTE:** Ensure that the child instance is not used in Express Connect.
 
@@ -57,5 +58,5 @@ The following attributes are exported:
 CEN instance can be imported using the id, e.g.
 
 ```
-$ terraform import alicloud_cen_instance.example cen-abc123456:vpc-abc123456
+$ terraform import alicloud_cen_instance_attachment.example cen-abc123456:vpc-abc123456
 ```

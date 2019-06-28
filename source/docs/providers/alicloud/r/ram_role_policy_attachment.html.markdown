@@ -15,25 +15,48 @@ Provides a RAM Role attachment resource.
 ```
 # Create a RAM Role Policy attachment.
 resource "alicloud_ram_role" "role" {
-  name = "test_role"
-  ram_users = ["acs:ram::${your_account_id}:root", "acs:ram::${other_account_id}:user/username"]
-  services = ["apigateway.aliyuncs.com", "ecs.aliyuncs.com"]
+  name = "roleName"
+  document = <<EOF
+    {
+      "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": [
+              "apigateway.aliyuncs.com", 
+              "ecs.aliyuncs.com"
+            ]
+          }
+        }
+      ],
+      "Version": "1"
+    }
+    EOF
   description = "this is a role test."
   force = true
 }
 
 resource "alicloud_ram_policy" "policy" {
-  name = "test_policy"
-  statement = [
-          {
-            effect = "Allow"
-            action = [
-              "oss:ListObjects",
-              "oss:GetObject"]
-            resource = [
-              "acs:oss:*:*:mybucket",
-              "acs:oss:*:*:mybucket/*"]
-          }]
+  name = "policyName"
+  document = <<EOF
+  {
+    "Statement": [
+      {
+        "Action": [
+          "oss:ListObjects",
+          "oss:GetObject"
+        ],
+        "Effect": "Allow",
+        "Resource": [
+          "acs:oss:*:*:mybucket",
+          "acs:oss:*:*:mybucket/*"
+        ]
+      }
+    ],
+      "Version": "1"
+  }
+  EOF
   description = "this is a policy test"
   force = true
 }
@@ -56,7 +79,4 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-* `id` - The attachment ID.
-* `role_name` - The role name.
-* `policy_name` - The policy name.
-* `policy_type` - The policy type.
+* `id` - The attachment ID. Composed of policy name, policy type and role name with format `role:<policy_name>:<policy_type>:<role_name>`.

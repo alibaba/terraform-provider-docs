@@ -17,24 +17,34 @@ databases.
 ### Create a RDS MySQL instance
 
 ```
+variable "name" {
+	default = "dbInstanceconfig"
+}
+variable "creation" {
+		default = "Rds"
+}
+data "alicloud_zones" "default" {
+  available_resource_creation = "${var.creation}"
+}
 resource "alicloud_vpc" "default" {
-	name       = "vpc-123456"
-	cidr_block = "172.16.0.0/16"
+  name       = "${var.name}"
+  cidr_block = "172.16.0.0/16"
 }
-
 resource "alicloud_vswitch" "default" {
-	vpc_id            = "${alicloud_vpc.default.id}"
-	cidr_block        = "172.16.0.0/24"
-	availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-	name              = "vpc-123456"
+  vpc_id            = "${alicloud_vpc.default.id}"
+  cidr_block        = "172.16.0.0/24"
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  name              = "${var.name}"
 }
-
 resource "alicloud_db_instance" "default" {
 	engine = "MySQL"
 	engine_version = "5.6"
-	db_instance_class = "rds.mysql.t1.small"
-	db_instance_storage = "10"
+	instance_type = "rds.mysql.s2.large"
+	instance_storage = "30"
+	instance_charge_type = "Postpaid"
+	instance_name = "${var.name}"
 	vswitch_id = "${alicloud_vswitch.default.id}"
+	monitoring_period = "60"
 }
 ```
 
@@ -66,13 +76,14 @@ resource "alicloud_db_instance" "default" {
 	engine_version = "5.6"
 	db_instance_class = "rds.mysql.t1.small"
 	db_instance_storage = "10"
-	parameters = [{
+	parameters {
 		name = "innodb_large_prefix"
 		value = "ON"
-	},{
+	}
+	parameters {
 		name = "connect_timeout"
 		value = "50"
-	}]
+	}
 }
 ```
 
@@ -91,6 +102,7 @@ The following arguments are supported:
     - [10, 2000] for SQL Server 2008R2;
     - [20,2000] for SQL Server 2012 basic single node edition
     Increase progressively at a rate of 5 GB. For details, see [Instance type table](https://www.alibabacloud.com/help/doc-detail/26312.htm).
+    Note: There is extra 5 GB storage for SQL Server Instance and it is not in specified `instance_storage`.
 
 * `instance_name` - (Optional) The name of DB instance. It a string of 2 to 256 characters.
 * `instance_charge_type` - (ForceNew) Valid values are `Prepaid`, `Postpaid`, Default to `Postpaid`.

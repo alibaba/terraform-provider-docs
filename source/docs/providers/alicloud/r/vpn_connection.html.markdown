@@ -65,8 +65,8 @@ resource "alicloud_vpn_connection" "foo" {
 The following arguments are supported:
 
 * `name` - (Optional) The name of the IPsec connection.
-* `vpn_gateway_id` - (Required ForceNew) The ID of the VPN gateway.
-* `customer_gateway_id` - (Required) The ID of the customer gateway.
+* `vpn_gateway_id` - (Required, ForceNew) The ID of the VPN gateway.
+* `customer_gateway_id` - (Required, ForceNew) The ID of the customer gateway.
 * `local_subnet` - (Required, Type:Set) The CIDR block of the VPC to be connected with the local data center. This parameter is used for phase-two negotiation.
 * `remote_subnet` - (Required, Type:Set) The CIDR block of the local data center. This parameter is used for phase-two negotiation.
 * `effect_immediately` - (Optional) Whether to delete a successfully negotiated IPsec tunnel and initiate a negotiation again. Valid value:true,false.
@@ -81,7 +81,7 @@ The ike_config mapping supports the following:
 * `ike_version` - (Optional) The version of the IKE protocol. Valid value: ikev1 | ikev2. Default value: ikev1
 * `ike_mode` - (Optional) The negotiation mode of IKE V1. Valid value: main (main mode) | aggressive (aggressive mode). Default value: main
 * `ike_enc_alg` - (Optional) The encryption algorithm of phase-one negotiation. Valid value: aes | aes192 | aes256 | des | 3des. Default Valid value: aes
-* `ike_auth_alg` - (Optional) The authentication algorithm of phase-one negotiation. Valid value: md5 | sha1. Default value: sha1
+* `ike_auth_alg` - (Optional) The authentication algorithm of phase-one negotiation. Valid value: md5 | sha1 | sha256 | sha384 | sha512 |. Default value: sha1
 * `ike_pfs` - (Optional) The Diffie-Hellman key exchange algorithm used by phase-one negotiation. Valid value: group1 | group2 | group5 | group14 | group24. Default value: group2
 * `ike_lifetime` - (Optional) The SA lifecycle as the result of phase-one negotiation. The valid value of n is [0, 86400], the unit is second and the default value is 86400.
 * `ike_local_id` - (Optional) The identification of the VPN gateway.
@@ -92,7 +92,7 @@ The ike_config mapping supports the following:
 The ipsec_config mapping supports the following:
 
 * `ipsec_enc_alg` - (Optional) The encryption algorithm of phase-two negotiation. Valid value: aes | aes192 | aes256 | des | 3des. Default value: aes
-* `ipsec_auth_alg` - (Optional) The authentication algorithm of phase-two negotiation. Valid value: md5 | sha1. Default value: sha1
+* `ipsec_auth_alg` - (Optional) The authentication algorithm of phase-two negotiation. Valid value: md5 | sha1 | sha256 | sha384 | sha512 |. Default value: sha1
 * `ipsec_pfs` - (Optional) The Diffie-Hellman key exchange algorithm used by phase-two negotiation. Valid value: group1 | group2 | group5 | group14 | group24. Default value: group2
 * `ipsec_lifetime` - (Optional)  The SA lifecycle as the result of phase-two negotiation. The valid value is [0, 86400], the unit is second and the default value is 86400.
 
@@ -102,6 +102,8 @@ The following attributes are exported:
 
 * `id` - The ID of the VPN connection id.
 * `status` - The status of VPN connection.
+* `ike_config` - The configurations of phase-one negotiation.
+* `ipsec_config` - The configurations of phase-two negotiation.
 
 ## Import
 

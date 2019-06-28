@@ -16,11 +16,11 @@ This data source provides a list of Nat Gateways owned by an Alibaba Cloud accou
 
 ```
 variable "name" {
-  default = "tf-testAcc-for-nat-gateways-datasource"
+  default = "natGatewaysDatasource"
 }
 
 data "alicloud_zones" "default" {
-	"available_resource_creation"= "VSwitch"
+	available_resource_creation = "VSwitch"
 }
 
 resource "alicloud_vpc" "foo" {

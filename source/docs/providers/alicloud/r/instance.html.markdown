@@ -34,7 +34,7 @@ resource "alicloud_security_group" "group" {
 resource "alicloud_instance" "instance" {
   # cn-beijing
   availability_zone = "cn-beijing-b"
-  security_groups = ["${alicloud_security_group.group.*.id}"]
+  security_groups = "${alicloud_security_group.group.*.id}"
 
   # series III
   instance_type        = "ecs.n4.large"
@@ -75,7 +75,7 @@ The following arguments are supported:
 * `instance_name` - (Optional) The name of the ECS. This instance_name can have a string of 2 to 128 characters, must contain only alphanumeric characters or hyphens, such as "-",".","_", and must not begin or end with a hyphen, and must not begin with http:// or https://. If not specified, 
 Terraform will autogenerate a default name is `ECS-Instance`.
 * `allocate_public_ip` - (Deprecated) It has been deprecated from version "1.7.0". Setting "internet_max_bandwidth_out" larger than 0 can allocate a public ip address for an instance.
-* `system_disk_category` - (Optional) Valid values are `cloud_efficiency`, `cloud_ssd` and `cloud`. `cloud` only is used to some none I/O optimized instance. Default to `cloud_efficiency`.
+* `system_disk_category` - (Optional) Valid values are `ephemeral_ssd`, `cloud_efficiency`, `cloud_ssd`, `cloud_essd`, `cloud`. `cloud` only is used to some none I/O optimized instance. Default to `cloud_efficiency`.
 * `system_disk_size` - (Optional) Size of the system disk, measured in GiB. Value range: [20, 500]. The specified value must be equal to or greater than max{20, Imagesize}. Default value: max{40, ImageSize}. ECS instance's system disk can be reset when replacing system disk.
 * `description` - (Optional) Description of the instance, This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
 * `internet_charge_type` - (Optional) Internet charge type of the instance, Valid values are `PayByBandwidth`, `PayByTraffic`. Default is `PayByTraffic`. At present, 'PrePaid' instance cannot change the value to "PayByBandwidth" from "PayByTraffic".
@@ -137,19 +137,20 @@ However, because of changing instance charge type has CPU core count quota limit
         - cloud：[5, 2000]
         - cloud_efficiency：[20, 32768]
         - cloud_ssd：[20, 32768]
-        - ephemeral_ssd：[5, 800]
+        - cloud_essd：[20, 32768]
+        - ephemeral_ssd: [5, 800]
     * `category` - (Optional, ForceNew) The category of the disk:
         - `cloud`: The general cloud disk.
         - `cloud_efficiency`: The efficiency cloud disk.
         - `cloud_ssd`: The SSD cloud disk.
+        - `cloud_essd`: The ESSD cloud disk.
         - `ephemeral_ssd`: The local SSD disk.
-
         Default to `cloud_efficiency`.
     * `encrypted` -(Optional, Bool, ForceNew) Encrypted the data in this disk.
 
         Default to false
     * `snapshot_id` - (Optional, ForceNew) The snapshot ID used to initialize the data disk. If the size specified by snapshot is greater that the size of the disk, use the size specified by snapshot as the size of the data disk.
-    * `delete_with_instance` - (Optional, ForceNew) Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency and cloud_ssd disk. If the category of this data disk was ephemeral_ssd, please don't set this param.
+    * `delete_with_instance` - (Optional, ForceNew) Delete this data disk when the instance is destroyed. It only works on cloud, cloud_efficiency, cloud_essd, cloud_ssd disk. If the category of this data disk was ephemeral_ssd, please don't set this param.
 
         Default to true
     * `description` - (Optional, ForceNew) The description of the data disk.
@@ -168,34 +169,24 @@ However, because of changing instance charge type has CPU core count quota limit
 
 -> **NOTE:** From version 1.7.0, instance's type can be changed. When it is changed, the instance will reboot to make the change take effect.
 
+### Timeouts
+
+-> **NOTE:** Available in 1.46.0+.
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration-0-11/resources.html#timeouts) for certain actions:
+
+* `create` - (Defaults to 10 mins) Used when creating the instance (until it reaches the initial `Running` status). 
+`Note`: There are extra at most 2 minutes used to retry to aviod some needless API errors and it is not in the timeouts configure.
+* `update` - (Defaults to 10 mins) Used when stopping and starting the instance when necessary during update - e.g. when changing instance type, password, image, vswitch and private IP.
+* `delete` - (Defaults to 20 mins) Used when terminating the instance. `Note`: There are extra at most 5 minutes used to retry to aviod some needless API errors and it is not in the timeouts configure.
 
 ## Attributes Reference
 
 The following attributes are exported:
 
 * `id` - The instance ID.
-* `availability_zone` - The Zone to start the instance in.
-* `instance_name` - The instance name.
-* `host_name` - The instance host name.
-* `description` - The instance description.
 * `status` - The instance status.
-* `image_id` - The instance Image Id.
-* `instance_type` - The instance type.
-* `private_ip` - The instance private ip.
 * `public_ip` - The instance public ip.
-* `vswitch_id` - If the instance created in VPC, then this value is  virtual switch ID.
-* `tags` - The instance tags, use jsonencode(item) to display the value.
-* `key_name` - The name of key pair that has been bound in ECS instance.
-* `role_name` - The name of RAM role that has been bound in ECS instance.
-* `user_data` - The hash value of the user data.
-* `period` - The ECS instance using duration.
-* `period_unit` - The ECS instance using duration unit.
-* `renewal_status` - The ECS instance automatically renew status.
-* `auto_renew_period` - Auto renewal period of an instance.
-* `dry_run` - Whether to pre-detection.
-* `spot_strategy` - The spot strategy of a Pay-As-You-Go instance
-* `spot_price_limit` - The hourly price threshold of a instance.
-
 
 ## Import
 
