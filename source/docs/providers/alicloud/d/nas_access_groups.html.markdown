@@ -21,8 +21,8 @@ data "alicloud_nas_access_groups" "ag" {
   description = "tf-testAccAccessGroupsdatasource"
 }
 
-output "first_nas_access_groups_id" {
-  value = "${data.alicloud_nas_access_groups.nas_access_groups_ds.access_groups.0.id}"
+output "alicloud_nas_access_groups_id" {
+  value = "${data.alicloud_nas_access_groups.ag.groups.0.id}"
 }
 ```
 

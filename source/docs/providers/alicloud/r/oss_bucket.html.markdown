@@ -30,7 +30,7 @@ Static Website
 resource "alicloud_oss_bucket" "bucket-website" {
   bucket = "bucket-170309-website"
 
-  website = {
+  website {
     index_document = "index.html"
     error_document = "error.html"
   }
@@ -96,20 +96,94 @@ resource "alicloud_oss_bucket" "bucket-lifecycle" {
   }
 }
 ```
+
+Set bucket policy 
+
+```
+resource "alicloud_oss_bucket" "bucket-policy" {
+  bucket = "bucket-170309-policy"
+  acl = "private"
+  
+  policy = <<POLICY
+  {"Statement":
+      [{"Action":
+          ["oss:PutObject", "oss:GetObject", "oss:DeleteBucket"],
+        "Effect":"Allow",
+        "Resource":
+            ["acs:oss:*:*:*"]}],
+   "Version":"1"}
+  POLICY
+}
+```
+
+IA Bucket
+
+```
+resource "alicloud_oss_bucket" "bucket-storageclass"{
+  bucket = "bucket-170309-storageclass"
+  storage_class = "IA"
+}
+```
+
+Set bucket server-side encryption rule 
+
+```
+resource "alicloud_oss_bucket" "bucket-sserule"{
+  bucket = "bucket-170309-sserule"
+  acl = "private"
+
+  server_side_encryption_rule {
+    sse_algorithm = "AES256"
+  }
+}
+```
+
+Set bucket tags 
+
+```
+resource "alicloud_oss_bucket" "bucket-tags"{
+  bucket = "bucket-170309-tags"
+  acl = "private"
+
+  tags = {
+    key1 = "value1"
+    key2 = "value2"
+  }
+}
+```
+
+Enable bucket versioning 
+
+```
+resource "alicloud_oss_bucket" "bucket-versioning"{
+  bucket = "bucket-170309-versioning"
+  acl = "private"
+
+  versioning {
+    status = "Enabled"
+  }
+}
+```
 ## Argument Reference
 
 The following arguments are supported:
 
 * `bucket` - (Optional, ForceNew) The name of the bucket. If omitted, Terraform will assign a random and unique name.
 * `acl` - (Optional) The [canned ACL](https://www.alibabacloud.com/help/doc-detail/31898.htm) to apply. Defaults to "private".
-* `cors_rule` - (Optional) A list rules of [Cross-Origin Resource Sharing](https://www.alibabacloud.com/help/doc-detail/31903.htm) (documented below). The items of cors rule are no more than 10 for every OSS bucket.
-* `website` - (Optional) A list website objects(documented below). The items of website are no more than 1 for every OSS bucket.
-* `logging` - (Optional) A list settings of [bucket logging](https://www.alibabacloud.com/help/doc-detail/31900.htm) (documented below). The items of logging are no more than 1 for every OSS bucket.
-* `logging_isenable` - (Deprecated) It has been deprecated from 1.37.0. When `logging` is set, the bucket logging will be able.
-* `referer_config` - (Optional) A list configurations of [referer](https://www.alibabacloud.com/help/doc-detail/31901.htm) (documented below). The items of referer_config are no more than 1 for every OSS bucket.
-* `lifecycle_rule` - (Optional) A list configurations of [object lifecycle management](https://www.alibabacloud.com/help/doc-detail/31904.htm) (documented below). The items of rules are no more than 1000 for every OSS bucket.
+* `cors_rule` - (Optional) A rule of [Cross-Origin Resource Sharing](https://www.alibabacloud.com/help/doc-detail/31903.htm) (documented below). The items of core rule are no more than 10 for every OSS bucket.
+* `website` - (Optional) A website object(documented below).
+* `logging` - (Optional) A Settings of [bucket logging](https://www.alibabacloud.com/help/doc-detail/31900.htm) (documented below).
+* `logging_isenable` - (Optional) The flag of using logging enable container. Defaults true.
+* `referer_config` - (Optional) The configuration of [referer](https://www.alibabacloud.com/help/doc-detail/31901.htm) (documented below).
+* `lifecycle_rule` - (Optional) A configuration of [object lifecycle management](https://www.alibabacloud.com/help/doc-detail/31904.htm) (documented below).
+* `policy` - (Optional, Available in 1.41.0) Json format text of bucket policy [bucket policy management](https://www.alibabacloud.com/help/doc-detail/100680.htm) (documented below).
+* `storage_class` - (Optional, ForceNew) The [storage class](https://www.alibabacloud.com/help/doc-detail/51374.htm) to apply. Can be "Standard", "IA" and "Archive". Defaults to "Standard".
+* `server_side_encryption_rule` - (Optional, Available in 1.45.0+) A configuration of server-side encryption (documented below).
+* `tags` - (Optional, Available in 1.45.0+) A mapping of tags to assign to the bucket. The items are no more than 10 for a bucket.
+* `versioning` - (Optional, Available in 1.45.0+) A state of versioning (documented below).
+* `force_destroy` - (Optional, Available in 1.45.0+) A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable. Defaults to "false".
 
-### Block cors_rule
+#### Block cors_rule
 
 The cors_rule mapping supports the following:
 
@@ -119,28 +193,28 @@ The cors_rule mapping supports the following:
 * `expose_headers` - (Optional) Specifies expose header in the response.
 * `max_age_seconds` - (Optional) Specifies time in seconds that browser can cache the response for a preflight request.
 
-### Block website
+#### Block website
 
 The website mapping supports the following:
 
 * `index_document` - (Required) Alicloud OSS returns this index document when requests are made to the root domain or any of the subfolders.
 * `error_document` - (Optional) An absolute path to the document to return in case of a 4XX error.
 
-### Block logging
+#### Block logging
 
 The logging object supports the following:
 
 * `target_bucket` - (Required) The name of the bucket that will receive the log objects.
 * `target_prefix` - (Optional) To specify a key prefix for log objects.
 
-### Block referer configuration
+#### Block referer configuration
 
 The referer configuration supports the following:
 
 * `allow_empty` - (Optional, Type: bool) Allows referer to be empty. Defaults true.
 * `referers` - (Required, Type: list) The list of referer.
 
-### Block lifecycle_rule
+#### Block lifecycle_rule
 
 The lifecycle_rule object supports the following:
 
@@ -158,6 +232,20 @@ The lifecycle_rule expiration object supports the following:
 
 `NOTE`: One and only one of "date" and "days" can be specified in one expiration configuration.
 
+#### Block server-side encryption rule
+
+The server-side encryption rule supports the following:
+
+* `sse_algorithm` - (Required) The server-side encryption algorithm to use. Possible values: `AES256` and `KMS`.
+
+#### Block versioning
+
+The versioning supports the following:
+
+* `status` - (Required) Specifies the versioning state of a bucket. Valid values: `Enabled` and `Suspended`.
+
+`NOTE`: Currently, the `versioning` feature is only available in ap-south-1 and with white list. If you want to use it, please contact us.
+
 ## Attributes Reference
 
 The following attributes are exported:
@@ -169,7 +257,6 @@ The following attributes are exported:
 * `intranet_endpoint` - The intranet access endpoint of the bucket.
 * `location` - The location of the bucket.
 * `owner` - The bucket owner.
-* `storage_class` - The bucket storage type.
 
 ## Import
 

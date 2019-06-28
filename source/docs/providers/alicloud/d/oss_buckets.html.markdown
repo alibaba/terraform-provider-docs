@@ -64,3 +64,8 @@ The following attributes are exported in addition to the arguments listed above:
     * `expiration` - A list of one element containing expiration attributes of an object. It contains the following attributes:
       * `date` - Date after which the rule to take effect. The format is like 2017-03-09.
       * `days` - Indicate the number of days after the last object update until the rules take effect.
+  * `server_side_encryption_rule` - A configuration of default encryption for a bucket. It contains the following attributes:
+    * `sse_algorithm` - The server-side encryption algorithm to use.
+  * `tags` - A mapping of tags.
+  * `versioning` - If present , the versioning state has been set on the bucket. It contains the following attribute.
+      * `status` - A bucket versioning state. Possible values:`Enabled` and `Suspended`.

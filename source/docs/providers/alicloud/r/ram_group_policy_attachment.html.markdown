@@ -15,23 +15,31 @@ Provides a RAM Group Policy attachment resource.
 ```
 # Create a RAM Group Policy attachment.
 resource "alicloud_ram_group" "group" {
-  name = "test_group"
+  name = "groupName"
   comments = "this is a group comments."
   force = true
 }
 
 resource "alicloud_ram_policy" "policy" {
-  name = "test_policy"
-  statement = [
-      {
-        effect = "Allow"
-        action = [
-          "oss:ListObjects",
-          "oss:GetObject"]
-        resource = [
-          "acs:oss:*:*:mybucket",
-          "acs:oss:*:*:mybucket/*"]
-      }]
+  name = "policyName"
+  document = <<EOF
+    {
+      "Statement": [
+        {
+          "Action": [
+            "oss:ListObjects",
+            "oss:GetObject"
+          ],
+          "Effect": "Allow",
+          "Resource": [
+            "acs:oss:*:*:mybucket",
+            "acs:oss:*:*:mybucket/*"
+          ]
+        }
+      ],
+        "Version": "1"
+    }
+  EOF
   description = "this is a policy test"
   force = true
 }
@@ -54,7 +62,4 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-* `id` - The attachment ID.
-* `group_name` - The group name.
-* `policy_name` - The policy name.
-* `policy_type` - The policy type.
+* `id` - The attachment ID. Composed of policy name, policy type and group name with format `group:<policy_name>:<policy_type>:<group_name>`.

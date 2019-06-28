@@ -13,8 +13,8 @@ Provides a ESS alarm task resource.
 ## Example Usage
 ```
 data "alicloud_zones" "default" {
-	"available_disk_category"= "cloud_efficiency"
-	"available_resource_creation"= "VSwitch"
+	available_disk_category = "cloud_efficiency"
+	available_resource_creation = "VSwitch"
 }
 
 data "alicloud_images" "ecs_image" {
@@ -84,11 +84,12 @@ The following arguments are supported:
 
 * `name` - (Optional) The name for ess alarm.
 * `description` - (Optional) The description for the alarm.
+* `enable` - (Optional, Available in 1.48.0+) Whether to enable specific ess alarm. Default to true.
 * `alarm_actions` - (Required) The list of actions to execute when this alarm transition into an ALARM state. Each action is specified as ess scaling rule ari.
 * `scaling_group_id` - (Required) The scaling group associated with this alarm.
-* `metric_type` - (Optional) The type for the alarm's associated metric. Supported value: system, custom. "system" means the metric data is collected by Aliyun Cloud Monitor Service(CMS), "custom" means the metric data is upload to CMS by users. Defaults to system. 
+* `metric_type` - (Optional, ForceNew) The type for the alarm's associated metric. Supported value: system, custom. "system" means the metric data is collected by Aliyun Cloud Monitor Service(CMS), "custom" means the metric data is upload to CMS by users. Defaults to system. 
 * `metric_name` - (Required) The name for the alarm's associated metric.
-* `period` - (Optional) The period in seconds over which the specified statistic is applied. Supported value: 60, 120, 300, 900. Defaults to 300.
+* `period` - (Optional, ForceNew) The period in seconds over which the specified statistic is applied. Supported value: 60, 120, 300, 900. Defaults to 300.
 * `statistics` - (Optional) The statistic to apply to the alarm's associated metric. Supported value: Average, Minimum, Maximum. Defaults to Average.
 * `threshold` - (Required) The value against which the specified statistics is compared.
 * `comparison_operator` - (Optional) The arithmetic operation to use when comparing the specified Statistic and Threshold. The specified Statistic value is used as the first operand. Supported value: >=, <=, >, <. Defaults to >=.

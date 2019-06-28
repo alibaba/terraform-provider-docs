@@ -28,7 +28,7 @@ output "first_ots_attachment_id" {
 
 The following arguments are supported:
 
-* `instance_name` - The name of OTS instance.
+* `instance_name` - (Required) The name of OTS instance.
 * `name_regex` - (Optional) A regex string to filter results by vpc name.
 * `output_file` - (Optional) File name where to save data source results (after running `terraform plan`).
 
@@ -37,6 +37,7 @@ The following arguments are supported:
 The following attributes are exported in addition to the arguments listed above:
 
 * `names` - A list of vpc names.
+* `vpc_ids` - A list of vpc ids.
 * `attachments` - A list of instance attachments. Each element contains the following attributes:
   * `id` - The resource ID, the value is same as "instance_name".
   * `domain` - The domain of the instance attachment.

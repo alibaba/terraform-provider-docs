@@ -16,10 +16,10 @@ This data source provides a list of Snat Entries owned by an Alibaba Cloud accou
 
 ```
 variable "name" {
-	default = "tf-testAccSnatEntryConfig"
+	default = "snat-entry-example-name"
 }
 data "alicloud_zones" "default" {
-	"available_resource_creation"= "VSwitch"
+	available_resource_creation = "VSwitch"
 }
 
 resource "alicloud_vpc" "foo" {
@@ -65,9 +65,9 @@ data "alicloud_snat_entries" "foo" {
 The following arguments are supported:
 
 * `ids` - (Optional) A list of Snat Entries IDs.
-* `snat_ip` - The public IP of the Snat Entry.
-* `source_cidr` - The source CIDR block of the Snat Entry.
-* `snat_table_id` - (Required, ForceNew) The ID of the Snat table.
+* `snat_ip` - (Optional) The public IP of the Snat Entry.
+* `source_cidr` - (Optional) The source CIDR block of the Snat Entry.
+* `snat_table_id` - (Required) The ID of the Snat table.
 * `output_file` - (Optional) File name where to save data source results (after running `terraform plan`).
 
 ## Attributes Reference
