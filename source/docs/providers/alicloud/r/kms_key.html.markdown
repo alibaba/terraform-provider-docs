@@ -16,16 +16,16 @@ Basic Usage
 
 ```
 resource "alicloud_kms_key" "key" {
-  description = "Hello KMS"
+  description             = "Hello KMS"
   deletion_window_in_days = "7"
-  is_enabled = true
+  is_enabled              = true
 }
 ```
 ## Argument Reference
 
 The following arguments are supported:
 
-* `description` - (Optional) The description of the key as viewed in Alicloud console. Default to "From Terraform".
+* `description` - (Optional, ForceNew) The description of the key as viewed in Alicloud console. Default to "From Terraform".
 * `key_usage` - (Optional) Specifies the usage of CMK. Currently, default to 'ENCRYPT/DECRYPT', indicating that CMK is used for encryption and decryption.
 * `deletion_window_in_days` - (Optional) Duration in days after which the key is deleted
 	after destruction of the resource, must be between 7 and 30 days. Defaults to 30 days.

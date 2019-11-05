@@ -15,8 +15,8 @@ This data source provides a list of KMS keys in an Alibaba Cloud account accordi
 ```
 # Declare the data source
 data "alicloud_kms_keys" "kms_keys_ds" {
-	description_regex = "Hello KMS"
-	output_file = "kms_keys.json"
+  description_regex = "Hello KMS"
+  output_file       = "kms_keys.json"
 }
 
 output "first_key_id" {
@@ -37,6 +37,7 @@ The following arguments are supported:
 
 The following attributes are exported in addition to the arguments listed above:
 
+* `ids` -  A list of KMS key IDs.
 * `keys` - A list of KMS keys. Each element contains the following attributes:
   * `id` - ID of the key.
   * `arn` - The Alibaba Cloud Resource Name (ARN) of the key.

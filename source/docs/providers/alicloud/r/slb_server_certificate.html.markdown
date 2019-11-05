@@ -20,23 +20,23 @@ For information about Server Certificate and how to use it, see [Configure Serve
 * using server_certificate/private content as string example
 
 ```
-  # create a server certificate
-  resource "alicloud_slb_server_certificate" "foo" {
-    name = "slbservercertificate"
-    server_certificate = "-----BEGIN CERTIFICATE-----\nMIIDRjCCAq+gAwIBAgI+OuMs******XTtI90EAxEG/bJJyOm5LqoiA=\n-----END CERTIFICATE-----"
-    private_key = "-----BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQDO0knDrlNdiys******ErVpjsckAaOW/JDG5PCSwkaMxk=\n-----END RSA PRIVATE KEY-----"
-  }
+# create a server certificate
+resource "alicloud_slb_server_certificate" "foo" {
+  name               = "slbservercertificate"
+  server_certificate = "-----BEGIN CERTIFICATE-----\nMIIDRjCCAq+gAwIBAgI+OuMs******XTtI90EAxEG/bJJyOm5LqoiA=\n-----END CERTIFICATE-----"
+  private_key        = "-----BEGIN RSA PRIVATE KEY-----\nMIICXAIBAAKBgQDO0knDrlNdiys******ErVpjsckAaOW/JDG5PCSwkaMxk=\n-----END RSA PRIVATE KEY-----"
+}
 ```
 
 * using server_certificate/private file example
 
 ```
-  # create a server certificate
-  resource "alicloud_slb_server_certificate" "foo" {
-    name = "slbservercertificate"
-    server_certificate = "${file("${path.module}/server_certificate.pem")}"
-    private_key = "${file("${path.module}/private_key.pem")}"
-  }
+# create a server certificate
+resource "alicloud_slb_server_certificate" "foo" {
+  name               = "slbservercertificate"
+  server_certificate = "${file("${path.module}/server_certificate.pem")}"
+  private_key        = "${file("${path.module}/private_key.pem")}"
+}
 ```
 
 ## Argument Reference
@@ -48,6 +48,7 @@ The following arguments are supported:
 * `private_key` - (Optional, ForceNew) the content of privat key of the ssl certificate specified by `server_certificate`. where `alicloud_certificate_id` is null, it is required, otherwise it is ignored.
 * `alicloud_certificate_id` - (Optional, ForceNew) an id of server certificate ssued/proxied by alibaba cloud. but it is not supported on the international site of alibaba cloud now.
 * `alicloud_certificate_name`- (Optional, ForceNew) the name of the certificate specified by `alicloud_certificate_id`.but it is not supported on the international site of alibaba cloud now.
+* `resource_group_id` - (Optional, ForceNew, Available in 1.58.0+) The Id of resource group which the slb server certificate belongs.
 
 ## Attributes Reference
 

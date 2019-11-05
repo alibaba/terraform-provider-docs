@@ -27,52 +27,52 @@ variable "name" {
 }
 variable "ip_version" {
   default = "ipv4"
-}	
+}
 resource "alicloud_slb" "default" {
-  name = "tf-testAccSlbListenerHttp"
+  name                 = "tf-testAccSlbListenerHttp"
   internet_charge_type = "PayByTraffic"
-  internet = true
+  internet             = true
 }
 resource "alicloud_slb_listener" "default" {
-  load_balancer_id = "${alicloud_slb.default.id}"
-  backend_port = 80
-  frontend_port = 80
-  protocol = "http"
-  bandwidth = 10
-  sticky_session = "on"
-  sticky_session_type = "insert"
-  cookie_timeout = 86400
-  cookie = "testslblistenercookie"
-  health_check = "on"
-  health_check_domain = "ali.com"
-  health_check_uri = "/cons"
+  load_balancer_id          = "${alicloud_slb.default.id}"
+  backend_port              = 80
+  frontend_port             = 80
+  protocol                  = "http"
+  bandwidth                 = 10
+  sticky_session            = "on"
+  sticky_session_type       = "insert"
+  cookie_timeout            = 86400
+  cookie                    = "testslblistenercookie"
+  health_check              = "on"
+  health_check_domain       = "ali.com"
+  health_check_uri          = "/cons"
   health_check_connect_port = 20
-  healthy_threshold = 8
-  unhealthy_threshold = 8
-  health_check_timeout = 8
-  health_check_interval = 5
-  health_check_http_code = "http_2xx,http_3xx"
+  healthy_threshold         = 8
+  unhealthy_threshold       = 8
+  health_check_timeout      = 8
+  health_check_interval     = 5
+  health_check_http_code    = "http_2xx,http_3xx"
   x_forwarded_for {
     retrive_slb_ip = true
     retrive_slb_id = true
   }
-  acl_status = "on"
-  acl_type   = "white"
-  acl_id     = "${alicloud_slb_acl.default.id}"
-  request_timeout           = 80
-  idle_timeout              = 30
+  acl_status      = "on"
+  acl_type        = "white"
+  acl_id          = "${alicloud_slb_acl.default.id}"
+  request_timeout = 80
+  idle_timeout    = 30
 }
 resource "alicloud_slb_acl" "default" {
-  name = "${var.name}"
+  name       = "${var.name}"
   ip_version = "${var.ip_version}"
   entry_list {
-      entry="10.10.10.0/24"
-      comment="first"
+    entry   = "10.10.10.0/24"
+    comment = "first"
   }
-   entry_list {
-      entry="168.10.10.0/24"
-      comment="second"
-   }
+  entry_list {
+    entry   = "168.10.10.0/24"
+    comment = "second"
+  }
 }
 ```
 
@@ -101,7 +101,8 @@ The following arguments are supported:
 * `health_check_timeout` - (Optional) Maximum timeout of each health check response. It is required when `health_check` is on. Valid value range: [1-300] in seconds. Default to 5. Note: If `health_check_timeout` < `health_check_interval`, its will be replaced by `health_check_interval`.
 * `health_check_interval` - (Optional) Time interval of health checks. It is required when `health_check` is on. Valid value range: [1-50] in seconds. Default to 2.
 * `health_check_http_code` - (Optional) Regular health check HTTP status code. Multiple codes are segmented by “,”. It is required when `health_check` is on. Default to `http_2xx`.  Valid values are: `http_2xx`,  `http_3xx`, `http_4xx` and `http_5xx`.
-* `ssl_certificate_id` - (Optional) Security certificate ID. It is required when `protocol` is `https`.
+* `ssl_certificate_id` - (Deprecated) It has been deprecated from 1.59.0 and using `server_certificate_id` instead. 
+* `server_certificate_id` - (Optional, Available in 1.59.0+) SLB Server certificate ID. It is required when `protocol` is `https`.
 * `gzip` - (Optional) Whether to enable "Gzip Compression". If enabled, files of specific file types will be compressed, otherwise, no files will be compressed. Default to true. Available in v1.13.0+.
 * `x_forwarded_for` - (Optional) Whether to set additional HTTP Header field "X-Forwarded-For" (documented below). Available in v1.13.0+.
 * `acl_status` - (Optional) Whether to enable "acl(access control list)", the acl is specified by `acl_id`. Valid values are `on` and `off`. Default to `off`.
@@ -154,7 +155,7 @@ unhealthy_threshold | http & https & tcp & udp | 1-10 |
 health_check_timeout | http & https & tcp & udp | 1-300 |
 health_check_interval | http & https & tcp & udp | 1-50 |
 health_check_http_code | http & https & tcp | http_2xx,http_3xx,http_4xx,http_5xx | 
-ssl_certificate_id | https |  |
+server_certificate_id | https |  |
 gzip | http & https | true or false  |
 x_forwarded_for | http & https |  |
 acl_status | http & https & tcp & udp | on or off |
@@ -173,7 +174,7 @@ The listener mapping supports the following:
 
 The following attributes are exported:
 
-* `id` - The ID of the load balancer listener. It is consist of `load_balancer_id` and `frontend_port`: `<load_balancer_id>:<frontend_port>`.
+* `id` - The ID of the load balancer listener. Its format as `<load_balancer_id>:<protocol>:<frontend_port>`. Before verson 1.57.1, the foramt as `<load_balancer_id>:<frontend_port>`.
 * `load_balancer_id` - The Load Balancer ID which is used to launch a new listener.
 * `frontend_port` - Port used by the Server Load Balancer instance frontend.
 * `backend_port` - Port used by the Server Load Balancer instance backend.
@@ -195,7 +196,7 @@ The following attributes are exported:
 * `health_check_timeout` - Maximum timeout of each health check response.
 * `health_check_interval` - Time interval of health checks.
 * `health_check_http_code` - Regular health check HTTP status code.
-* `ssl_certificate_id` - (Optional) Security certificate ID.
+* `server_certificate_id` - (Optional) Security certificate ID.
 
 ## Import
 

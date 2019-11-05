@@ -17,15 +17,15 @@ Basic Usage
 
 ```
 resource "alicloud_log_project" "example" {
-  name       = "tf-log"
+  name        = "tf-log"
   description = "created by terraform"
 }
 resource "alicloud_log_machine_group" "example" {
-    project = "${alicloud_log_project.example.name}"
-    name = "tf-machine-group"
-    identify_type = "ip"
-    topic = "terraform"
-    identify_list = ["10.0.0.1", "10.0.0.2"]
+  project       = "${alicloud_log_project.example.name}"
+  name          = "tf-machine-group"
+  identify_type = "ip"
+  topic         = "terraform"
+  identify_list = ["10.0.0.1", "10.0.0.2"]
 }
 ```
 ## Argument Reference
@@ -34,9 +34,9 @@ The following arguments are supported:
 
 * `project` - (Required, ForceNew) The project name to the machine group belongs.
 * `name` - (Required, ForceNew) The machine group name, which is unique in the same project.
-* `identify_type` - The machine identification type, including IP and user-defined identity. Valid values are "ip" and "userdefined". Default to "ip".
+* `identify_type` - (Optional) The machine identification type, including IP and user-defined identity. Valid values are "ip" and "userdefined". Default to "ip".
 * `identify_list`- (Required) The specific machine identification, which can be an IP address or user-defined identity.
-* `topic` - The topic of a machine group.
+* `topic` - (Optional) The topic of a machine group.
 
 ## Attributes Reference
 

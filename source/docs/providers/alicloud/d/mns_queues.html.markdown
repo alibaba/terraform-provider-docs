@@ -33,11 +33,12 @@ The following arguments are supported:
 
 The following attributes are exported in addition to the arguments listed above:
 
-* `queues` - A list of users. Each element contains the following attributes:
-  * `id` - The id of the queue
+* `names` - A list of queue names. 
+* `queues` - A list of queues. Each element contains the following attributes:
+  * `id` - The id of the queue, The value is set to `name`.
   * `name` - The name of the queue
   * `delay_seconds` - This attribute defines the length of time, in seconds, after which every message sent to the queue is dequeued.
   * `maximum_message_size` - This indicates the maximum length, in bytes, of any message body sent to the queue.
   * `message_retention_period` - Messages are deleted from the queue after a specified length of time, whether they have been activated or not. This attribute defines the viability period, in seconds, for every message in the queue.
-  * `visibility_timeout` - Dequeued messages change from active (visible) status to inactive (invisible) status. This attribute defines the length of time, in seconds, that messages remain invisible. Messages return to active status after the set period.
+  * `visibility_timeouts` - Dequeued messages change from active (visible) status to inactive (invisible) status. This attribute defines the length of time, in seconds, that messages remain invisible. Messages return to active status after the set period.
   * `polling_wait_seconds` - Long polling is measured in seconds. When this attribute is set to 0, long polling is disabled. When it is not set to 0, long polling is enabled and message dequeue requests will be processed only when valid messages are received or when long polling times out.

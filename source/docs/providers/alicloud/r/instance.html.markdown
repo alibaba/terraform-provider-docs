@@ -21,6 +21,8 @@ Provides a ECS instance resource.
 -> **NOTE:** The resource supports modifying instance charge type from 'PrePaid' to 'PostPaid' from version 1.9.6.
  However, at present, this modification has some limitation about CPU core count in one month, so strongly recommand that `Don't modify instance charge type frequentlly in one month`.
 
+-> **NOTE:**  There is unsupported 'deletion_protection' attribute when the instance is spot
+
 ## Example Usage
 
 ```
@@ -28,20 +30,20 @@ Provides a ECS instance resource.
 resource "alicloud_security_group" "group" {
   name        = "tf_test_foo"
   description = "foo"
-  vpc_id = "${alicloud_vpc.vpc.id}"
+  vpc_id      = "${alicloud_vpc.vpc.id}"
 }
 
 resource "alicloud_instance" "instance" {
   # cn-beijing
   availability_zone = "cn-beijing-b"
-  security_groups = "${alicloud_security_group.group.*.id}"
+  security_groups   = "${alicloud_security_group.group.*.id}"
 
   # series III
-  instance_type        = "ecs.n4.large"
-  system_disk_category = "cloud_efficiency"
-  image_id             = "ubuntu_140405_64_40G_cloudinit_20161115.vhd"
-  instance_name        = "test_foo"
-  vswitch_id = "${alicloud_vswitch.vswitch.id}"
+  instance_type              = "ecs.n4.large"
+  system_disk_category       = "cloud_efficiency"
+  image_id                   = "ubuntu_18_04_64_20G_alibase_20190624.vhd"
+  instance_name              = "test_foo"
+  vswitch_id                 = "${alicloud_vswitch.vswitch.id}"
   internet_max_bandwidth_out = 10
 }
 
@@ -67,7 +69,7 @@ resource "alicloud_slb" "slb" {
 The following arguments are supported:
 
 * `image_id` - (Required) The Image to use for the instance. ECS instance's image can be replaced via changing 'image_id'. When it is changed, the instance will reboot to make the change take effect.
-* `instance_type` - (Required) The type of instance to start.
+* `instance_type` - (Required) The type of instance to start. When it is changed, the instance will reboot to make the change take effect.
 * `io_optimized` - (Deprecated) It has been deprecated on instance resource. All the launched alicloud instances will be I/O optimized.
 * `is_outdated` - (Optional) Whether to use outdated instance type. Default to false.
 * `security_groups` - (Required)  A list of security group ids to associate with.
@@ -76,16 +78,19 @@ The following arguments are supported:
 Terraform will autogenerate a default name is `ECS-Instance`.
 * `allocate_public_ip` - (Deprecated) It has been deprecated from version "1.7.0". Setting "internet_max_bandwidth_out" larger than 0 can allocate a public ip address for an instance.
 * `system_disk_category` - (Optional) Valid values are `ephemeral_ssd`, `cloud_efficiency`, `cloud_ssd`, `cloud_essd`, `cloud`. `cloud` only is used to some none I/O optimized instance. Default to `cloud_efficiency`.
-* `system_disk_size` - (Optional) Size of the system disk, measured in GiB. Value range: [20, 500]. The specified value must be equal to or greater than max{20, Imagesize}. Default value: max{40, ImageSize}. ECS instance's system disk can be reset when replacing system disk.
+* `system_disk_size` - (Optional) Size of the system disk, measured in GiB. Value range: [20, 500]. The specified value must be equal to or greater than max{20, Imagesize}. Default value: max{40, ImageSize}. ECS instance's system disk can be reset when replacing system disk. When it is changed, the instance will reboot to make the change take effect.
 * `description` - (Optional) Description of the instance, This description can have a string of 2 to 256 characters, It cannot begin with http:// or https://. Default value is null.
 * `internet_charge_type` - (Optional) Internet charge type of the instance, Valid values are `PayByBandwidth`, `PayByTraffic`. Default is `PayByTraffic`. At present, 'PrePaid' instance cannot change the value to "PayByBandwidth" from "PayByTraffic".
 * `internet_max_bandwidth_in` - (Optional) Maximum incoming bandwidth from the public network, measured in Mbps (Mega bit per second). Value range: [1, 200]. If this value is not specified, then automatically sets it to 200 Mbps.
 * `internet_max_bandwidth_out` - (Optional) Maximum outgoing bandwidth to the public network, measured in Mbps (Mega bit per second). Value range:  [0, 100]. Default to 0 Mbps.
-* `host_name` - (Optional) Host name of the ECS, which is a string of at least two characters. “hostname” cannot start or end with “.” or “-“. In addition, two or more consecutive “.” or “-“ symbols are not allowed. On Windows, the host name can contain a maximum of 15 characters, which can be a combination of uppercase/lowercase letters, numerals, and “-“. The host name cannot contain dots (“.”) or contain only numeric characters.
+* `host_name` - (Optional) Host name of the ECS, which is a string of at least two characters. “hostname” cannot start or end with “.” or “-“. In addition, two or more consecutive “.” or “-“ symbols are not allowed. On Windows, the host name can contain a maximum of 15 characters, which can be a combination of uppercase/lowercase letters, numerals, and “-“. The host name cannot contain dots (“.”) or contain only numeric characters. When it is changed, the instance will reboot to make the change take effect.
 On other OSs such as Linux, the host name can contain a maximum of 30 characters, which can be segments separated by dots (“.”), where each segment can contain uppercase/lowercase letters, numerals, or “_“. When it is changed, the instance will reboot to make the change take effect.
-* `password` - (Optional) Password to an instance is a string of 8 to 30 characters. It must contain uppercase/lowercase letters and numerals, but cannot contain special symbols. When it is changed, the instance will reboot to make the change take effect.
-* `vswitch_id` - (Optional) The virtual switch ID to launch in VPC. This parameter must be set unless you can create classic network instances.
+* `password` - (Optional, Sensitive) Password to an instance is a string of 8 to 30 characters. It must contain uppercase/lowercase letters and numerals, but cannot contain special symbols. When it is changed, the instance will reboot to make the change take effect.
+* `kms_encrypted_password` - (Optional, Available in 1.57.1+) An KMS encrypts password used to an instance. If the `password` is filled in, this field will be ignored. When it is changed, the instance will reboot to make the change take effect.
+* `kms_encryption_context` - (Optional, MapString, Available in 1.57.1+) An KMS encryption context used to decrypt `kms_encrypted_password` before creating or updating an instance with `kms_encrypted_password`. See [Encryption Context](https://www.alibabacloud.com/help/doc-detail/42975.htm). It is valid when `kms_encrypted_password` is set. When it is changed, the instance will reboot to make the change take effect.
+* `vswitch_id` - (Optional) The virtual switch ID to launch in VPC. This parameter must be set unless you can create classic network instances. When it is changed, the instance will reboot to make the change take effect.
 * `instance_charge_type` - (Optional) Valid values are `PrePaid`, `PostPaid`, The default is `PostPaid`.
+* `resource_group_id` - (ForceNew, ForceNew, Available in 1.57.0+) The Id of resource group which the instance belongs.
 * `period_unit` - (Optional) The duration unit that you will buy the resource. It is valid when `instance_charge_type` is 'PrePaid'. Valid value: ["Week", "Month"]. Default to "Month".
 * `period` - (Optional) The duration that you will buy the resource, in month. It is valid when `instance_charge_type` is `PrePaid`. Default to 1. Valid values:
     - [1-9, 12, 24, 36, 48, 60] when `period_unit` in "Month"
@@ -108,12 +113,13 @@ On other OSs such as Linux, the host name can contain a maximum of 30 characters
     - Key: It can be up to 64 characters in length. It cannot begin with "aliyun", "acs:", "http://", or "https://". It cannot be a null string.
     - Value: It can be up to 128 characters in length. It cannot begin with "aliyun", "acs:", "http://", or "https://". It can be a null string.
 
-* `user_data` - (Optional) User-defined data to customize the startup behaviors of an ECS instance and to pass data into an ECS instance.
+* `user_data` - (Optional) User-defined data to customize the startup behaviors of an ECS instance and to pass data into an ECS instance. From version 1.60.0, it can be update in-place. If updated, the instance will reboot to make the change take effect. Note: Not all of changes will take effect and it depends on [cloud-init module type](https://cloudinit.readthedocs.io/en/latest/topics/modules.html).
 * `key_name` - (Optional, Force new resource) The name of key pair that can login ECS instance successfully without password. If it is specified, the password would be invalid.
 * `role_name` - (Optional, Force new resource) Instance RAM role name. The name is provided and maintained by RAM. You can use `alicloud_ram_role` to create a new one.
 * `include_data_disks` - (Optional) Whether to change instance disks charge type when changing instance charge type.
 * `dry_run` - (Optional) Whether to pre-detection. When it is true, only pre-detection and not actually modify the payment type operation. It is valid when `instance_charge_type` is 'PrePaid'. Default to false.
-* `private_ip` - (Optional) Instance private IP address can be specified when you creating new instance. It is valid when `vswitch_id` is specified.
+* `private_ip` - (Optional) Instance private IP address can be specified when you creating new instance. It is valid when `vswitch_id` is specified. When it is changed, the instance will reboot to make the change take effect.
+* `credit_specification` - (Optional, Available in 1.57.1+) Performance mode of the t5 burstable instance. Valid values: 'Standard', 'Unlimited'.
 * `spot_strategy` - (Optional, ForceNew) The spot strategy of a Pay-As-You-Go instance, and it takes effect only when parameter `instance_charge_type` is 'PostPaid'. Value range:
     - NoSpot: A regular Pay-As-You-Go instance.
     - SpotWithPriceLimit: A price threshold for a spot instance

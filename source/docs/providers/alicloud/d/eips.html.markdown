@@ -27,8 +27,10 @@ The following arguments are supported:
 
 * `ids` - (Optional) A list of EIP IDs.
 * `ip_addresses` - (Optional) A list of EIP public IP addresses.
+* `tags` - (Optional, Available in v1.55.3+) A mapping of tags to assign to the resource.
 * `in_use` - (Deprecated) Deprecated since the version 1.8.0 of this provider.
 * `output_file` - (Optional) File name where to save data source results (after running `terraform plan`).
+* `resource_group_id` - (Optional, ForceNew, Available in 1.58.0+) The Id of resource group which the eips belongs.
 
 ## Attributes Reference
 
@@ -45,3 +47,4 @@ The following attributes are exported in addition to the arguments listed above:
   * `instance_id` - The ID of the instance that is being bound.
   * `instance_type` - The instance type of that the EIP is bound.
   * `creation_time` - Time of creation.
+  * `resource_group_id` - The Id of resource group which the eips belongs.

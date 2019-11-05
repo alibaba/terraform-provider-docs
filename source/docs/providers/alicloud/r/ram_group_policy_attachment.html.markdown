@@ -15,13 +15,13 @@ Provides a RAM Group Policy attachment resource.
 ```
 # Create a RAM Group Policy attachment.
 resource "alicloud_ram_group" "group" {
-  name = "groupName"
+  name     = "groupName"
   comments = "this is a group comments."
-  force = true
+  force    = true
 }
 
 resource "alicloud_ram_policy" "policy" {
-  name = "policyName"
+  name     = "policyName"
   document = <<EOF
     {
       "Statement": [
@@ -63,3 +63,11 @@ The following arguments are supported:
 The following attributes are exported:
 
 * `id` - The attachment ID. Composed of policy name, policy type and group name with format `group:<policy_name>:<policy_type>:<group_name>`.
+
+## Import
+
+RAM Group Policy attachment can be imported using the id, e.g.
+
+```
+$ terraform import alicloud_ram_group_policy_attachment.example group:my-policy:Custom:my-group
+```

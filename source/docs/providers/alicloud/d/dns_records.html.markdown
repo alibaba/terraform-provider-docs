@@ -14,11 +14,11 @@ This data source provides a list of DNS Domain Records in an Alibaba Cloud accou
 
 ```
 data "alicloud_dns_records" "records_ds" {
-  domain_name = "xiaozhu.top"
-  is_locked = false
-  type = "A"
+  domain_name       = "xiaozhu.top"
+  is_locked         = false
+  type              = "A"
   host_record_regex = "^@"
-  output_file = "records.txt"
+  output_file       = "records.txt"
 }
 
 output "first_record_id" {
@@ -34,9 +34,10 @@ The following arguments are supported:
 * `host_record_regex` - (Optional) Host record regex. 
 * `value_regex` - (Optional) Host record value regex. 
 * `type` - (Optional) Record type. Valid items are `A`, `NS`, `MX`, `TXT`, `CNAME`, `SRV`, `AAAA`, `REDIRECT_URL`, `FORWORD_URL` .
-* `line` - (Optional) ISP line. Valid items are `default`, `telecom`, `unicom`, `mobile`, `oversea`, `edu`.
+* `line` - (Optional) ISP line. Valid items are `default`, `telecom`, `unicom`, `mobile`, `oversea`, `edu`, `drpeng`, `btvn`, .etc. For checking all resolution lines enumeration please visit [Alibaba Cloud DNS doc](https://www.alibabacloud.com/help/doc-detail/34339.htm) 
 * `status` - (Optional) Record status. Valid items are `ENABLE` and `DISABLE`.
 * `is_locked` - (Optional, type: bool) Whether the record is locked or not.
+* `ids` - (Optional, Available 1.52.2+) A list of record IDs.
 * `output_file` - (Optional) File name where to save data source results (after running `terraform plan`).
 
 
@@ -44,6 +45,7 @@ The following arguments are supported:
 
 The following attributes are exported in addition to the arguments listed above:
 
+* `ids` - A list of record IDs. 
 * `urls` - A list of entire URLs. Each item format as `<host_record>.<domain_name>`.
 * `records` - A list of records. Each element contains the following attributes:
   * `record_id` - ID of the record.

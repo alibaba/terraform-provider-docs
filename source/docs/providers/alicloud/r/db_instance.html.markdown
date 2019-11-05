@@ -18,10 +18,10 @@ databases.
 
 ```
 variable "name" {
-	default = "dbInstanceconfig"
+  default = "dbInstanceconfig"
 }
 variable "creation" {
-		default = "Rds"
+  default = "Rds"
 }
 data "alicloud_zones" "default" {
   available_resource_creation = "${var.creation}"
@@ -37,14 +37,14 @@ resource "alicloud_vswitch" "default" {
   name              = "${var.name}"
 }
 resource "alicloud_db_instance" "default" {
-	engine = "MySQL"
-	engine_version = "5.6"
-	instance_type = "rds.mysql.s2.large"
-	instance_storage = "30"
-	instance_charge_type = "Postpaid"
-	instance_name = "${var.name}"
-	vswitch_id = "${alicloud_vswitch.default.id}"
-	monitoring_period = "60"
+  engine               = "MySQL"
+  engine_version       = "5.6"
+  instance_type        = "rds.mysql.s2.large"
+  instance_storage     = "30"
+  instance_charge_type = "Postpaid"
+  instance_name        = "${var.name}"
+  vswitch_id           = "${alicloud_vswitch.default.id}"
+  monitoring_period    = "60"
 }
 ```
 
@@ -52,38 +52,38 @@ resource "alicloud_db_instance" "default" {
 
 ```
 resource "alicloud_vpc" "default" {
-	name       = "vpc-123456"
-	cidr_block = "172.16.0.0/16"
+  name       = "vpc-123456"
+  cidr_block = "172.16.0.0/16"
 }
 
 resource "alicloud_vswitch" "default" {
-	vpc_id            = "${alicloud_vpc.default.id}"
-	cidr_block        = "172.16.0.0/24"
-	availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-	name              = "vpc-123456"
+  vpc_id            = "${alicloud_vpc.default.id}"
+  cidr_block        = "172.16.0.0/24"
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  name              = "vpc-123456"
 }
 
 resource "alicloud_db_instance" "default" {
-	engine = "MySQL"
-	engine_version = "5.6"
-	db_instance_class = "rds.mysql.t1.small"
-	db_instance_storage = "10"
-	vswitch_id = "${alicloud_vswitch.default.id}"
+  engine              = "MySQL"
+  engine_version      = "5.6"
+  db_instance_class   = "rds.mysql.t1.small"
+  db_instance_storage = "10"
+  vswitch_id          = "${alicloud_vswitch.default.id}"
 }
 
 resource "alicloud_db_instance" "default" {
-	engine = "MySQL"
-	engine_version = "5.6"
-	db_instance_class = "rds.mysql.t1.small"
-	db_instance_storage = "10"
-	parameters {
-		name = "innodb_large_prefix"
-		value = "ON"
-	}
-	parameters {
-		name = "connect_timeout"
-		value = "50"
-	}
+  engine              = "MySQL"
+  engine_version      = "5.6"
+  db_instance_class   = "rds.mysql.t1.small"
+  db_instance_storage = "10"
+  parameters {
+    name  = "innodb_large_prefix"
+    value = "ON"
+  }
+  parameters {
+    name  = "connect_timeout"
+    value = "50"
+  }
 }
 ```
 
@@ -105,7 +105,7 @@ The following arguments are supported:
     Note: There is extra 5 GB storage for SQL Server Instance and it is not in specified `instance_storage`.
 
 * `instance_name` - (Optional) The name of DB instance. It a string of 2 to 256 characters.
-* `instance_charge_type` - (ForceNew) Valid values are `Prepaid`, `Postpaid`, Default to `Postpaid`.
+* `instance_charge_type` - (Optional) Valid values are `Prepaid`, `Postpaid`, Default to `Postpaid`. Currently, the resource only supports PostPaid to PrePaid.
 * `period` - (Optional) The duration that you will buy DB instance (in month). It is valid when instance_charge_type is `PrePaid`. Valid values: [1~9], 12, 24, 36. Default to 1.
 * `monitoring_period` - (Optional) The monitoring frequency in seconds. Valid values are 5, 60, 300. Defaults to 300. 
 * `auto_renew` - (Optional, Available in 1.34.0+) Whether to renewal a DB instance automatically or not. It is valid when instance_charge_type is `PrePaid`. Default to `false`.
@@ -126,8 +126,9 @@ The multiple zone ID can be retrieved by setting `multi` to "true" in the data s
 * `security_ips` - (Optional) List of IP addresses allowed to access all databases of an instance. The list contains up to 1,000 IP addresses, separated by commas. Supported formats include 0.0.0.0/0, 10.23.12.24 (IP), and 10.23.12.24/24 (Classless Inter-Domain Routing (CIDR) mode. /24 represents the length of the prefix in an IP address. The range of the prefix length is [1,32]).
 * `db_mappings` - (Deprecated) It has been deprecated from version 1.5.0. New resource `alicloud_db_database` replaces it.
 * `parameters` - (Optional) Set of parameters needs to be set after DB instance was launched. Available parameters can refer to the latest docs [View database parameter templates](https://www.alibabacloud.com/help/doc-detail/26284.htm) .
-* `tags` - (Optional) the instance bound to the tag. The format of the incoming value is `json` string, including `TagKey` and `TagValue`. `TagKey` cannot be null, and `TagValue` can be empty, and both cannot begin with `aliyun`. Format example `{"key1":"value1"}`.
+* `tags` - (Optional) the instance bound to the tag. The format of the incoming value is `json` string, including `TagKey` and `TagValue`. `TagKey` cannot be null, and `TagValue` can be empty, and both cannot begin with `aliyun`. Format example `{"key1":"value1"}`, TagKey and TagValue are not case sensitive.
 * `security_group_id` - (Optional) Input the ECS Security Group ID to join ECS Security Group. Only support mysql 5.5, mysql 5.6
+* `maintain_time` - (Optional, Available in 1.56.0+) Maintainable time period format of the instance: HH:MMZ-HH:MMZ (UTC time)
 
 -> **NOTE:** Because of data backup and migration, change DB instance type and storage would cost 15~20 minutes. Please make full preparation before changing them.
 
@@ -138,6 +139,16 @@ The following attributes are exported:
 * `id` - The RDS instance ID.
 * `port` - RDS database connection port.
 * `connection_string` - RDS database connection string.
+
+### Timeouts
+
+-> **NOTE:** Available in 1.52.1+.
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration-0-11/resources.html#timeouts) for certain actions:
+
+* `create` - (Defaults to 20 mins) Used when creating the db instance (until it reaches the initial `Running` status). 
+* `update` - (Defaults to 30 mins) Used when updating the db instance (until it reaches the initial `Running` status). 
+* `delete` - (Defaults to 20 mins) Used when terminating the db instance. 
 
 ## Import
 

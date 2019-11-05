@@ -15,10 +15,10 @@ This data source provides a list of RAM users in an Alibaba Cloud account accord
 ```
 data "alicloud_ram_users" "users_ds" {
   output_file = "users.txt"
-  group_name = "group1"
+  group_name  = "group1"
   policy_name = "AliyunACSDefaultAccess"
   policy_type = "Custom"
-  name_regex = "^user"
+  name_regex  = "^user"
 }
 
 output "first_user_id" {
@@ -31,6 +31,7 @@ output "first_user_id" {
 The following arguments are supported:
 
 * `name_regex` - (Optional) A regex string to filter resulting users by their names.
+* `ids` (Optional, Available 1.53.0+) - A list of ram user IDs. 
 * `group_name` - (Optional) Filter results by a specific group name. Returned users are in the specified group. 
 * `policy_type` - (Optional) Filter results by a specific policy type. Valid values are `Custom` and `System`. If you set this parameter, you must set `policy_name` as well.
 * `policy_name` - (Optional) Filter results by a specific policy name. If you set this parameter without setting `policy_type`, the later will be automatically set to `System`. Returned users are attached to the specified policy.

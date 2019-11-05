@@ -16,68 +16,68 @@ Provides a ESS scaling configuration resource.
 
 ```
 variable "name" {
-    default = "essscalingconfiguration"
+  default = "essscalingconfiguration"
 }
-	
+
 data "alicloud_zones" "default" {
-    available_disk_category     = "cloud_efficiency"
-    available_resource_creation = "VSwitch"
+  available_disk_category     = "cloud_efficiency"
+  available_resource_creation = "VSwitch"
 }
-    
+
 data "alicloud_instance_types" "default" {
-    availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-    cpu_core_count    = 2
-    memory_size       = 4
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  cpu_core_count    = 2
+  memory_size       = 4
 }
-    
+
 data "alicloud_images" "default" {
-    name_regex  = "^ubuntu_14.*_64"
-    most_recent = true
-    owners      = "system"
+  name_regex  = "^ubuntu_18.*_64"
+  most_recent = true
+  owners      = "system"
 }
-    
+
 resource "alicloud_vpc" "default" {
-    name       = "${var.name}"
-    cidr_block = "172.16.0.0/16"
+  name       = "${var.name}"
+  cidr_block = "172.16.0.0/16"
 }
-    
+
 resource "alicloud_vswitch" "default" {
-    vpc_id            = "${alicloud_vpc.default.id}"
-    cidr_block        = "172.16.0.0/24"
-    availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-    name              = "${var.name}"
+  vpc_id            = "${alicloud_vpc.default.id}"
+  cidr_block        = "172.16.0.0/24"
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  name              = "${var.name}"
 }
-    
+
 resource "alicloud_security_group" "default" {
-    name   = "${var.name}"
-    vpc_id = "${alicloud_vpc.default.id}"
+  name   = "${var.name}"
+  vpc_id = "${alicloud_vpc.default.id}"
 }
-    
+
 resource "alicloud_security_group_rule" "default" {
-    type = "ingress"
-    ip_protocol = "tcp"
-    nic_type = "intranet"
-    policy = "accept"
-    port_range = "22/22"
-    priority = 1
-    security_group_id = "${alicloud_security_group.default.id}"
-    cidr_ip = "172.16.0.0/24"
+  type              = "ingress"
+  ip_protocol       = "tcp"
+  nic_type          = "intranet"
+  policy            = "accept"
+  port_range        = "22/22"
+  priority          = 1
+  security_group_id = "${alicloud_security_group.default.id}"
+  cidr_ip           = "172.16.0.0/24"
 }
 
 resource "alicloud_ess_scaling_group" "default" {
-    min_size = 1
-    max_size = 1
-    scaling_group_name = "${var.name}"
-    removal_policies = ["OldestInstance", "NewestInstance"]
-    vswitch_ids = ["${alicloud_vswitch.default.id}"]
+  min_size           = 1
+  max_size           = 1
+  scaling_group_name = "${var.name}"
+  removal_policies   = ["OldestInstance", "NewestInstance"]
+  vswitch_ids        = ["${alicloud_vswitch.default.id}"]
 }
-	
+
 resource "alicloud_ess_scaling_configuration" "default" {
-    scaling_group_id = "${alicloud_ess_scaling_group.default.id}"
-    image_id = "${data.alicloud_images.default.images.0.id}"
-    instance_type = "${data.alicloud_instance_types.default.instance_types.0.id}"
-    security_group_id = "${alicloud_security_group.default.id}"
-    force_delete = true
+  scaling_group_id  = "${alicloud_ess_scaling_group.default.id}"
+  image_id          = "${data.alicloud_images.default.images.0.id}"
+  instance_type     = "${data.alicloud_instance_types.default.instance_types.0.id}"
+  security_group_id = "${alicloud_security_group.default.id}"
+  force_delete      = true
 }
 
 ```
@@ -93,7 +93,8 @@ The following arguments are supported:
 * `instance_name` - (Optional) Name of an ECS instance. Default to "ESS-Instance". It is valid from version 1.7.1.
 * `io_optimized` - (Deprecated) It has been deprecated on instance resource. All the launched alicloud instances will be I/O optimized.
 * `is_outdated` - (Optional) Whether to use outdated instance type. Default to false.
-* `security_group_id` - (Optional) ID of the security group to which a newly created instance belongs.
+* `security_group_id` - (Optional) ID of the security group used to create new instance. It is conflict with `security_group_ids`.
+* `security_group_ids` - (Optional, Available in 1.43.0+) List IDs of the security group used to create new instances. It is conflict with `security_group_id`.
 * `scaling_configuration_name` - (Optional) Name shown for the scheduled task. If this parameter value is not specified, the default value is ScalingConfigurationId.
 * `internet_charge_type` - (Optional) Network billing type, Values: PayByBandwidth or PayByTraffic. Default to `PayByBandwidth`.
 * `internet_max_bandwidth_in` - (Optional) Maximum incoming bandwidth from the public network, measured in Mbps (Mega bit per second). The value range is [1,200].
@@ -113,6 +114,9 @@ The following arguments are supported:
     - Key: It can be up to 64 characters in length. It cannot begin with "aliyun", "http://", or "https://". It cannot be a null string.
     - Value: It can be up to 128 characters in length. It cannot begin with "aliyun", "http://", or "https://" It can be a null string.
 * `override` - (Optional, Available in 1.46.0+) Indicates whether to overwrite the existing data. Default to false.
+* `password` - (Optional, ForceNew, Available in 1.60.0+) The password of the ECS instance. The password must be 8 to 30 characters in length. It must contains at least three of the following character types: uppercase letters, lowercase letters, digits, and special characters. Special characters include `() ~!@#$%^&*-_+=\|{}[]:;'<>,.?/`, The password of Windows-based instances cannot start with a forward slash (/).
+* `kms_encrypted_password` - (Optional, ForceNew, Available in 1.60.0+) An KMS encrypts password used to a db account. If the `password` is filled in, this field will be ignored.
+* `kms_encryption_context` - (Optional, MapString, Available in 1.60.0+) An KMS encryption context used to decrypt `kms_encrypted_password` before creating or updating a db account with `kms_encrypted_password`. See [Encryption Context](https://www.alibabacloud.com/help/doc-detail/42975.htm). It is valid when `kms_encrypted_password` is set.
 
 -> **NOTE:** Before enabling the scaling group, it must have a active scaling configuration.
 

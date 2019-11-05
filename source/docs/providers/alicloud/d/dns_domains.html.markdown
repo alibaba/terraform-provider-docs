@@ -15,7 +15,7 @@ This data source provides a list of DNS Domains in an Alibaba Cloud account acco
 ```
 data "alicloud_dns_domains" "domains_ds" {
   domain_name_regex = "^hegu"
-  output_file = "domains.txt"
+  output_file       = "domains.txt"
 }
 
 output "first_domain_id" {
@@ -32,7 +32,9 @@ The following arguments are supported:
 * `ali_domain` - (Optional, type: bool) Specifies whether the domain is from Alibaba Cloud or not.
 * `instance_id` - (Optional) Cloud analysis product ID.
 * `version_code` - (Optional) Cloud analysis version code.
+* `ids` (Optional, Available in 1.53.0+) - A list of domain IDs.
 * `output_file` - (Optional) File name where to save data source results (after running `terraform plan`).
+* `resource_group_id` - (Optional, ForceNew, Available in 1.59.0+) The Id of resource group which the dns belongs.
 
 ## Attributes Reference
 
@@ -50,3 +52,4 @@ The following attributes are exported in addition to the arguments listed above:
   * `version_code` - Cloud analysis version code of the domain.
   * `puny_code` - Punycode of the Chinese domain.
   * `dns_servers` - DNS list of the domain in the analysis system.
+  * `resource_group_id` - The Id of resource group which the dns belongs.

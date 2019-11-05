@@ -18,27 +18,27 @@ Compute Service (ECS) instances in real time in the Log Service console. [Refer 
 Basic Usage
 
 ```
-resource "alicloud_log_project" "example"{
-	name = "test-tf"
-	description = "create by terraform"
+resource "alicloud_log_project" "example" {
+  name        = "test-tf"
+  description = "create by terraform"
 }
-resource "alicloud_log_store" "example"{
-  	project = "${alicloud_log_project.example.name}"
-  	name = "tf-test-logstore"
-  	retention_period = 3650
-  	shard_count = 3
-  	auto_split = true
-  	max_split_shard_count = 60
-  	append_meta = true
+resource "alicloud_log_store" "example" {
+  project               = "${alicloud_log_project.example.name}"
+  name                  = "tf-test-logstore"
+  retention_period      = 3650
+  shard_count           = 3
+  auto_split            = true
+  max_split_shard_count = 60
+  append_meta           = true
 }
-resource "alicloud_logtail_config" "example"{
-	project = "${alicloud_log_project.example.name}"
-  	logstore = "${alicloud_log_store.example.name}"
-  	input_type = "file"
-  	log_sample = "test"
-  	name = "tf-log-config"
-	output_type = "LogService"
-  	input_detail = "${file("config.json")}"
+resource "alicloud_logtail_config" "example" {
+  project      = "${alicloud_log_project.example.name}"
+  logstore     = "${alicloud_log_store.example.name}"
+  input_type   = "file"
+  log_sample   = "test"
+  name         = "tf-log-config"
+  output_type  = "LogService"
+  input_detail = "${file("config.json")}"
 }
 ```
 ## Argument Reference
@@ -51,7 +51,7 @@ The following arguments are supported:
 * `log_sample` - （Optional）The log sample of the Logtail configuration. The log size cannot exceed 1,000 bytes.
 * `name` - (Required, ForceNew) The Logtail configuration name, which is unique in the same project.
 * `output_type` - (Required) The output type. Currently, only LogService is supported.
-* `input_detail` - (Required) The logtail configure the required JSON files.([Refer to details](https://www.alibabacloud.com/help/doc-detail/29058.htm))
+* `input_detail` - (Required) The logtail configure the required JSON files. ([Refer to details](https://www.alibabacloud.com/help/doc-detail/29058.htm))
 
 ## Attributes Reference
 

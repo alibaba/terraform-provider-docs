@@ -14,8 +14,8 @@ This data source provides Private Zone Records resource information owned by an 
 
 ```
 data "alicloud_pvtz_zone_records" "records_ds" {
-	zone_id = "${alicloud_pvtz_zone.basic.id}"
-	keyword = "${alicloud_pvtz_zone_record.foo.value}"
+  zone_id = "${alicloud_pvtz_zone.basic.id}"
+  keyword = "${alicloud_pvtz_zone_record.foo.value}"
 }
 
 output "first_record_id" {
@@ -29,12 +29,14 @@ The following arguments are supported:
 
 * `keyword` - (Optional) Keyword for record rr and value.
 * `zone_id` - (Required) ID of the Private Zone.
+* `ids` - (Optional, Available in 1.53.0+) A list of Private Zone Record IDs.
 * `output_file` - (Optional) File name where to save data source results (after running `terraform plan`).
 
 ## Attributes Reference
 
 The following attributes are exported in addition to the arguments listed above:
 
+* `ids` - A list of Private Zone Record IDs.
 * `records` - A list of zone records. Each element contains the following attributes:
   * `id` - ID of the Private Zone Record.
   * `resource_record` - Resource record of the Private Zone Record.

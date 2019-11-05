@@ -16,8 +16,8 @@ This data source provides user-available access groups. Use when you can create 
 
 ```
 data "alicloud_nas_access_groups" "ag" {
-  name_regex = "^foo"
-  type = "Classic"
+  name_regex  = "^foo"
+  type        = "Classic"
   description = "tf-testAccAccessGroupsdatasource"
 }
 
@@ -39,7 +39,8 @@ The following arguments are supported:
 
 The following attributes are exported in addition to the arguments listed above:
 
-* `ids` - A list of AccessGroup IDs.
+* `ids` - A list of AccessGroup IDs, the value is set to `names` .
+* `names` - A list of AccessGroup names.
 * `groups` - A list of AccessGroups. Each element contains the following attributes:
  * `id` - AccessGroupName of the AccessGroup.
  * `rule_count` - RuleCount of the AccessGroup.

@@ -21,14 +21,14 @@ Basic Usage
 
 ```
 resource "alicloud_vpc" "foo" {
-    cidr_block = "172.16.0.0/12"
-    name = "vpc-example-name"
+  cidr_block = "172.16.0.0/12"
+  name       = "vpc-example-name"
 }
 
 resource "alicloud_route_table" "foo" {
-    vpc_id = "${alicloud_vpc.foo.id}"
-    name = "route-table-example-name"
-    description = "route-table-example-description"
+  vpc_id      = "${alicloud_vpc.foo.id}"
+  name        = "route-table-example-name"
+  description = "route-table-example-description"
 }
 ```
 
@@ -39,6 +39,7 @@ The following arguments are supported:
 * `vpc_id` - (Required, ForceNew) The vpc_id of the route table, the field can't be changed.
 * `name` - (Optional) The name of the route table.
 * `description` - (Optional) The description of the route table instance.
+* `tags` - (Optional, Available in v1.55.3+) A mapping of tags to assign to the resource.
 
 ## Attributes Reference
 

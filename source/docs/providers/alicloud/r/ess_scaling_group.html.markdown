@@ -18,68 +18,68 @@ It defines the maximum and minimum numbers of ECS instances in the group, and th
 
 ```
 variable "name" {
-    default = "essscalinggroupconfig"
+  default = "essscalinggroupconfig"
 }
-	
+
 data "alicloud_zones" "default" {
-    available_disk_category     = "cloud_efficiency"
-    available_resource_creation = "VSwitch"
+  available_disk_category     = "cloud_efficiency"
+  available_resource_creation = "VSwitch"
 }
-    
+
 data "alicloud_instance_types" "default" {
-    availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-    cpu_core_count    = 2
-    memory_size       = 4
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  cpu_core_count    = 2
+  memory_size       = 4
 }
-    
+
 data "alicloud_images" "default" {
-    name_regex  = "^ubuntu_14.*_64"
-    most_recent = true
-    owners      = "system"
+  name_regex  = "^ubuntu_18.*_64"
+  most_recent = true
+  owners      = "system"
 }
-    
+
 resource "alicloud_vpc" "default" {
-    name       = "${var.name}"
-    cidr_block = "172.16.0.0/16"
+  name       = "${var.name}"
+  cidr_block = "172.16.0.0/16"
 }
-    
+
 resource "alicloud_vswitch" "default" {
-    vpc_id            = "${alicloud_vpc.default.id}"
-    cidr_block        = "172.16.0.0/24"
-    availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-    name              = "${var.name}"
+  vpc_id            = "${alicloud_vpc.default.id}"
+  cidr_block        = "172.16.0.0/24"
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  name              = "${var.name}"
 }
-    
+
 resource "alicloud_security_group" "default" {
-    name   = "${var.name}"
-    vpc_id = "${alicloud_vpc.default.id}"
+  name   = "${var.name}"
+  vpc_id = "${alicloud_vpc.default.id}"
 }
-    
+
 resource "alicloud_security_group_rule" "default" {
-    type = "ingress"
-    ip_protocol = "tcp"
-    nic_type = "intranet"
-    policy = "accept"
-    port_range = "22/22"
-    priority = 1
-    security_group_id = "${alicloud_security_group.default.id}"
-    cidr_ip = "172.16.0.0/24"
+  type              = "ingress"
+  ip_protocol       = "tcp"
+  nic_type          = "intranet"
+  policy            = "accept"
+  port_range        = "22/22"
+  priority          = 1
+  security_group_id = "${alicloud_security_group.default.id}"
+  cidr_ip           = "172.16.0.0/24"
 }
-	
+
 resource "alicloud_vswitch" "default2" {
-    vpc_id = "${alicloud_vpc.default.id}"
-    cidr_block = "172.16.1.0/24"
-    availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-    name = "${var.name}-bar"
+  vpc_id            = "${alicloud_vpc.default.id}"
+  cidr_block        = "172.16.1.0/24"
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  name              = "${var.name}-bar"
 }
-	
+
 resource "alicloud_ess_scaling_group" "default" {
-    min_size = 1
-    max_size = 1
-    scaling_group_name = "${var.name}"
-    default_cooldown = 20
-    vswitch_ids = ["${alicloud_vswitch.default.id}", "${alicloud_vswitch.default2.id}"]
-    removal_policies = ["OldestInstance", "NewestInstance"]
+  min_size           = 1
+  max_size           = 1
+  scaling_group_name = "${var.name}"
+  default_cooldown   = 20
+  vswitch_ids        = ["${alicloud_vswitch.default.id}", "${alicloud_vswitch.default2.id}"]
+  removal_policies   = ["OldestInstance", "NewestInstance"]
 }
 ```
 
@@ -107,11 +107,17 @@ The following arguments are supported:
       targeting your `alicloud_slb_listener` in order to make sure the listener with its HealthCheck configuration is ready before creating your scaling group).
     - The Server Load Balancer instance attached with VPC-type ECS instances cannot be attached to the scaling group.
     - The default weight of an ECS instance attached to the Server Load Balancer instance is 50.
-* `multi_az_policy` - (Optional, ForceNew) Multi-AZ scaling group ECS instance expansion and contraction strategy. PRIORITY or BALANCE.
+* `multi_az_policy` - (Optional, ForceNew) Multi-AZ scaling group ECS instance expansion and contraction strategy. PRIORITY, BALANCE or COST_OPTIMIZED(Available in 1.54.0+).
+* `on_demand_base_capacity` - (Optional, Available in 1.54.0+) The minimum amount of the Auto Scaling group's capacity that must be fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.
+* `on_demand_percentage_above_base_capacity` - (Optional, Available in 1.54.0+) Controls the percentages of On-Demand Instances and Spot Instances for your additional capacity beyond OnDemandBaseCapacity.  
+* `spot_instance_pools` - (Optional, Available in 1.54.0+) The number of Spot pools to use to allocate your Spot capacity. The Spot pools is composed of instance types of lowest price.
+* `spot_instance_remedy` - (Optional, Available in 1.54.0+) Whether to replace spot instances with newly created spot/onDemand instance when receive a spot recycling message.            
 
 -> **NOTE:** When detach loadbalancers, instances in group will be remove from loadbalancer's `Default Server Group`; On the contrary, When attach loadbalancers, instances in group will be added to loadbalancer's `Default Server Group`.
 
 -> **NOTE:** When detach dbInstances, private ip of instances in group will be remove from dbInstance's `WhiteList`; On the contrary, When attach dbInstances, private ip of instances in group will be added to dbInstance's `WhiteList`.
+
+-> **NOTE:** `on_demand_base_capacity`,`on_demand_percentage_above_base_capacity`,`spot_instance_pools`,`spot_instance_remedy` are valid only if `multi_az_policy` is 'COST_OPTIMIZED'.
 
 
 ## Attributes Reference

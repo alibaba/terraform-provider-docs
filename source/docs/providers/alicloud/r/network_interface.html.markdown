@@ -22,7 +22,7 @@ variable "name" {
 }
 
 resource "alicloud_vpc" "vpc" {
-  name = "${var.name}"
+  name       = "${var.name}"
   cidr_block = "192.168.0.0/24"
 }
 
@@ -31,22 +31,22 @@ data "alicloud_zones" "default" {
 }
 
 resource "alicloud_vswitch" "vswitch" {
-  name = "${var.name}"
-  cidr_block = "192.168.0.0/24"
+  name              = "${var.name}"
+  cidr_block        = "192.168.0.0/24"
   availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-  vpc_id = "${alicloud_vpc.vpc.id}"
+  vpc_id            = "${alicloud_vpc.vpc.id}"
 }
 
 resource "alicloud_security_group" "group" {
-  name = "${var.name}"
+  name   = "${var.name}"
   vpc_id = "${alicloud_vpc.vpc.id}"
 }
 
 resource "alicloud_network_interface" "default" {
-  name = "${var.name}%d"
-  vswitch_id = "${alicloud_vswitch.vswitch.id}"
-  security_groups = [ "${alicloud_security_group.group.id}" ]
-  private_ip = "192.168.0.2"
+  name              = "${var.name}%d"
+  vswitch_id        = "${alicloud_vswitch.vswitch.id}"
+  security_groups   = ["${alicloud_security_group.group.id}"]
+  private_ip        = "192.168.0.2"
   private_ips_count = 3
 }
 ```
@@ -63,12 +63,14 @@ The following arguments are supported:
 * `private_ips`  - (Optional) List of secondary private IPs to assign to the ENI. Don't use both private_ips and private_ips_count in the same ENI resource block.
 * `private_ips_count` - (Optional) Number of secondary private IPs to assign to the ENI. Don't use both private_ips and private_ips_count in the same ENI resource block.
 * `tags` - (Optional) A mapping of tags to assign to the resource.
+* `resource_group_id` - (ForceNew, ForceNew, Available in 1.57.0+) The Id of resource group which the network interface belongs.
 
 ## Attributes Reference
 
 The following attributes are exported:
 
 * `id` - The ENI ID.
+* `mac` - (Available in 1.54.0+) The MAC address of an ENI.
 
 ## Import
 

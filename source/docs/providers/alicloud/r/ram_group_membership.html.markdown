@@ -15,32 +15,32 @@ Provides a RAM Group membership resource.
 ```
 # Create a RAM Group membership.
 resource "alicloud_ram_group" "group" {
-  name = "groupName"
+  name     = "groupName"
   comments = "this is a group comments."
-  force = true
+  force    = true
 }
 
 resource "alicloud_ram_user" "user" {
-  name = "user_test"
+  name         = "user_test"
   display_name = "user_display_name"
-  mobile = "86-18688888888"
-  email = "hello.uuu@aaa.com"
-  comments = "yoyoyo"
-  force = true
+  mobile       = "86-18688888888"
+  email        = "hello.uuu@aaa.com"
+  comments     = "yoyoyo"
+  force        = true
 }
 
 resource "alicloud_ram_user" "user1" {
-  name = "user_test1"
+  name         = "user_test1"
   display_name = "user_display_name1"
-  mobile = "86-18688888889"
-  email = "hello.uuu@aaa.com"
-  comments = "yoyoyo"
-  force = true
+  mobile       = "86-18688888889"
+  email        = "hello.uuu@aaa.com"
+  comments     = "yoyoyo"
+  force        = true
 }
 
 resource "alicloud_ram_group_membership" "membership" {
   group_name = "${alicloud_ram_group.group.name}"
-  user_names = ["${alicloud_ram_user.user.name}"，"${alicloud_ram_user.user1.name}"]
+  user_names = ["${alicloud_ram_user.user.name}", "${alicloud_ram_user.user1.name}"]
 }
 ```
 ## Argument Reference
@@ -54,6 +54,13 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-* `id` - The membership ID.
+* `id` - The membership ID, it's set to `group_name`
 * `group_name` - The group name.
 * `user_names` - The list of names of users which in the group.
+
+## Import
+RAM Group membership can be imported using the id, e.g.
+
+```
+$ terraform import alicloud_ram_group_membership.example my-group
+```

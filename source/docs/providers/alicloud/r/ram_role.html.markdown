@@ -17,7 +17,7 @@ Provides a RAM Role resource.
 ```
 # Create a new RAM Role.
 resource "alicloud_ram_role" "role" {
-  name = "testrole"
+  name     = "testrole"
   document = <<EOF
   {
     "Statement": [
@@ -55,7 +55,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-* `id` - The role ID.
+* `id` - This ID of this resource. The value is set to `role_name`.
+* `role_id` - The role ID.
 * `name` - The role name.
 * `arn` - The role arn.
 * `description` - The role description.
