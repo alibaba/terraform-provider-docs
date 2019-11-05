@@ -13,7 +13,7 @@ This data source provides the api groups of the current Alibaba Cloud user.
 ## Example Usage
 
 ```
-data "alicloud_api_gateway_groups" "data_apigatway"{
+data "alicloud_api_gateway_groups" "data_apigatway" {
   output_file = "outgroups"
 }
 
@@ -27,6 +27,7 @@ output "first_group_id" {
 The following arguments are supported:
 
 * `name_regex` - (Optional) A regex string to filter api gateway groups by name.
+* `ids` - (Optional, Available 1.52.1+) A list of api group IDs. 
 * `output_file` - (Optional) File name where to save data source results (after running `terraform plan`).
 
 ## Attributes Reference

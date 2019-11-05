@@ -44,18 +44,18 @@ data "alicloud_instance_types" "default" {
 }
 
 data "alicloud_images" "default" {
-  name_regex = "^ubuntu_14.*_64"
+  name_regex  = "^ubuntu_18.*_64"
   most_recent = true
-  owners = "system"
+  owners      = "system"
 }
 
 resource "alicloud_instance" "ecs_instance" {
-  image_id              = "${data.alicloud_images.default.images.0.id}"
-  instance_type         = "${data.alicloud_instance_types.default.instance_types.0.id}"
-  availability_zone     = "${data.alicloud_zones.default.zones.0.id}"
-  security_groups       = ["${alicloud_security_group.group.id}"]
-  vswitch_id            = "${alicloud_vswitch.vsw.id}"
-  instance_name         = "hello"
+  image_id          = "${data.alicloud_images.default.images.0.id}"
+  instance_type     = "${data.alicloud_instance_types.default.instance_types.0.id}"
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  security_groups   = ["${alicloud_security_group.group.id}"]
+  vswitch_id        = "${alicloud_vswitch.vsw.id}"
+  instance_name     = "hello"
   tags = {
     Name = "TerraformTest-instance"
   }
@@ -82,6 +82,8 @@ The following arguments are supported:
 * `allocation_id` - (Required, ForcesNew) The allocation EIP ID.
 * `instance_id` - (Required, ForcesNew) The ID of the ECS or SLB instance or Nat Gateway.
 * `instance_type` - (Optional, ForceNew, Available in 1.46.0+) The type of cloud product that the eip instance to bind.
+* `private_ip_address` - (Optional, ForceNew, Available in 1.52.2+) The private IP address in the network segment of the vswitch which has been assigned.
+
 
 ## Attributes Reference
 

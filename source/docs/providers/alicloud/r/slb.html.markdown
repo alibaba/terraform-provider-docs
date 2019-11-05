@@ -25,25 +25,25 @@ variable "name" {
   default = "terraformtestslbconfig"
 }
 data "alicloud_zones" "default" {
-	available_resource_creation = "VSwitch"
+  available_resource_creation = "VSwitch"
 }
 
 resource "alicloud_vpc" "default" {
-  name = "${var.name}"
+  name       = "${var.name}"
   cidr_block = "172.16.0.0/12"
 }
 
 resource "alicloud_vswitch" "default" {
-  vpc_id = "${alicloud_vpc.default.id}"
-  cidr_block = "172.16.0.0/21"
+  vpc_id            = "${alicloud_vpc.default.id}"
+  cidr_block        = "172.16.0.0/21"
   availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-  name = "${var.name}"
+  name              = "${var.name}"
 }
 
 resource "alicloud_slb" "default" {
-  name = "${var.name}"
+  name          = "${var.name}"
   specification = "slb.s2.small"
-  vswitch_id = "${alicloud_vswitch.default.id}"
+  vswitch_id    = "${alicloud_vswitch.default.id}"
   tags = {
     tag_a = 1
     tag_b = 2
@@ -66,23 +66,29 @@ The following arguments are supported:
 * `name` - (Optional) The name of the SLB. This name must be unique within your AliCloud account, can have a maximum of 80 characters,
 must contain only alphanumeric characters or hyphens, such as "-","/",".","_", and must not begin or end with a hyphen. If not specified,
 Terraform will autogenerate a name beginning with `tf-lb`.
-* `internet` - (Optional, ForceNew) If true, the SLB addressType will be internet, false will be intranet, Default is false. If load balancer launched in VPC, this value must be "false".
+* `internet` - (Deprecated) Field 'internet' has been deprecated from provider version 1.55.3. Use 'address_type' replaces it.
+* `address_type` - (Optional, ForceNew, Available in 1.55.3+) The network type of the SLB instance. Valid values: ["internet", "intranet"]. If load balancer launched in VPC, this value must be "intranet".
+    - internet: After an Internet SLB instance is created, the system allocates a public IP address so that the instance can forward requests from the Internet.
+    - intranet: After an intranet SLB instance is created, the system allocates an intranet IP address so that the instance can only forward intranet requests.
 * `internet_charge_type` - (Optional, ForceNew) Valid
   values are `PayByBandwidth`, `PayByTraffic`. If this value is "PayByBandwidth", then argument "internet" must be "true". Default is "PayByTraffic". If load balancer launched in VPC, this value must be "PayByTraffic".
   Before version 1.10.1, the valid values are "paybybandwidth" and "paybytraffic".
 * `bandwidth` - (Optional) Valid
   value is between 1 and 1000, If argument "internet_charge_type" is "paybytraffic", then this value will be ignore.
 * `listener` - (Deprecated) The field has been deprecated from terraform-alicloud-provider [version 1.3.0](https://github.com/alibaba/terraform-provider/releases/tag/V1.3.0), and use resource `alicloud_slb_listener` to replace.
-* `vswitch_id` - (Required for a VPC SLB, Forces New Resource) The VSwitch ID to launch in.
+* `vswitch_id` - (Required for a VPC SLB, Forces New Resource) The VSwitch ID to launch in. If `address_type` is internet, it will be ignore.
 * `specification` - (Optional) The specification of the Server Load Balancer instance. Default to empty string indicating it is "Shared-Performance" instance.
  Launching "[Performance-guaranteed](https://www.alibabacloud.com/help/doc-detail/27657.htm)" instance, it is must be specified and it valid values are: "slb.s1.small", "slb.s2.small", "slb.s2.medium",
- "slb.s3.small", "slb.s3.medium" and "slb.s3.large".
+ "slb.s3.small", "slb.s3.medium", "slb.s3.large" and "slb.s4.large".
 * `tags` - (Optional) A mapping of tags to assign to the resource. The `tags` can have a maximum of 10 tag for every load balancer instance.
 * `instance_charge_type` - (Optional, Available in v1.34.0+) The billing method of the load balancer. Valid values are "PrePaid" and "PostPaid". Default to "PostPaid".
 * `period` - (Optional, Available in v1.34.0+) The duration that you will buy the resource, in month. It is valid when `instance_charge_type` is `PrePaid`. Default to 1. Valid values: [1-9, 12, 24, 36].
 * `master_zone_id` - (Optional, ForceNew, Available in v1.36.0+) The primary zone ID of the SLB instance. If not specified, the system will be randomly assigned. You can query the primary and standby zones in a region by calling the DescribeZone API.
 * `slave_zone_id` - (Optional, ForceNew, Available in v1.36.0+) The standby zone ID of the SLB instance. If not specified, the system will be randomly assigned. You can query the primary and standby zones in a region by calling the DescribeZone API.
-
+* `delete_protection` - (Optional, Available in v1.51.0+) Whether enable the deletion protection or not. on: Enable deletion protection. off: Disable deletion protection. Default to off. Only postpaid instance support this function.   
+* `address_ip_version` - (Optional, Available in v1.55.2+) The IP version of the SLB instance to be created, which can be set to ipv4 or ipv6 . Default to "ipv4". Now, only internet instance support ipv6 address.
+* `address` - (Optional, Available in v1.55.2+) Specify the IP address of the private network for the SLB instance, which must be in the destination CIDR block of the correspond ing switch.
+* `resource_group_id` - (Optional, ForceNew, Available in v1.55.3+) The Id of resource group which the SLB belongs.
 -> **NOTE:** A "Shared-Performance" instance can be changed to "Performance-guaranteed", but the change is irreversible.
 
 -> **NOTE:** To change a "Shared-Performance" instance to a "Performance-guaranteed" instance, the SLB will have a short probability of business interruption (10 seconds-30 seconds). Advise to change it during the business downturn, or migrate business to other SLB Instances by using GSLB before changing.
@@ -94,14 +100,7 @@ Terraform will autogenerate a name beginning with `tf-lb`.
 The following attributes are exported:
 
 * `id` - The ID of the load balancer.
-* `name` - The name of the load balancer.
-* `internet` - The internet of the load balancer.
-* `internet_charge_type` - The internet_charge_type of the load balancer.
-* `bandwidth` - The bandwidth of the load balancer.
-* `vswitch_id` - The VSwitch ID of the load balancer. Only available on SLB launched in a VPC.
 * `address` - The IP address of the load balancer.
-* `specification` - The specification of the Server Load Balancer instance.
-
 ## Import
 
 Load balancer can be imported using the id, e.g.

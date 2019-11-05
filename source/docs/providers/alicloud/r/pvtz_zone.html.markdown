@@ -18,14 +18,14 @@ Basic Usage
 
 ```
 resource "alicloud_pvtz_zone" "foo" {
-	name = "foo.test.com"
+  name = "foo.test.com"
 }
 ```
 ## Argument Reference
 
 The following arguments are supported:
 
-* `name` - (Optional) The name of the Private Zone.
+* `name` - (Optional, ForceNew) The name of the Private Zone.
 * `remark` - (Optional) The remark of the Private Zone.
 
 ## Attributes Reference

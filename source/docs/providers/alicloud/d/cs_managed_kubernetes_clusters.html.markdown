@@ -17,7 +17,7 @@ This data source provides a list Container Service Managed Kubernetes Clusters o
 ```
 # Declare the data source
 data "alicloud_cs_managed_kubernetes_clusters" "k8s_clusters" {
-  name_regex = "my-first-k8s"
+  name_regex  = "my-first-k8s"
   output_file = "my-first-k8s-json"
 }
 
@@ -49,21 +49,13 @@ The following attributes are exported in addition to the arguments listed above:
   * `worker_numbers` - The ECS instance node number in the current container cluster.
   * `vswitch_ids` - The ID of VSwitches where the current cluster is located.
   * `vpc_id` - The ID of VPC where the current cluster is located.
-  * `slb_internet_enabled` - Whether internet load balancer for API Server is created
   * `security_group_id` - The ID of security group where the current cluster worker node is located.
-  * `image_id` - The ID of node image.
   * `nat_gateway_id` - The ID of nat gateway used to launch kubernetes cluster.
-  * `worker_instance_types` - The instance type of worker node.
-  * `worker_disk_category` - The system disk category of worker node.
-  * `worker_disk_size` - The system disk size of worker node.
-  * `worker_data_disk_category` - The data disk size of worker node.
-  * `worker_data_disk_size` - The data disk category of worker node.
   * `worker_nodes` - List of cluster worker nodes. It contains several attributes to `Block Nodes`.
   * `connections` - Map of kubernetes cluster connection information. It contains several attributes to `Block Connections`.
-  * `node_cidr_mask` - The network mask used on pods for each node.
   * `log_config` - A list of one element containing information about the associated log store. It contains the following attributes:
     * `type` - Type of collecting logs.
-    * `project` - Log Service project name.
+    * `project` - Log Service project name. 
 
 ### Block Nodes
 

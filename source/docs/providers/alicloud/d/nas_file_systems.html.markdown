@@ -16,8 +16,8 @@ This data source provides FileSystems available to the user.
 
 ```
 data "alicloud_nas_file_systems" "fs" {
-   protocol_type = "NFS"
-   description = "${alicloud_nas_file_system.foo.description}"
+  protocol_type = "NFS"
+  description   = "${alicloud_nas_file_system.foo.description}"
 }
 
 output "alicloud_nas_file_systems_id" {
@@ -39,6 +39,7 @@ The following arguments are supported:
 The following attributes are exported in addition to the arguments listed above:
 
 * `ids` - A list of FileSystem Id.
+* `descriptions` - A list of FileSystem descriptions.
 * `systems` - A list of VPCs. Each element contains the following attributes:
   * `id` - ID of the FileSystem.
   * `region_id` - ID of the region where the FileSystem is located.

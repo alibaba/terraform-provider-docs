@@ -20,15 +20,15 @@ Basic Usage
 
 ```
 resource "alicloud_cs_swarm" "my_cluster" {
-  password = "Yourpassword1234"
+  password      = "Yourpassword1234"
   instance_type = "ecs.n4.small"
-  name = "ClusterFromAlicloud"
-  node_number = 2
+  name          = "ClusterFromAlicloud"
+  node_number   = 2
   disk_category = "cloud_efficiency"
-  disk_size = 20
-  cidr_block = "172.18.0.0/24"
-  image_id = "${var.image_id}"
-  vswitch_id = "${var.vswitch_id}"
+  disk_size     = 20
+  cidr_block    = "172.18.0.0/24"
+  image_id      = "${var.image_id}"
+  vswitch_id    = "${var.vswitch_id}"
 }
 ```
 ## Argument Reference
@@ -51,7 +51,7 @@ The following arguments are supported:
 * `image_id` - (ForceNew) The image ID of ECS instance node used. Default to System automate allocated.
 * `instance_type` - (Required, ForceNew) The type of ECS instance node.
 * `is_outdated` - (Optional) Whether to use outdated instance type. Default to false.
-* `password` - (Required, ForceNew) The password of ECS instance node.
+* `password` - (Required, ForceNew, Sensitive) The password of ECS instance node.
 * `disk_category` - (ForceNew) The data disk category of ECS instance node. Its valid value are `cloud`, `cloud_ssd`, `cloud_essd`, `ephemeral_essd` and `cloud_efficiency`. Default to `cloud_efficiency`.
 * `disk_size` - (ForceNew) The data disk size of ECS instance node. Its valid value is 20~32768 GB. Default to 20.
 * `vswitch_id` - (Required, ForceNew) The password of ECS instance node. If it is not specified, the container cluster's network mode will be `Classic`.

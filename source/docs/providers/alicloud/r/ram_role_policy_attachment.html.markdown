@@ -15,7 +15,7 @@ Provides a RAM Role attachment resource.
 ```
 # Create a RAM Role Policy attachment.
 resource "alicloud_ram_role" "role" {
-  name = "roleName"
+  name     = "roleName"
   document = <<EOF
     {
       "Statement": [
@@ -58,13 +58,13 @@ resource "alicloud_ram_policy" "policy" {
   }
   EOF
   description = "this is a policy test"
-  force = true
+  force       = true
 }
 
 resource "alicloud_ram_role_policy_attachment" "attach" {
   policy_name = "${alicloud_ram_policy.policy.name}"
   policy_type = "${alicloud_ram_policy.policy.type}"
-  role_name = "${alicloud_ram_role.role.name}"
+  role_name   = "${alicloud_ram_role.role.name}"
 }
 ```
 ## Argument Reference
@@ -80,3 +80,11 @@ The following arguments are supported:
 The following attributes are exported:
 
 * `id` - The attachment ID. Composed of policy name, policy type and role name with format `role:<policy_name>:<policy_type>:<role_name>`.
+
+## Import
+
+RAM Role Policy attachment can be imported using the id, e.g.
+
+```
+$ terraform import alicloud_ram_role_policy_attachment.example role:my-policy:Custom:my-role
+```

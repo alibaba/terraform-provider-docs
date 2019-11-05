@@ -18,15 +18,15 @@ Basic Usage
 
 ```
 resource "alicloud_pvtz_zone" "zone" {
-	name = "foo.test.com"
+  name = "foo.test.com"
 }
 
 resource "alicloud_pvtz_zone_record" "foo" {
-	zone_id = "${alicloud_pvtz_zone.zone.id}"
-	resource_record = "www"
-	type = "CNAME"
-	value = "bbb.test.com"
-	ttl="60
+  zone_id         = "${alicloud_pvtz_zone.zone.id}"
+  resource_record = "www"
+  type            = "CNAME"
+  value           = "bbb.test.com"
+  ttl             = 60
 }
 ```
 ## Argument Reference
@@ -44,7 +44,8 @@ The following arguments are supported:
 
 The following attributes are exported:
 
-* `id` - The ID of the Private Zone Record.
+* `id` - This ID of this resource. The value is formate as `<record_id>:<zone_id>`.
+* `record_id` - The Private Zone Record ID.
 
 ## Import
 

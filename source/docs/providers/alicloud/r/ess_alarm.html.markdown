@@ -13,68 +13,68 @@ Provides a ESS alarm task resource.
 ## Example Usage
 ```
 data "alicloud_zones" "default" {
-	available_disk_category = "cloud_efficiency"
-	available_resource_creation = "VSwitch"
+  available_disk_category     = "cloud_efficiency"
+  available_resource_creation = "VSwitch"
 }
 
 data "alicloud_images" "ecs_image" {
   most_recent = true
-  name_regex =  "^centos_6\\w{1,5}[64].*"
+  name_regex  = "^centos_6\\w{1,5}[64].*"
 }
 
 data "alicloud_instance_types" "default" {
- 	availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-	cpu_core_count = 1
-	memory_size = 2
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  cpu_core_count    = 1
+  memory_size       = 2
 }
 
 resource "alicloud_vpc" "foo" {
-  	name = "tf-testAccEssAlarm_basic"
-  	cidr_block = "172.16.0.0/16"
+  name       = "tf-testAccEssAlarm_basic"
+  cidr_block = "172.16.0.0/16"
 }
 
 resource "alicloud_vswitch" "foo" {
-	name = "tf-testAccEssAlarm_basic_foo"
-  	vpc_id = "${alicloud_vpc.foo.id}"
-  	cidr_block = "172.16.0.0/24"
-	availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  name              = "tf-testAccEssAlarm_basic_foo"
+  vpc_id            = "${alicloud_vpc.foo.id}"
+  cidr_block        = "172.16.0.0/24"
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
 }
 
 resource "alicloud_vswitch" "bar" {
-	name = "tf-testAccEssAlarm_basic_bar"
-  	vpc_id = "${alicloud_vpc.foo.id}"
-  	cidr_block = "172.16.1.0/24"
-  	availability_zone = "${data.alicloud_zones.default.zones.0.id}"
+  name              = "tf-testAccEssAlarm_basic_bar"
+  vpc_id            = "${alicloud_vpc.foo.id}"
+  cidr_block        = "172.16.1.0/24"
+  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
 }
 
 resource "alicloud_ess_scaling_group" "foo" {
-	min_size = 1
-	max_size = 1
-	scaling_group_name = "tf-testAccEssAlarm_basic"
-	removal_policies = ["OldestInstance", "NewestInstance"]
-	vswitch_ids = ["${alicloud_vswitch.foo.id}","${alicloud_vswitch.bar.id}"]
+  min_size           = 1
+  max_size           = 1
+  scaling_group_name = "tf-testAccEssAlarm_basic"
+  removal_policies   = ["OldestInstance", "NewestInstance"]
+  vswitch_ids        = ["${alicloud_vswitch.foo.id}", "${alicloud_vswitch.bar.id}"]
 }
 
 resource "alicloud_ess_scaling_rule" "foo" {
-	scaling_rule_name = "tf-testAccEssAlarm_basic"
-	scaling_group_id = "${alicloud_ess_scaling_group.foo.id}"
-	adjustment_type = "TotalCapacity"
-	adjustment_value = 2
-	cooldown = 60
+  scaling_rule_name = "tf-testAccEssAlarm_basic"
+  scaling_group_id  = "${alicloud_ess_scaling_group.foo.id}"
+  adjustment_type   = "TotalCapacity"
+  adjustment_value  = 2
+  cooldown          = 60
 }
 
 resource "alicloud_ess_alarm" "foo" {
-	name = "tf-testAccEssAlarm_basic"
-    description = "Acc alarm test"
-    alarm_actions = ["${alicloud_ess_scaling_rule.foo.ari}"]
-    scaling_group_id = "${alicloud_ess_scaling_group.foo.id}"
-    metric_type = "system"
-    metric_name = "CpuUtilization"
-    period = 300
-    statistics = "Average"
-    threshold = 200.3
-    comparison_operator = ">="
-	evaluation_count = 2 
+  name                = "tf-testAccEssAlarm_basic"
+  description         = "Acc alarm test"
+  alarm_actions       = ["${alicloud_ess_scaling_rule.foo.ari}"]
+  scaling_group_id    = "${alicloud_ess_scaling_group.foo.id}"
+  metric_type         = "system"
+  metric_name         = "CpuUtilization"
+  period              = 300
+  statistics          = "Average"
+  threshold           = 200.3
+  comparison_operator = ">="
+  evaluation_count    = 2
 }
 ```
 
@@ -86,7 +86,7 @@ The following arguments are supported:
 * `description` - (Optional) The description for the alarm.
 * `enable` - (Optional, Available in 1.48.0+) Whether to enable specific ess alarm. Default to true.
 * `alarm_actions` - (Required) The list of actions to execute when this alarm transition into an ALARM state. Each action is specified as ess scaling rule ari.
-* `scaling_group_id` - (Required) The scaling group associated with this alarm.
+* `scaling_group_id` - (Required, ForceNew) The scaling group associated with this alarm, the 'ForceNew' attribute is available in 1.56.0+.
 * `metric_type` - (Optional, ForceNew) The type for the alarm's associated metric. Supported value: system, custom. "system" means the metric data is collected by Aliyun Cloud Monitor Service(CMS), "custom" means the metric data is upload to CMS by users. Defaults to system. 
 * `metric_name` - (Required) The name for the alarm's associated metric.
 * `period` - (Optional, ForceNew) The period in seconds over which the specified statistic is applied. Supported value: 60, 120, 300, 900. Defaults to 300.

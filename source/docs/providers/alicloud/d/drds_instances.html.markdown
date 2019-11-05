@@ -18,9 +18,9 @@ Filters support regular expression for the instance name, searches by tags, and 
  ```
 data "alicloud_drds_instances" "drds_instances_ds" {
   name_regex = "drds-\\d+"
-  ids     = "drdsfacbz68g3299test"
+  ids        = "drdsfacbz68g3299test"
 }
- output "first_db_instance_id" {
+output "first_db_instance_id" {
   value = "${data.alicloud_drds_instances.drds_instances_ds.instances.0.drdsInstanceId}"
 }
 ```
@@ -35,7 +35,10 @@ The following arguments are supported:
 ## Attributes Reference
 
 The following attributes are exported in addition to the arguments listed above:
+
  * `ids` - A list of DRDS instance IDs.
+ * `descriptions` - A list of DRDS descriptions. 
+ * `instances` - A list of DRDS instances.
    * `id` - The ID of the DRDS instance.
    * `description` - The DRDS instance description.
    * `name` - The name of the RDS instance.

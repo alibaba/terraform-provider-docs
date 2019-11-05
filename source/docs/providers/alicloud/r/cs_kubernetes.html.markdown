@@ -33,6 +33,9 @@ you must specify three items in `vswitch_ids`, `master_instance_types` and `work
 -> **NOTE:** You need to activate several other products and confirm Authorization Policy used by Container Service before using this resource.
 Please refer to the `Authorization management` and `Cluster management` sections in the [Document Center](https://www.alibabacloud.com/help/doc-detail/86488.htm).
 
+-> **NOTE:** From version 1.50.0, when `force_update` is set to `false`, updates to the following arguments will be ignored: `vswitch_ids`, `master_instance_types`, `worker_instance_types`, `worker_numbers`, `password`, `key_name`, `user_ca`, `pod_cidr`, `service_cidr`, `cluster_network_type`, `node_cidr_mask`, `log_config`, `enable_ssh`, `master_disk_size`, `master_disk_category`, `worker_disk_size`, `worker_disk_category`, `worker_data_disk_category`, `master_instance_charge_type`, `worker_instance_charge_type`, `install_cloud_monitor`, `is_outdated`.
+
+
 ## Example Usage
 
 Single AZ Kubernetes Cluster
@@ -43,16 +46,16 @@ data "alicloud_zones" "default" {
 }
 
 resource "alicloud_cs_kubernetes" "main" {
-  name_prefix = "my-first-k8s"
-  availability_zone = "${data.alicloud_zones.default.zones.0.id}"
-  new_nat_gateway = true
+  name_prefix           = "my-first-k8s"
+  availability_zone     = "${data.alicloud_zones.default.zones.0.id}"
+  new_nat_gateway       = true
   master_instance_types = ["ecs.n4.small"]
   worker_instance_types = ["ecs.n4.small"]
-  worker_numbers = [3]
-  password = "Yourpassword1234"
-  pod_cidr = "192.168.1.0/16"
-  service_cidr = "192.168.2.0/24"
-  enable_ssh = true
+  worker_numbers        = [3]
+  password              = "Yourpassword1234"
+  pod_cidr              = "192.168.1.0/16"
+  service_cidr          = "192.168.2.0/24"
+  enable_ssh            = true
   install_cloud_monitor = true
 }
 ```
@@ -61,7 +64,7 @@ Three AZ Kubernetes Cluster
 
 ```
 variable "name" {
-	default = "my-first-3az-k8s"
+  default = "my-first-3az-k8s"
 }
 
 data "alicloud_zones" main {
@@ -69,71 +72,71 @@ data "alicloud_zones" main {
 }
 
 data "alicloud_instance_types" "instance_types_1_master" {
-	availability_zone = "${data.alicloud_zones.main.zones.0.id}"
-	cpu_core_count = 2
-	memory_size = 4
-	kubernetes_node_role = "Master"
+  availability_zone    = "${data.alicloud_zones.main.zones.0.id}"
+  cpu_core_count       = 2
+  memory_size          = 4
+  kubernetes_node_role = "Master"
 }
 data "alicloud_instance_types" "instance_types_2_master" {
-	availability_zone = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones)-1)%length(data.alicloud_zones.main.zones)], "id")}"
-	cpu_core_count = 2
-	memory_size = 4
-	kubernetes_node_role = "Master"
+  availability_zone    = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones) - 1) % length(data.alicloud_zones.main.zones)], "id")}"
+  cpu_core_count       = 2
+  memory_size          = 4
+  kubernetes_node_role = "Master"
 }
 data "alicloud_instance_types" "instance_types_3_master" {
-	availability_zone = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones)-2)%length(data.alicloud_zones.main.zones)], "id")}"
-	cpu_core_count = 2
-	memory_size = 4
-	kubernetes_node_role = "Master"
+  availability_zone    = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones) - 2) % length(data.alicloud_zones.main.zones)], "id")}"
+  cpu_core_count       = 2
+  memory_size          = 4
+  kubernetes_node_role = "Master"
 }
 
 data "alicloud_instance_types" "instance_types_1_worker" {
-	availability_zone = "${data.alicloud_zones.main.zones.0.id}"
-	cpu_core_count = 2
-	memory_size = 4
-	kubernetes_node_role = "Worker"
+  availability_zone    = "${data.alicloud_zones.main.zones.0.id}"
+  cpu_core_count       = 2
+  memory_size          = 4
+  kubernetes_node_role = "Worker"
 }
 data "alicloud_instance_types" "instance_types_2_worker" {
-	availability_zone = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones)-1)%length(data.alicloud_zones.main.zones)], "id")}"
-	cpu_core_count = 2
-	memory_size = 4
-	kubernetes_node_role = "Worker"
+  availability_zone    = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones) - 1) % length(data.alicloud_zones.main.zones)], "id")}"
+  cpu_core_count       = 2
+  memory_size          = 4
+  kubernetes_node_role = "Worker"
 }
 data "alicloud_instance_types" "instance_types_3_worker" {
-	availability_zone = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones)-2)%length(data.alicloud_zones.main.zones)], "id")}"
-	cpu_core_count = 2
-	memory_size = 4
-	kubernetes_node_role = "Worker"
+  availability_zone    = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones) - 2) % length(data.alicloud_zones.main.zones)], "id")}"
+  cpu_core_count       = 2
+  memory_size          = 4
+  kubernetes_node_role = "Worker"
 }
 resource "alicloud_vpc" "foo" {
-  name = "${var.name}"
+  name       = "${var.name}"
   cidr_block = "10.1.0.0/21"
 }
 
 resource "alicloud_vswitch" "vsw1" {
-  name = "${var.name}"
-  vpc_id = "${alicloud_vpc.foo.id}"
-  cidr_block = "10.1.1.0/24"
+  name              = "${var.name}"
+  vpc_id            = "${alicloud_vpc.foo.id}"
+  cidr_block        = "10.1.1.0/24"
   availability_zone = "${data.alicloud_zones.main.zones.0.id}"
 }
 
 resource "alicloud_vswitch" "vsw2" {
-  name = "${var.name}"
-  vpc_id = "${alicloud_vpc.foo.id}"
-  cidr_block = "10.1.2.0/24"
-  availability_zone = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones)-1)%length(data.alicloud_zones.main.zones)], "id")}"
+  name              = "${var.name}"
+  vpc_id            = "${alicloud_vpc.foo.id}"
+  cidr_block        = "10.1.2.0/24"
+  availability_zone = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones) - 1) % length(data.alicloud_zones.main.zones)], "id")}"
 }
 
 resource "alicloud_vswitch" "vsw3" {
-  name = "${var.name}"
-  vpc_id = "${alicloud_vpc.foo.id}"
-  cidr_block = "10.1.3.0/24"
-  availability_zone = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones)-2)%length(data.alicloud_zones.main.zones)], "id")}"
+  name              = "${var.name}"
+  vpc_id            = "${alicloud_vpc.foo.id}"
+  cidr_block        = "10.1.3.0/24"
+  availability_zone = "${lookup(data.alicloud_zones.main.zones[(length(data.alicloud_zones.main.zones) - 2) % length(data.alicloud_zones.main.zones)], "id")}"
 }
 
 resource "alicloud_nat_gateway" "nat_gateway" {
-  name = "${var.name}"
-  vpc_id = "${alicloud_vpc.foo.id}"
+  name          = "${var.name}"
+  vpc_id        = "${alicloud_vpc.foo.id}"
   specification = "Small"
 }
 
@@ -156,7 +159,7 @@ resource "alicloud_snat_entry" "snat_entry_3" {
 }
 
 resource "alicloud_eip" "eip" {
-  name = "${var.name}"
+  name      = "${var.name}"
   bandwidth = "100"
 }
 
@@ -166,23 +169,23 @@ resource "alicloud_eip_association" "eip_asso" {
 }
 
 resource "alicloud_cs_kubernetes" "k8s" {
-  name = "${var.name}"
-  vswitch_ids = ["${alicloud_vswitch.vsw1.id}", "${alicloud_vswitch.vsw2.id}", "${alicloud_vswitch.vsw3.id}"]
-  new_nat_gateway = true
-  master_instance_types = ["${data.alicloud_instance_types.instance_types_1_master.instance_types.0.id}", "${data.alicloud_instance_types.instance_types_2_master.instance_types.0.id}", "${data.alicloud_instance_types.instance_types_3_master.instance_types.0.id}"]
-  worker_instance_types = ["${data.alicloud_instance_types.instance_types_1_worker.instance_types.0.id}", "${data.alicloud_instance_types.instance_types_2_worker.instance_types.0.id}", "${data.alicloud_instance_types.instance_types_3_worker.instance_types.0.id}"]
-  worker_numbers = [1, 2, 3]
-  master_disk_category  = "cloud_ssd"
-  worker_disk_size = 50
-  worker_data_disk_category  = "cloud_ssd"
-  worker_data_disk_size = 50
-  password = "Yourpassword1234"
-  pod_cidr = "192.168.1.0/16"
-  service_cidr = "192.168.2.0/24"
-  enable_ssh = true
-  slb_internet_enabled = true
-  node_cidr_mask = 25
-  install_cloud_monitor = true
+  name                      = "${var.name}"
+  vswitch_ids               = ["${alicloud_vswitch.vsw1.id}", "${alicloud_vswitch.vsw2.id}", "${alicloud_vswitch.vsw3.id}"]
+  new_nat_gateway           = true
+  master_instance_types     = ["${data.alicloud_instance_types.instance_types_1_master.instance_types.0.id}", "${data.alicloud_instance_types.instance_types_2_master.instance_types.0.id}", "${data.alicloud_instance_types.instance_types_3_master.instance_types.0.id}"]
+  worker_instance_types     = ["${data.alicloud_instance_types.instance_types_1_worker.instance_types.0.id}", "${data.alicloud_instance_types.instance_types_2_worker.instance_types.0.id}", "${data.alicloud_instance_types.instance_types_3_worker.instance_types.0.id}"]
+  worker_numbers            = [1, 2, 3]
+  master_disk_category      = "cloud_ssd"
+  worker_disk_size          = 50
+  worker_data_disk_category = "cloud_ssd"
+  worker_data_disk_size     = 50
+  password                  = "Yourpassword1234"
+  pod_cidr                  = "192.168.1.0/16"
+  service_cidr              = "192.168.2.0/24"
+  enable_ssh                = true
+  slb_internet_enabled      = true
+  node_cidr_mask            = 25
+  install_cloud_monitor     = true
 }
 ```
 
@@ -193,6 +196,7 @@ The following arguments are supported:
 
 * `name` - (Optional) The kubernetes cluster's name. It is the only in one Alicloud account.
 * `name_prefix` - (Optional) The kubernetes cluster name's prefix. It is conflict with `name`. If it is specified, terraform will using it to build the only cluster name. Default to "Terraform-Creation".
+* `force_update` - (Optional, Available in 1.50.0+) Whether to force the update of kubernetes cluster arguments. Default to false.
 * `availability_zone` - (Optional, ForceNew) The Zone where new kubernetes cluster will be located. If it is not be specified, the `vswitch_ids` should be set, its value will be vswitch's zone.
 * `vswitch_id` - (Deprecated from version 1.16.0)(Force new resource) The vswitch where new kubernetes cluster will be located. If it is not specified, a new VPC and VSwicth will be built. It must be in the zone which `availability_zone` specified.
 * `vswitch_ids` - (Optional, ForceNew) The vswitch where new kubernetes cluster will be located. For SingleAZ Cluster, if it is not specified, a new VPC and VSwicth will be built. It must be in the zone which `availability_zone` specified. For MultiAZ Cluster, you must create three vswitches firstly, specify them here.
@@ -204,8 +208,10 @@ You can get the available kubetnetes master node instance types by [datasource i
 * `worker_instance_types` - (Required, ForceNew) The instance type of worker node. Specify one type for single AZ Cluster, three types for MultiAZ Cluster.
 You can get the available kubetnetes master node instance types by [datasource instance_types](https://www.terraform.io/docs/providers/alicloud/d/instance_types.html#kubernetes_node_role)
 * `worker_number` - (Required) The worker node number of the kubernetes cluster. Default to 3. It is limited up to 50 and if you want to enlarge it, please apply white list or contact with us.
-* `password` - (Optional, ForceNew) The password of ssh login cluster node. You have to specify one of `password` and `key_name` fields.
+* `password` - (Optional, ForceNew, Sensitive) The password of ssh login cluster node. You have to specify one of `password` `key_name` `kms_encrypted_password` fields.
 * `key_name` - (Optional, ForceNew) The keypair of ssh login cluster node, you have to create it first.
+* `kms_encrypted_password` - (Optional, ForceNew, Available in 1.57.1+) An KMS encrypts password used to a cs kubernetes. It is conflicted with `password` and `key_name`.
+* `kms_encryption_context` - (Optional, ForceNew, MapString, Available in 1.57.1+) An KMS encryption context used to decrypt `kms_encrypted_password` before creating or updating a cs kubernetes with `kms_encrypted_password`. See [Encryption Context](https://www.alibabacloud.com/help/doc-detail/42975.htm). It is valid when `kms_encrypted_password` is set.
 * `user_ca` - (Optional, ForceNew) The path of customized CA cert, you can use this CA to sign client certs to connect your cluster.
 * `cluster_network_type` - (Required, ForceNew) The network that cluster uses, use `flannel` or `terway`.
 * `pod_cidr` - (Optional, ForceNew) The CIDR block for the pod network. It will be allocated automatically when `vswitch_ids` is not specified.
@@ -243,6 +249,16 @@ Larger this number is, less pods can be allocated on each node. Default value is
 * `client_key` - (Optional) The path of client key, like `~/.kube/client-key.pem`.
 * `cluster_ca_cert` - (Optional) The path of cluster ca certificate, like `~/.kube/cluster-ca-cert.pem`
 
+### Timeouts
+
+-> **NOTE:** Available in 1.58.0+.
+
+The `timeouts` block allows you to specify [timeouts](https://www.terraform.io/docs/configuration-0-11/resources.html#timeouts) for certain actions:
+
+* `create` - (Defaults to 90 mins) Used when creating the kubernetes cluster (until it reaches the initial `running` status). 
+* `update` - (Defaults to 60 mins) Used when activating the kubernetes cluster when necessary during update.
+* `delete` - (Defaults to 60 mins) Used when terminating the kubernetes cluster. 
+
 ## Attributes Reference
 
 The following attributes are exported:
@@ -250,37 +266,13 @@ The following attributes are exported:
 * `id` - The ID of the container cluster.
 * `name` - The name of the container cluster.
 * `availability_zone` - The ID of availability zone.
-* `key_name` - The keypair of ssh login cluster node, you have to create it first.
-* `worker_number` - (Deprecated from version 1.16.0) The ECS instance node number in the current container cluster.
-* `worker_numbers` - The ECS instance node number in the current container cluster.
-* `vswitch_id` - (Deprecated from version 1.16.0) The ID of VSwitch where the current cluster is located.
-* `vswitch_ids` - The ID of VSwitches where the current cluster is located.
 * `vpc_id` - The ID of VPC where the current cluster is located.
-* `slb_id` - (Deprecated from version 1.9.2).
-* `slb_internet_enabled` - Whether internet load balancer for API Server is created
-* `slb_internet` - The ID of public load balancer where the current cluster master node is located.
 * `slb_intranet` - The ID of private load balancer where the current cluster master node is located.
 * `security_group_id` - The ID of security group where the current cluster worker node is located.
-* `image_id` - The ID of node image.
 * `nat_gateway_id` - The ID of nat gateway used to launch kubernetes cluster.
-* `master_instance_type` - (Deprecated from version 1.16.0) The instance type of master node.
-* `master_instance_types` - The instance type of master node.
-* `worker_instance_type` - (Deprecated from version 1.16.0)The instance type of worker node.
-* `worker_instance_types` - The instance type of worker node.
-* `master_disk_category` - The system disk category of master node.
-* `master_disk_size` - The system disk size of master node.
-* `worker_disk_category` - The system disk category of worker node.
-* `worker_disk_size` - The system disk size of worker node.
-* `worker_data_disk_category` - The data disk size of worker node.
-* `worker_data_disk_size` - The data disk category of worker node.
-* `nodes` - (Deprecated from version 1.9.4) It has been deprecated from provider version 1.9.4. New field `master_nodes` and `worker_nodes` replace it.
 * `master_nodes` - List of cluster master nodes. It contains several attributes to `Block Nodes`.
 * `worker_nodes` - List of cluster worker nodes. It contains several attributes to `Block Nodes`.
 * `connections` - Map of kubernetes cluster connection information. It contains several attributes to `Block Connections`.
-* `node_cidr_mask` - The network mask used on pods for each node.
-* `log_config` - A list of one element containing information about the associated log store. It contains the following attributes:
-  * `type` - Type of collecting logs.
-  * `project` - Log Service project name.
 
 ### Block Nodes
 

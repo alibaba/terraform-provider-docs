@@ -15,7 +15,7 @@ This data source provides the Function Compute functions of the current Alibaba 
 ```
 data "alicloud_fc_functions" "functions_ds" {
   service_name = "sample_service"
-  name_regex = "sample_fc_function"
+  name_regex   = "sample_fc_function"
 }
 
 output "first_fc_function_name" {
@@ -29,6 +29,7 @@ The following arguments are supported:
 
 * `service_name` - Name of the service that contains the functions to find.
 * `name_regex` - (Optional) A regex string to filter results by function name.
+* `ids` (Optional, Available in 1.53.0+) - A list of functions ids.
 * `output_file` - (Optional) File name where to save data source results (after running `terraform plan`).
 
 ## Attributes Reference

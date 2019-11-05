@@ -6,13 +6,15 @@ description: |-
   The Alicloud provider is used to interact with many resources supported by Alicloud. The provider needs to be configured with the proper credentials before it can be used.
 ---
 
-# Alicloud Provider
+# Alibaba Cloud Provider
 
-The Alicloud provider is used to interact with the
-many resources supported by [Alicloud](https://www.alibabacloud.com). The provider needs to be configured
+The Alibaba Cloud provider is used to interact with the
+many resources supported by [Alibaba Cloud](https://www.alibabacloud.com). The provider needs to be configured
 with the proper credentials before it can be used.
 
 Use the navigation on the left to read about the available resources.
+
+-> **Note:** From version 1.50.0, the provider start to support Terraform 0.12.x.
 
 -> **Note:** When you use terraform on a `Windows` computer, please install [golang](https://golang.org/dl/) first.
 Otherwise, you may encounter an issue that occurs from the version 1.8.1 to 1.10.0. For more information, please read the [Crash Error](https://github.com/alibaba/terraform-provider/issues/469).
@@ -28,7 +30,7 @@ provider "alicloud" {
   region     = "${var.region}"
 }
 
-data "alicloud_instance_types" "2c4g" {
+data "alicloud_instance_types" "c2g4" {
   cpu_core_count = 2
   memory_size = 4
 }
@@ -44,7 +46,7 @@ resource "alicloud_instance" "web" {
   image_id          = "${data.alicloud_images.default.images.0.id}"
   internet_charge_type  = "PayByBandwidth"
 
-  instance_type        = "${data.alicloud_instance_types.2c4g.instance_types.0.id}"
+  instance_type        = "${data.alicloud_instance_types.c2g4.instance_types.0.id}"
   system_disk_category = "cloud_efficiency"
   security_groups      = ["${alicloud_security_group.default.id}"]
   instance_name        = "web"
@@ -122,7 +124,7 @@ Usage:
 ```hcl
 provider "alicloud" {
   ecs_role_name = "terraform-provider-alicloud"
-  region     = "${var.region}"
+  region        = "${var.region}"
 }
 ```
 
@@ -173,25 +175,30 @@ In addition to [generic `provider` arguments](https://www.terraform.io/docs/conf
   If not provided, the provider will attempt to retrieve it automatically with [STS GetCallerIdentity](https://www.alibabacloud.com/help/doc-detail/43767.htm).
   It can be sourced from the `ALICLOUD_ACCOUNT_ID` environment variable.
 
-* `shared_credentials_file` - (Optional, Available in 1.49.0+) This is the path to the shared credentials file. If this is not set and a profile is specified, ~/.aliyun/config.json will be used.
+* `shared_credentials_file` - (Optional, Available in 1.49.0+) This is the path to the shared credentials file. It can also be sourced from the `ALICLOUD_SHARED_CREDENTIALS_FILE` environment variable. If this is not set and a profile is specified, ~/.aliyun/config.json will be used.
 
-* `profile` - (Optional, Available in 1.49.0+) This is the Alicloud profile name as set in the shared credentials file.
+* `profile` - (Optional, Available in 1.49.0+) This is the Alicloud profile name as set in the shared credentials file. It can also be sourced from the `ALICLOUD_PROFILE` environment variable.
 
 * `assume_role` - (Optional) An `assume_role` block (documented below). Only one `assume_role` block may be in the configuration.
 
 * `endpoints` - (Optional) An `endpoints` block (documented below) to support custom endpoints.
 
+* `skip_region_validation` - (Optional, Available in 1.52.0+) Skip static validation of region ID. Used by users of alternative AlibabaCloud-like APIs or users w/ access to regions that are not public (yet).
+
+* `configuration_source` - (Optional, Available in 1.56.0+) Use a string to mark a configuration file source, like `terraform-alicloud-modules/terraform-alicloud-ecs-instance` or `terraform-provider-alicloud/examples/vpc`.
+The length should not more than 64.
+
 The nested `assume_role` block supports the following:
 
-* `role_arn` - (Required) The ARN of the role to assume. If ARN is set to an empty string, it does not perform role switching.
+* `role_arn` - (Required) The ARN of the role to assume. If ARN is set to an empty string, it does not perform role switching. It supports environment variable `ALICLOUD_ASSUME_ROLE_ARN`.
   Terraform executes configuration on account with provided credentials.
 
 * `policy` - (Optional) A more restrictive policy to apply to the temporary credentials. This gives you a way to further restrict the permissions for the resulting temporary
   security credentials. You cannot use the passed policy to grant permissions that are in excess of those allowed by the access policy of the role that is being assumed.
 
-* `session_name` - (Optional) The session name to use when assuming the role. If omitted, 'terraform' is passed to the AssumeRole call as session name.
+* `session_name` - (Optional) The session name to use when assuming the role. If omitted, 'terraform' is passed to the AssumeRole call as session name. It supports environment variable `ALICLOUD_ASSUME_ROLE_SESSION_NAME`.
 
-* `session_expiration` - (Optional) The time after which the established session for assuming role expires. Valid value range: [900-3600] seconds. Default to 3600 (in this case Alicloud use own default value).
+* `session_expiration` - (Optional) The time after which the established session for assuming role expires. Valid value range: [900-3600] seconds. Default to 3600 (in this case Alicloud use own default value). It supports environment variable `ALICLOUD_ASSUME_ROLE_SESSION_EXPIRATION`.
 
 Nested `endpoints` block supports the following:
 

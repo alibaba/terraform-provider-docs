@@ -13,7 +13,7 @@ This data source provides the apps of the current Alibaba Cloud user.
 ## Example Usage
 
 ```
-data "alicloud_api_gateway_apps" "data_apigatway"{
+data "alicloud_api_gateway_apps" "data_apigatway" {
   output_file = "outapps"
 }
 
@@ -27,6 +27,8 @@ output "first_app_id" {
 The following arguments are supported:
 
 * `name_regex` - (Optional) A regex string to filter apps by name.
+* `ids` - (Optional, Available in 1.52.2+) A list of app IDs. 
+* `tags` - (Optional, Available in v1.55.3+) A mapping of tags to assign to the resource.
 * `output_file` - (Optional) File name where to save data source results (after running `terraform plan`).
 
 ## Attributes Reference
